@@ -18,7 +18,7 @@ namespace MyFrame.Repository
         /// 当前数据库上下文
         /// </summary>
         protected EFDbContext dbContext = EFDbContextFactory.GetCurrentContext();
-        public IQueryable<TEntity> Entities
+        public virtual IQueryable<TEntity> Entities
         {
             get
             {
@@ -26,7 +26,7 @@ namespace MyFrame.Repository
             }
         }
 
-        public TEntity Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
             try
             {
@@ -41,12 +41,12 @@ namespace MyFrame.Repository
             return entity;
         }
 
-        public int Count(Expression<Func<TEntity, bool>> where)
+        public virtual int Count(Expression<Func<TEntity, bool>> where)
         {
             return dbContext.Set<TEntity>().Count(where);
         }
 
-        public bool Delete(TEntity entity)
+        public virtual bool Delete(TEntity entity)
         {
             int rst = 0;
             try
@@ -62,7 +62,7 @@ namespace MyFrame.Repository
             return rst > 0;
         }
 
-        public bool Update(TEntity entity)
+        public virtual bool Update(TEntity entity)
         {
             int rst = 0;
             try
@@ -78,23 +78,18 @@ namespace MyFrame.Repository
             return rst > 0;
         }
 
-        public bool Exists(Expression<Func<TEntity, bool>> where)
+        public virtual bool Exists(Expression<Func<TEntity, bool>> where)
         {
             return Entities.Any(where);
         }
 
-        public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where)
+        public virtual IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where)
         {
             return Entities.Where(where);
         }
 
-        public TEntity Find(string id)
-        {
-            return dbContext.Set<TEntity>().Find(id);
-        }
 
-
-        public IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs)
+        public virtual IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs)
         {
             //1、处理分页参数
             var _list = Entities.Where(where);

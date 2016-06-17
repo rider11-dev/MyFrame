@@ -15,59 +15,53 @@ namespace MyFrame.Service
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
     {
-        IBaseRepositoryWrapper<TEntity> _baseRepositoryWrapper = null;
+        IBaseRepository<TEntity> _repository = null;
 
-        public BaseService(IBaseRepositoryWrapper<TEntity> repositoryWrapper)
+        public BaseService(IBaseRepository<TEntity> repository)
         {
-            _baseRepositoryWrapper = repositoryWrapper;
+            _repository = repository;
         }
 
-        public TEntity Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
-            OperationResult result = _baseRepositoryWrapper.Add(entity);
-            return result.Parse<TEntity, BaseService<TEntity>>();
+            var result = _repository.Add(entity);
+            return result;
         }
 
-        public int Count(Expression<Func<TEntity, bool>> where)
+        public virtual int Count(Expression<Func<TEntity, bool>> where)
         {
-            OperationResult result = _baseRepositoryWrapper.Count(where);
-            return result.Parse<int, BaseService<TEntity>>();
+            var result = _repository.Count(where);
+            return result;
         }
 
-        public bool Delete(TEntity entity)
+        public virtual bool Delete(TEntity entity)
         {
-            OperationResult result = _baseRepositoryWrapper.Delete(entity);
-            return result.Parse<bool, BaseService<TEntity>>();
+            var result = _repository.Delete(entity);
+            return result;
         }
 
-        public bool Update(TEntity entity)
+        public virtual bool Update(TEntity entity)
         {
-            OperationResult result = _baseRepositoryWrapper.Update(entity);
-            return result.Parse<bool, BaseService<TEntity>>();
+            var result = _repository.Update(entity);
+            return result;
         }
 
-        public bool Exists(Expression<Func<TEntity, bool>> where)
+        public virtual bool Exists(Expression<Func<TEntity, bool>> where)
         {
-            OperationResult result = _baseRepositoryWrapper.Exists(where);
-            return result.Parse<bool, BaseService<TEntity>>();
+            var result = _repository.Exists(where);
+            return result;
         }
 
-        public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where)
+        public virtual IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where)
         {
-            OperationResult result = _baseRepositoryWrapper.Find(where);
-            return result.Parse<IQueryable<TEntity>, BaseService<TEntity>>();
+            var result = _repository.Find(where);
+            return result;
         }
 
-        public TEntity Find(string id)
+        public virtual IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs)
         {
-            OperationResult result = _baseRepositoryWrapper.Find(id);
-            return result.Parse<TEntity, BaseService<TEntity>>();
-        }
-
-        public IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs)
-        {
-            OperationResult result = _baseRepositoryWrapper.FindByPage(where, orderByList, pageArgs);
-            return result.Parse<IQueryable<TEntity>, BaseService<TEntity>>();
+            var result = _repository.FindByPage(where, orderByList, pageArgs);
+            return result;
         }
     }
 }

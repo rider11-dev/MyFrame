@@ -8,38 +8,23 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using MyFrame.Infrastructure.Extension;
+using MyFrame.IService;
 
-namespace MyFrame.Repository
+namespace MyFrame.Service
 {
-    public class BaseRepositoryWrapper<TEntity> : IBaseRepositoryWrapper<TEntity> where TEntity : class
+    public class BaseServiceWrapper<TEntity> : IBaseServiceWrapper<TEntity> where TEntity : class
     {
-        IBaseRepository<TEntity> _repository;
+        IBaseService<TEntity> _service;
 
+        public BaseServiceWrapper(IBaseService<TEntity> service)
+        {
+            _service = service;
+        }
+
+        /// <summary>
+        /// 数据实体类名称
+        /// </summary>
         string EntityType = typeof(TEntity).FullName;
-
-        public BaseRepositoryWrapper(IBaseRepository<TEntity> repository)
-        {
-            _repository = repository;
-        }
-
-        public OperationResult Entities
-        {
-            get
-            {
-                OperationResult result = new OperationResult();
-                try
-                {
-                    var data = _repository.Entities;
-                    result.ResultType = OperationResultType.Success;
-                    result.AppendData = data;
-                }
-                catch (Exception ex)
-                {
-                    ProcessException(result, string.Format("获取{0}数据实体集出错", EntityType), ex);
-                }
-                return result;
-            }
-        }
 
         public OperationResult Add(TEntity entity)
         {
@@ -52,7 +37,7 @@ namespace MyFrame.Repository
             }
             try
             {
-                var data = _repository.Add(entity);
+                var data = _service.Add(entity);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
@@ -68,7 +53,7 @@ namespace MyFrame.Repository
             OperationResult result = new OperationResult();
             try
             {
-                var data = _repository.Count(where);
+                var data = _service.Count(where);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
@@ -90,37 +75,9 @@ namespace MyFrame.Repository
             }
             try
             {
-                var data = _repository.Delete(entity);
+                var data = _service.Delete(entity);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
-            }
-            catch (Exception ex)
-            {
-                ProcessException(result, string.Format("删除{0}数据实体失败", EntityType), ex);
-            }
-            return result;
-        }
-        public OperationResult Delete(string id)
-        {
-            OperationResult result = new OperationResult();
-            if (string.IsNullOrEmpty(id))
-            {
-                result.ResultType = OperationResultType.ParamError;
-                result.Message = string.Format("删除{0}实体失败，主键不能为空", EntityType);
-                return result;
-            }
-            try
-            {
-                TEntity entity = _repository.Find(id);
-                if (entity == null)
-                {
-                    result.ResultType = OperationResultType.ParamError;
-                    result.Message = string.Format("删除{0}实体失败，指定主键的实体不存在", EntityType);
-                }
-                else
-                {
-                    _repository.Delete(entity);
-                }
             }
             catch (Exception ex)
             {
@@ -140,7 +97,7 @@ namespace MyFrame.Repository
             }
             try
             {
-                var data = _repository.Update(entity);
+                var data = _service.Update(entity);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
@@ -156,7 +113,7 @@ namespace MyFrame.Repository
             OperationResult result = new OperationResult();
             try
             {
-                var data = _repository.Exists(where);
+                var data = _service.Exists(where);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
@@ -172,35 +129,13 @@ namespace MyFrame.Repository
             OperationResult result = new OperationResult();
             try
             {
-                var data = _repository.Find(where);
+                var data = _service.Find(where);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
             catch (Exception ex)
             {
                 ProcessException(result, string.Format("获取{0}数据实体集出错", EntityType), ex);
-            }
-            return result;
-        }
-
-        public OperationResult Find(string id)
-        {
-            OperationResult result = new OperationResult();
-            if (string.IsNullOrEmpty(id))
-            {
-                result.ResultType = OperationResultType.ParamError;
-                result.Message = string.Format("根据主键获取{0}实体失败，参数不能为空", EntityType);
-                return result;
-            }
-            try
-            {
-                var data = _repository.Find(id);
-                result.ResultType = OperationResultType.Success;
-                result.AppendData = data;
-            }
-            catch (Exception ex)
-            {
-                ProcessException(result, string.Format("根据主键获取{0}实体失败", EntityType), ex);
             }
             return result;
         }
@@ -216,7 +151,7 @@ namespace MyFrame.Repository
             }
             try
             {
-                var data = _repository.FindByPage(where, orderByList, pageArgs);
+                var data = _service.FindByPage(where, orderByList, pageArgs);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }

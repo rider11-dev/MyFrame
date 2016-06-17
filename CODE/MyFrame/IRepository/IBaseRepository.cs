@@ -22,7 +22,6 @@ namespace MyFrame.IRepository
         bool Exists(Expression<Func<TEntity, bool>> where);
 
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where);
-        TEntity Find(string id);
 
         IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs);
     }
