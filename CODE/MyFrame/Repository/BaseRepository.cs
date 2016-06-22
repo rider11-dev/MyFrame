@@ -125,5 +125,11 @@ namespace MyFrame.Repository
             //4、返回
             return _list;
         }
+
+
+        public bool Delete(Expression<Func<TEntity, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
