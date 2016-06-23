@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+@model WebApp.ViewModels.RBAC.LoginVM
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>用户登录</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/signin.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <form class="form-signin">
+            <h2 class="form-signin-heading">用户登录</h2>
+            <label for="txtUserName" class="sr-only">用户名</label>
+            <input type="text" name="UserName" class="form-control" placeholder="用户名" required autofocus />
+            <label for="txtPwd" class="sr-only">密码</label>
+            <input type="password" name="Password" class="form-control" placeholder="密码" required />
+            <div>
+                <label>
+                    <input type="checkbox" value="RememberMe" />&nbsp;记住我
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        </form>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="~/Scripts/html5shiv.min.js"></script>
+        <script src="~/Scripts/respond.min.js"></script>
+    <![endif]-->
+</body>
+</html>

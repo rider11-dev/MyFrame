@@ -1,5 +1,3 @@
-USE MyFrame
-GO
 -- 用户表
 CREATE TABLE Users(
 	Id int IDENTITY(1,1) primary key,
@@ -15,9 +13,8 @@ CREATE TABLE Users(
 	Enabled bit NOT NULL default 0,
 	Remark nvarchar(255) NULL,
 	IsDeleted bit NOT NULL default 0
-)
-GO
-
+);
+INSERT into Users(UserName,Password,Email,Phone,Address,Enabled) values('admin','管理员','751682472@163.com','88888888','中国山东',1);
 -- 角色表
 create table Roles(
 	Id int identity(1,1) primary key,
@@ -30,5 +27,4 @@ create table Roles(
 	LastModifier int NULL,
 	LastModifyTime datetime NULL,
 	IsDeleted bit NOT NULL default 0
-)
-go
+);
