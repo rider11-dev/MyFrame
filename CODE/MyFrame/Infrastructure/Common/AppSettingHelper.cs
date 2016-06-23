@@ -20,8 +20,12 @@ namespace MyFrame.Infrastructure.Common
             }
         }
 
-        static string Get(string key)
+        public static string Get(string key)
         {
+            if (string.IsNullOrEmpty(key) || !ConfigurationManager.AppSettings.AllKeys.Contains(key))
+            {
+                return string.Empty;
+            }
             return ConfigurationManager.AppSettings[key].ToString();
         }
     }

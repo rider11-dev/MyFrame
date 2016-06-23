@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\..\dlls\MyFrame\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +26,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\..\dlls\MyFrame\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
-      <HintPath>..\dlls\log4net\log4net.dll</HintPath>
+      <HintPath>..\..\dlls\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -57,7 +57,10 @@
     <Compile Include="Expression\ExpressionExtensions.cs" />
     <Compile Include="Expression\OrderByArgs.cs" />
     <Compile Include="Logger\ILogHelper.cs" />
+    <Compile Include="Logger\ILogHelperProvider.cs" />
     <Compile Include="Logger\Log4NetHelper.cs" />
+    <Compile Include="Logger\LogHelperFactory.cs" />
+    <Compile Include="Logger\LogHelperProvider.cs" />
     <Compile Include="OptResult\OperationResult.cs" />
     <Compile Include="OptResult\OperationResultExtension.cs" />
     <Compile Include="OptResult\OperationResultType.cs" />

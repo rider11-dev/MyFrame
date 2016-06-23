@@ -9,6 +9,7 @@ using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using EntityFramework.Extensions;
 
 namespace MyFrame.Repository
 {
@@ -28,56 +29,70 @@ namespace MyFrame.Repository
 
         public virtual TEntity Add(TEntity entity)
         {
-            try
-            {
-                dbContext.Entry<TEntity>(entity).State = EntityState.Added;
-                dbContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            dbContext.Entry<TEntity>(entity).State = EntityState.Added;
+            dbContext.SaveChanges();
 
             return entity;
         }
 
-        public virtual int Count(Expression<Func<TEntity, bool>> where)
+        public virtual int Count(Expression<Func<TEntity, bool>> where = null)
         {
-            return dbContext.Set<TEntity>().Count(where);
+            int count = 0;
+            if (where == null)
+            {
+                count = dbContext.Set<TEntity>().Count();
+            }
+            else
+            {
+                count = dbContext.Set<TEntity>().Count(where);
+            }
+            return count;
         }
 
         public virtual bool Delete(TEntity entity)
         {
             int rst = 0;
-            try
+            dbContext.Set<TEntity>().Attach(entity);
+            dbContext.Entry<TEntity>(entity).State = EntityState.Deleted;
+            rst = dbContext.SaveChanges();
+            return rst > 0;
+        }
+
+        public bool Delete(Expression<Func<TEntity, bool>> where)
+        {
+            if (where == null)
             {
-                dbContext.Set<TEntity>().Attach(entity);
-                dbContext.Entry<TEntity>(entity).State = EntityState.Deleted;
-                rst = dbContext.SaveChanges();
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            int rst = Entities.Where(where).Delete();
             return rst > 0;
         }
 
         public virtual bool Update(TEntity entity)
         {
             int rst = 0;
-            try
+            dbContext.Set<TEntity>().Attach(entity);
+            dbContext.Entry<TEntity>(entity).State = EntityState.Modified;
+            rst = dbContext.SaveChanges();
+            return rst > 0;
+        }
+        public bool Update(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, TEntity>> update)
+        {
+            if (update == null)
             {
-                dbContext.Set<TEntity>().Attach(entity);
-                dbContext.Entry<TEntity>(entity).State = EntityState.Modified;
-                rst = dbContext.SaveChanges();
+                return false;
             }
-            catch (Exception ex)
+            int rst = 0;
+            if (where != null)
             {
-                throw ex;
+                rst = Entities.Where(where).Update(update);
+            }
+            else
+            {
+                rst = Entities.Update(update);
             }
             return rst > 0;
         }
-
         public virtual bool Exists(Expression<Func<TEntity, bool>> where)
         {
             return Entities.Any(where);
@@ -126,10 +141,5 @@ namespace MyFrame.Repository
             return _list;
         }
 
-
-        public bool Delete(Expression<Func<TEntity, bool>> where)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

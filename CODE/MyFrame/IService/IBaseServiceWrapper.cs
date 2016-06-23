@@ -13,10 +13,12 @@ namespace MyFrame.IService
     {
         OperationResult Add(TEntity entity);
 
-        OperationResult Count(Expression<Func<TEntity, bool>> where);
+        OperationResult Count(Expression<Func<TEntity, bool>> where = null);
 
         OperationResult Delete(TEntity entity);
+        OperationResult Delete(Expression<Func<TEntity, bool>> where);
         OperationResult Update(TEntity entity);
+        OperationResult Update(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, TEntity>> update);
         OperationResult Exists(Expression<Func<TEntity, bool>> where);
 
         OperationResult Find(Expression<Func<TEntity, bool>> where);

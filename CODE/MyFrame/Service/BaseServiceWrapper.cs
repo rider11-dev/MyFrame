@@ -9,16 +9,18 @@ using System.Linq.Expressions;
 using System.Text;
 using MyFrame.Infrastructure.Extension;
 using MyFrame.IService;
+using MyFrame.Infrastructure.Logger;
 
 namespace MyFrame.Service
 {
     public class BaseServiceWrapper<TEntity> : IBaseServiceWrapper<TEntity> where TEntity : class
     {
         IBaseService<TEntity> _service;
-
+        ILogHelper<TEntity> _logger;
         public BaseServiceWrapper(IBaseService<TEntity> service)
         {
             _service = service;
+            _logger = LogHelperFactory.GetLogHelper<TEntity>();
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace MyFrame.Service
             return result;
         }
 
-        public OperationResult Count(Expression<Func<TEntity, bool>> where)
+        public OperationResult Count(Expression<Func<TEntity, bool>> where = null)
         {
             OperationResult result = new OperationResult();
             try
@@ -85,6 +87,27 @@ namespace MyFrame.Service
             }
             return result;
         }
+        public OperationResult Delete(Expression<Func<TEntity, bool>> where)
+        {
+            OperationResult result = new OperationResult();
+            if (where == null)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = string.Format("删除{0}实体失败，删除条件不能为空", EntityType);
+                return result;
+            }
+            try
+            {
+                var data = _service.Delete(where);
+                result.ResultType = OperationResultType.Success;
+                result.AppendData = data;
+            }
+            catch (Exception ex)
+            {
+                ProcessException(result, string.Format("删除{0}数据实体失败", EntityType), ex);
+            }
+            return result;
+        }
 
         public OperationResult Update(TEntity entity)
         {
@@ -107,7 +130,27 @@ namespace MyFrame.Service
             }
             return result;
         }
-
+        public OperationResult Update(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, TEntity>> update)
+        {
+            OperationResult result = new OperationResult();
+            if (update == null)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = string.Format("更新{0}实体失败，更新表达式不能为空", EntityType);
+                return result;
+            }
+            try
+            {
+                var data = _service.Update(where, update);
+                result.ResultType = OperationResultType.Success;
+                result.AppendData = data;
+            }
+            catch (Exception ex)
+            {
+                ProcessException(result, string.Format("更新{0}数据实体失败", EntityType), ex);
+            }
+            return result;
+        }
         public OperationResult Exists(Expression<Func<TEntity, bool>> where)
         {
             OperationResult result = new OperationResult();
@@ -171,6 +214,11 @@ namespace MyFrame.Service
             result.ResultType = OperationResultType.Error;
             result.Exception = ex.GetDeepestException();
             result.Message = msg;
+            //记录日志
+            if (LogHelperFactory.Log)
+            {
+                _logger.LogError(ex);
+            }
         }
 
     }

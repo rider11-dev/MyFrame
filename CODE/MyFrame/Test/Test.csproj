@@ -41,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,23 +50,54 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="entity\Module.cs" />
-    <Compile Include="entity\Permission.cs" />
+    <Compile Include="bll\IUsersService.cs" />
+    <Compile Include="bll\IUsersServiceWrapper.cs" />
+    <Compile Include="bll\UsersService.cs" />
+    <Compile Include="bll\UsersServiceWrapper.cs" />
+    <Compile Include="dal\EFDbContextProviderRBAC.cs" />
+    <Compile Include="dal\EFDbContextRBAC.cs" />
+    <Compile Include="dal\IUsersRepository.cs" />
+    <Compile Include="dal\UsersRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="entity\Role.cs" />
-    <Compile Include="entity\User.cs" />
-    <Compile Include="entity\UserGroup.cs" />
+    <Compile Include="entity\Users.cs" />
+    <Compile Include="UsersTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{7392f954-0758-496e-8557-bc8a673f32a3}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRepository\IRepository.csproj">
+      <Project>{b93fd2a6-af92-4c3b-9378-b68400d44966}</Project>
+      <Name>IRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IService\IService.csproj">
+      <Project>{1ccc50d1-e39c-4e6e-898f-56cb93740c07}</Project>
+      <Name>IService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{8ff11b4f-4cb4-459f-88aa-5090bca26116}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Repository\Repository.csproj">
+      <Project>{3bfdaf93-19f6-43c5-820f-1aafb8d6d366}</Project>
+      <Name>Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Service\Service.csproj">
+      <Project>{3d17abc4-356a-458c-b6ea-8e58c13e406c}</Project>
+      <Name>Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
