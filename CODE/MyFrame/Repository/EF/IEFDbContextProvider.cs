@@ -7,6 +7,7 @@ namespace MyFrame.Repository.EF
 {
     public interface IEFDbContextProvider
     {
+        string NameOrConnectionString { get; set; }
         EFDbContext Generate();
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MyFrame.Infrastructure.Extension;
 
 namespace MyFrame.Infrastructure.OptResult
 {
@@ -89,9 +90,28 @@ namespace MyFrame.Infrastructure.OptResult
         public OperationResultType ResultType { get; set; }
 
         /// <summary>
+        /// 直接信息
+        /// </summary>
+        private string _directMsg;
+        /// <summary>
         ///     获取或设置 操作返回信息
         /// </summary>
-        public string Message { get; set; }
+        public string Message
+        {
+            get
+            {
+                string msg = _directMsg;
+                if (Exception != null)
+                {
+                    msg += "," + Exception.GetDeepestException().Message;
+                }
+                return msg;
+            }
+            set
+            {
+                _directMsg = value;
+            }
+        }
 
         /// <summary>
         ///     异常

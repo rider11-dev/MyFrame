@@ -8,6 +8,9 @@ namespace WebApp.Controllers
 {
     public class BaseController : Controller
     {
-
+        protected ActionResult RedirectToHome()
+        {
+            return RedirectToAction("Index", "Home", new { Area = "RBAC" });
+        }
     }
 }

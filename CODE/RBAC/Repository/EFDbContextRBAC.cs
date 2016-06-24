@@ -6,10 +6,17 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 
-namespace RBAC
+namespace MyFrame.IRepository.RBAC
 {
     public class EFDbContextRBAC : EFDbContext
     {
+        public EFDbContextRBAC()
+            : base()
+        { }
+        public EFDbContextRBAC(string nameOrConnectionString)
+            : base(nameOrConnectionString)
+        { }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
     }

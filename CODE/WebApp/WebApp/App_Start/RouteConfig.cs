@@ -13,11 +13,19 @@ namespace WebApp
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //routes.MapRoute(
+            //    name: "Default",
+            //    url: "{controller}/{action}/{id}",
+            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            //);
+
+            //默认登录页
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+                defaults: new { controller = "Login", action = "Index", id = UrlParameter.Optional },
+                namespaces: new string[] { "WebApp.Areas.RBAC.Controllers" }
+            ).DataTokens.Add("Area", "RBAC");
         }
     }
 }

@@ -42,10 +42,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dlls\MyFrame\MyFrame.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="MyFrame.IRepository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dlls\MyFrame\MyFrame.IRepository.dll</HintPath>
-    </Reference>
     <Reference Include="MyFrame.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dlls\MyFrame\MyFrame.Model.dll</HintPath>
@@ -65,15 +61,13 @@
   <ItemGroup>
     <Compile Include="EFDbContextProviderRBAC.cs" />
     <Compile Include="EFDbContextRBAC.cs" />
+    <Compile Include="IRoleRepository.cs" />
+    <Compile Include="IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleRepository.cs" />
     <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IRepository\IRepository.csproj">
-      <Project>{34c7da67-249c-4b86-8478-459fece2dc37}</Project>
-      <Name>IRepository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{f9f78552-22d3-4018-a063-d31ab66a30ab}</Project>
       <Name>Model</Name>

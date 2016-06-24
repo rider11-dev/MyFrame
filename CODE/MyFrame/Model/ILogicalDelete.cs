@@ -12,7 +12,6 @@ namespace MyFrame.Model
     /// </summary>
     public interface ILogicalDelete
     {
-        [Display(Name = "是否已删除")]
         bool IsDeleted { get; set; }
     }
 }

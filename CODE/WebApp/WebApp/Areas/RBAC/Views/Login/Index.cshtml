@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null;
+}
+@model WebApp.ViewModels.RBAC.LoginVM
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>用户登录</title>
+    <link href="~/Content/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/signin.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        @using (Html.BeginForm("Index", "Login", new { Area = "RBAC" }, FormMethod.Post, new { @class = "form-signin" }))
+        {
+            @Html.AntiForgeryToken();
+            <h2 class="form-signin-heading">用户登录</h2>
+            <div style="color:red;">
+                @Html.ValidationSummary()
+            </div>
+            <div class="form-group has-feedback">
+                @Html.TextBoxFor(u => u.UserName, new { @class = "form-control", placeholder = "用户名" })
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                @Html.PasswordFor(u => u.Password, new { @class = "form-control", placeholder = "密码" })
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" value="RememberMe" />&nbsp;记住我
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        }
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="~/Scripts/html5shiv.min.js"></script>
+        <script src="~/Scripts/respond.min.js"></script>
+    <![endif]-->
+</body>
+</html>

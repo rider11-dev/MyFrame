@@ -8,6 +8,7 @@ namespace Test.dal
 {
     public class EFDbContextProviderRBAC : IEFDbContextProvider
     {
+        public string NameOrConnectionString { get; set; }
         public EFDbContext Generate()
         {
             return new EFDbContextRBAC();

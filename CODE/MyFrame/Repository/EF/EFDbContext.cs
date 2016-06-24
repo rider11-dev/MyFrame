@@ -15,5 +15,9 @@ namespace MyFrame.Repository.EF
         public EFDbContext()
             : base("DefaultConnection")
         { }
+
+        public EFDbContext(string nameOrConnectionString)
+            : base(nameOrConnectionString)
+        { }
     }
 }

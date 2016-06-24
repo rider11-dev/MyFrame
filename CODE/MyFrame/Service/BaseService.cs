@@ -15,7 +15,7 @@ namespace MyFrame.Service
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
     {
-        IBaseRepository<TEntity> _repository = null;
+        protected IBaseRepository<TEntity> _repository = null;
 
         public BaseService(IBaseRepository<TEntity> repository)
         {

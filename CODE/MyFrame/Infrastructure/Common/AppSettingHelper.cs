@@ -16,7 +16,10 @@ namespace MyFrame.Infrastructure.Common
         {
             get
             {
-                return Convert.ToBoolean(Get(KEY_LOG));
+                var val = Get(KEY_LOG);
+                bool result = false;
+                Boolean.TryParse(val, out result);
+                return result;
             }
         }
 

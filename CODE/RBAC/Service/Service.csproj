@@ -34,17 +34,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dlls\MyFrame\MyFrame.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="MyFrame.IRepository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dlls\MyFrame\MyFrame.IRepository.dll</HintPath>
-    </Reference>
-    <Reference Include="MyFrame.IService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dlls\MyFrame\MyFrame.IService.dll</HintPath>
-    </Reference>
     <Reference Include="MyFrame.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dlls\MyFrame\MyFrame.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="MyFrame.Repository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\MyFrame\MyFrame.Repository.dll</HintPath>
     </Reference>
     <Reference Include="MyFrame.Service">
       <HintPath>..\..\dlls\MyFrame\MyFrame.Service.dll</HintPath>
@@ -58,6 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRoleService.cs" />
+    <Compile Include="IRoleServiceWrapper.cs" />
+    <Compile Include="IUserService.cs" />
+    <Compile Include="IUserServiceWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleService.cs" />
     <Compile Include="RoleServiceWrapper.cs" />
@@ -65,17 +65,13 @@
     <Compile Include="UserServiceWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IRepository\IRepository.csproj">
-      <Project>{34c7da67-249c-4b86-8478-459fece2dc37}</Project>
-      <Name>IRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IService\IService.csproj">
-      <Project>{e948426f-ef19-48da-92d9-968190762b7e}</Project>
-      <Name>IService</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{f9f78552-22d3-4018-a063-d31ab66a30ab}</Project>
       <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Repository\Repository.csproj">
+      <Project>{94c58547-423d-4aaf-a99e-70c7ec7eccc9}</Project>
+      <Name>Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

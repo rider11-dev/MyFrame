@@ -9,5 +9,14 @@ namespace MyFrame.Repository.RBAC
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
+        public User FindByUserName(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                return null;
+            }
+            var list = base.Find(u => u.UserName == userName);
+            return list.FirstOrDefault();
+        }
     }
 }

@@ -68,14 +68,6 @@
       <Project>{7392f954-0758-496e-8557-bc8a673f32a3}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRepository\IRepository.csproj">
-      <Project>{b93fd2a6-af92-4c3b-9378-b68400d44966}</Project>
-      <Name>IRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IService\IService.csproj">
-      <Project>{1ccc50d1-e39c-4e6e-898f-56cb93740c07}</Project>
-      <Name>IService</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{8ff11b4f-4cb4-459f-88aa-5090bca26116}</Project>
       <Name>Model</Name>

@@ -4,13 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RBAC
+namespace MyFrame.IRepository.RBAC
 {
     public class EFDbContextProviderRBAC : IEFDbContextProvider
     {
+        public EFDbContextProviderRBAC()
+        { }
+        public EFDbContextProviderRBAC(string nameOrConnectionString)
+        {
+            NameOrConnectionString = nameOrConnectionString;
+        }
+
         public EFDbContext Generate()
         {
-            return new EFDbContextRBAC();
+            EFDbContext dbContext = string.IsNullOrEmpty(NameOrConnectionString) ? new EFDbContextRBAC() : new EFDbContextRBAC(NameOrConnectionString);
+
+            return dbContext;
         }
+
+        public string NameOrConnectionString { get; set; }
     }
 }

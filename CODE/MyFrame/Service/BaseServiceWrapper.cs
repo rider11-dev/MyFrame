@@ -26,7 +26,7 @@ namespace MyFrame.Service
         /// <summary>
         /// 数据实体类名称
         /// </summary>
-        string EntityType = typeof(TEntity).FullName;
+        protected string EntityType = typeof(TEntity).FullName;
 
         public OperationResult Add(TEntity entity)
         {
@@ -174,7 +174,7 @@ namespace MyFrame.Service
             {
                 var data = _service.Find(where);
                 result.ResultType = OperationResultType.Success;
-                result.AppendData = data;
+                result.AppendData = data.ToList();
             }
             catch (Exception ex)
             {
@@ -196,7 +196,7 @@ namespace MyFrame.Service
             {
                 var data = _service.FindByPage(where, orderByList, pageArgs);
                 result.ResultType = OperationResultType.Success;
-                result.AppendData = data;
+                result.AppendData = data.ToList();
             }
             catch (Exception ex)
             {
@@ -205,7 +205,7 @@ namespace MyFrame.Service
             return result;
         }
 
-        private void ProcessException(OperationResult result, string msg, Exception ex)
+        protected void ProcessException(OperationResult result, string msg, Exception ex)
         {
             if (result == null)
             {

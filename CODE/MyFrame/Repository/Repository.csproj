@@ -54,16 +54,13 @@
     <Compile Include="EF\EFDbContext.cs" />
     <Compile Include="EF\EFDbContextFactory.cs" />
     <Compile Include="EF\IEFDbContextProvider.cs" />
+    <Compile Include="IBaseRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{7392f954-0758-496e-8557-bc8a673f32a3}</Project>
       <Name>Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IRepository\IRepository.csproj">
-      <Project>{b93fd2a6-af92-4c3b-9378-b68400d44966}</Project>
-      <Name>IRepository</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{8ff11b4f-4cb4-459f-88aa-5090bca26116}</Project>

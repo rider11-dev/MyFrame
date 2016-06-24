@@ -10,8 +10,16 @@ namespace MyFrame.Service.RBAC
 {
     public class UserService : BaseService<User>, IUserService
     {
+        IUserRepository usrRepository;
         public UserService(IUserRepository _usrRep)
             : base(_usrRep)
-        { }
+        {
+            usrRepository = _usrRep;
+        }
+
+        public User FindByUserName(string userName)
+        {
+            return usrRepository.FindByUserName(userName);
+        }
     }
 }

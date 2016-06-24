@@ -14,7 +14,7 @@ CREATE TABLE Users(
 	Remark nvarchar(255) NULL,
 	IsDeleted bit NOT NULL default 0
 );
-INSERT into Users(UserName,Password,Email,Phone,Address,Enabled) values('admin','管理员','751682472@163.com','88888888','中国山东',1);
+INSERT into Users(UserName,Password,Email,Phone,Address,Enabled) values('admin','0b4e7a0e5fe84ad35fb5f95b9ceeac79','751682472@163.com','88888888','中国山东',1); --aaaaaa
 -- 角色表
 create table Roles(
 	Id int identity(1,1) primary key,
