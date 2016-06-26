@@ -35,7 +35,7 @@ namespace WebApp.Extensions.Filters
             {
                 if (filterContext.HttpContext.Session[SessionConfig.KEY_USER_ID] == null)
                 {
-                    filterContext.HttpContext.Response.Redirect("~/RBAC/Login/Index");
+                    filterContext.HttpContext.Response.Redirect("~/RBAC/Account/Index");
                 }
             }
         }

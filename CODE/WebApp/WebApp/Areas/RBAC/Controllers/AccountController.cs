@@ -14,23 +14,23 @@ using WebApp.ViewModels.RBAC;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
-    public class LoginController : BaseController
+    public class AccountController : BaseController
     {
         readonly IUserServiceWrapper _usrSrvWrapper;
-        public LoginController(IUserServiceWrapper usrSrvWrapper)
+        public AccountController(IUserServiceWrapper usrSrvWrapper)
         {
             _usrSrvWrapper = usrSrvWrapper;
         }
         //
         // GET: /RBAC/User/
-        public ActionResult Index()
+        public ActionResult Login()
         {
             return View(new LoginVM());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]//防止xss攻击
-        public ActionResult Index(LoginVM loginVM)
+        public ActionResult Login(LoginVM loginVM)
         {
             if (!ModelState.IsValid)
             {

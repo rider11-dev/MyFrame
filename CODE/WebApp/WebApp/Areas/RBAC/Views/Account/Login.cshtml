@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="container">
-        @using (Html.BeginForm("Index", "Login", new { Area = "RBAC" }, FormMethod.Post, new { @class = "form-signin" }))
+        @using (Html.BeginForm("Login", "Account", new { Area = "RBAC" }, FormMethod.Post, new { @class = "form-signin" }))
         {
             @Html.AntiForgeryToken();
             <h2 class="form-signin-heading">用户登录</h2>

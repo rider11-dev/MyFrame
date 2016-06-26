@@ -146,6 +146,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\RBAC\Models\" />
+    <Folder Include="Areas\RBAC\Views\Module\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
@@ -154,9 +155,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\RBAC\Controllers\HomeController.cs" />
-    <Compile Include="Areas\RBAC\Controllers\LoginController.cs" />
+    <Compile Include="Areas\RBAC\Controllers\AccountController.cs" />
+    <Compile Include="Areas\RBAC\Controllers\ModuleController.cs" />
     <Compile Include="Areas\RBAC\RBACAreaRegistration.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Extensions\Filters\LayoutAttrbute.cs" />
     <Compile Include="Extensions\Filters\LoginCheckFilterAttribute.cs" />
     <Compile Include="Extensions\Ioc\AutofacHelper.cs" />
     <Compile Include="Extensions\Ioc\AutofacRegister.cs" />
@@ -167,6 +170,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\RBAC\LoginVM.cs" />
+    <Compile Include="ViewModels\RBAC\ModuleVM.cs" />
     <Compile Include="ViewModels\RBAC\UserVM.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1828,7 +1832,7 @@
     <Content Include="libs\plugins\sparkline\jquery.sparkline.js" />
     <Content Include="libs\plugins\sparkline\jquery.sparkline.min.js" />
     <Content Include="Areas\RBAC\Views\web.config" />
-    <Content Include="Areas\RBAC\Views\Login\Index.cshtml" />
+    <Content Include="Areas\RBAC\Views\Account\Login.cshtml" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
