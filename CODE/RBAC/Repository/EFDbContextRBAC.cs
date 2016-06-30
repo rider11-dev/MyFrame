@@ -19,5 +19,6 @@ namespace MyFrame.IRepository.RBAC
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Module> Modules { get; set; }
     }
 }

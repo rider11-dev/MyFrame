@@ -12,6 +12,7 @@ namespace WebApp.Areas.RBAC.Controllers
         //
         // GET: /RBAC/Home/
         [LoginCheckFilter]
+        [LayoutAttrbute]
         public ActionResult Index()
         {
             return View();

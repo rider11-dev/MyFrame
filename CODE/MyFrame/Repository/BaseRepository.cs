@@ -109,7 +109,7 @@ namespace MyFrame.Repository
             //1、处理分页参数
             var _list = Entities.Where(where);
             pageArgs.RecordsCount = _list.Count();
-            pageArgs.PageCount = Convert.ToInt32(Math.Ceiling(pageArgs.RecordsCount * 1.0 % pageArgs.PageSize));
+            pageArgs.PageCount = Convert.ToInt32(Math.Ceiling(pageArgs.RecordsCount * 1.0 / pageArgs.PageSize));
             if (pageArgs.PageIndex > pageArgs.PageCount)
             {
                 //页索引不能超过总页数
@@ -136,7 +136,7 @@ namespace MyFrame.Repository
                 }
             }
             //3、分页获取
-            _list = _list.Skip((pageArgs.PageIndex - 1) * pageArgs.PageSize).Take(pageArgs.PageCount);
+            _list = _list.Skip((pageArgs.PageIndex - 1) * pageArgs.PageSize).Take(pageArgs.PageSize);
             //4、返回
             return _list;
         }

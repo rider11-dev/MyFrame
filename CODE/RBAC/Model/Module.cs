@@ -26,7 +26,7 @@ namespace MyFrame.Model.RBAC
 
         [Description("模块编号")]
         [StringLength(20)]
-        public int Code { get; set; }
+        public string Code { get; set; }
         [Required]
         [Description("名称")]
         [StringLength(20)]
@@ -53,7 +53,7 @@ namespace MyFrame.Model.RBAC
         [Description("是否系统模块")]
         public bool IsSystem { get; set; }
         [Description("排序号")]
-        public bool SortOrder { get; set; }
+        public int SortOrder { get; set; }
 
 
         [Description("创建时间")]

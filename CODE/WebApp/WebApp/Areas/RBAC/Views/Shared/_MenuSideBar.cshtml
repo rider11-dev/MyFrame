@@ -1,4 +1,8 @@
-﻿
+﻿@using WebApp.ViewModels.RBAC
+@using System.Text
+@{
+    var moduleList = ViewData["ModuleTreeData"] as List<ModuleVM>;
+}
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -29,30 +33,34 @@
             <li class="active">
                 <a href="#"><i class="fa fa-home"></i><span>主页</span></a>
             </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-wrench"></i>
-                    <span>授权管理</span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-bookmark"></i> 角色管理</a></li>
-                    <li class=""><a href="#"><i class="fa fa-user"></i> 用户管理</a></li>
-                    <li><a href="#"><i class="fa fa-group"></i> 用户组管理</a></li>
-                    <li><a href="#"><i class="fa fa-cog"></i> 模块管理</a></li>
-                    <li><a href="#"><i class="fa fa-eye"></i> 权限管理</a></li>
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-user"></i>
-                    <span>我的账户</span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-edit"></i> 信息修改</a></li>
-                    <li><a href="#"><i class="fa fa-key"></i> 修改密码</a></li>
-                    <li><a href="#"><i class="fa fa-sign-out"></i> 退出登录</a></li>
-                </ul>
-            </li>
+            @{
+                Action<ModuleVM, StringBuilder> actionFormatTreeMenu = null;
+                actionFormatTreeMenu = (m, sb) =>
+                {
+                    if (m == null)
+                    {
+                        return;
+                    }
+                    sb.AppendFormat("<li {0}>", m.HasChild ? "class='treeview'" : "");
+                    sb.AppendFormat("<a href='{0}'><i class='fa {1}'></i><span>{2}</span></a>", string.IsNullOrEmpty(m.LinkUrl) ? "#" : (Request.ApplicationPath + m.LinkUrl), m.Icon, m.Name);
+                    if (m.SubModules != null && m.SubModules.Count() > 0)
+                    {
+                        sb.AppendFormat("<ul class='treeview-menu'>");
+                        foreach (var mSub in m.SubModules)
+                        {
+                            actionFormatTreeMenu(mSub, sb);
+                        }
+                        sb.AppendFormat("</ul>");
+                    }
+                    sb.AppendFormat("</li>");
+                };
+                StringBuilder sbHtml = new StringBuilder();
+                foreach (var item in moduleList)
+                {
+                    actionFormatTreeMenu(item, sbHtml);
+                }
+                @Html.Raw(sbHtml.ToString());
+            }
         </ul>
     </section>
     <!-- /.sidebar -->

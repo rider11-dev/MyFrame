@@ -38,16 +38,12 @@ namespace WebApp.ViewModels.RBAC
         [Display(Name = "是否激活")]
         public bool Enabled { get; set; }
 
-        public string EnabledText { get { return Enabled ? "是" : "否"; } }
-
         [Display(Name = "备注")]
         [MaxLength(255, ErrorMessage = "备注不能超过255个字符")]
         public string Remark { get; set; }
 
         [Display(Name = "是否已删除")]
         public bool IsDeleted { get; set; }
-        public string IsDeletedText { get { return IsDeleted ? "是" : "否"; } }
-
 
         [Display(Name = "创建人")]
         public int? Creator { get; set; }

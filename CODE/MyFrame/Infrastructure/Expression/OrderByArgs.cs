@@ -11,7 +11,7 @@ namespace MyFrame.Infrastructure.Expression
     /// </summary>
     public class OrderByArgs<T> where T : class
     {
-        public Expression<Func<T, bool>> Expression { get; set; }
+        public Expression<Func<T, object>> Expression { get; set; }
         public OrderByType OrderByType { get; set; }
     }
 

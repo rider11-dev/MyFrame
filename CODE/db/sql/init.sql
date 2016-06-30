@@ -40,14 +40,14 @@ CREATE TABLE Modules(
 	ParentId int ,
 	HasChild bit not null default 0,
 	Enabled bit not null default 0,
-  IsSystem bit not null default 0,
+	IsSystem bit not null default 0,
 	SortOrder int not null default 10,
 	Remark nvarchar(255),
 	Creator int,
 	CreateTime date,
 	LastModifier int,
 	LastModifyTime date,
-	IsDelete bit not null default 0
+	IsDeleted bit not null default 0
 );
 set IDENTITY_INSERT Modules on;
 INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(11,'RoleManage','用户管理','/RBAC/User/Index','fa-user',1,0,1,10,1,1);
