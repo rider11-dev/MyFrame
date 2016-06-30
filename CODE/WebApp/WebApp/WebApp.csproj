@@ -231,10 +231,14 @@
     <Content Include="libs\plugins\bootstrap-table\locale\bootstrap-table-zh-CN.min.js" />
     <Content Include="libs\plugins\bootstrap-table\locale\bootstrap-table-zh-TW.js" />
     <Content Include="libs\plugins\bootstrap-table\locale\bootstrap-table-zh-TW.min.js" />
+    <Content Include="libs\plugins\modernizr-2.6.2.js" />
     <Content Include="libs\plugins\toastr\toastr.css" />
     <Content Include="libs\plugins\toastr\toastr.js" />
     <Content Include="libs\plugins\toastr\toastr.min.css" />
+    <Content Include="libs\plugins\validate\jquery.validate.min.js" />
+    <Content Include="libs\plugins\validate\jquery.validate.unobtrusive.min.js" />
     <Content Include="libs\rbac\base.js" />
+    <Content Include="libs\rbac\modalForm.js" />
     <Content Include="libs\rbac\user\usermanage.js" />
     <Content Include="libs\rbac\index.js" />
     <Content Include="Content\bootstrap\bootstrap-theme.css" />
@@ -2126,6 +2130,8 @@
     <Content Include="libs\plugins\datatables\extensions\TableTools\images\psd\file_types.psd" />
     <Content Include="libs\plugins\datatables\extensions\TableTools\images\psd\printer.psd" />
     <Content Include="libs\plugins\datatables\extensions\TableTools\Readme.md" />
+    <Content Include="Areas\RBAC\Views\User\Add.cshtml" />
+    <Content Include="Areas\RBAC\Views\Shared\_Modal.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

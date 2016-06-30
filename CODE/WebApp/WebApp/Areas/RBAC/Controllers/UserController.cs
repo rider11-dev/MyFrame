@@ -23,13 +23,21 @@ namespace WebApp.Areas.RBAC.Controllers
             _userSrvWrapper = userSrvWrapper;
         }
 
-        //
-        // GET: /RBAC/User/
+        /// <summary>
+        /// 列表界面
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// 分页获取
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public JsonResult GetUsersByPage(int pageNumber, int pageSize)
         {
             Expression<Func<User, bool>> where = u => u.IsDeleted == false;
@@ -49,12 +57,35 @@ namespace WebApp.Areas.RBAC.Controllers
 
             if (result.ResultType == OperationResultType.Success)
             {
-                return Json(new { code = result.ResultType, total = pageArgs.RecordsCount, rows = (result.AppendData as List<User>) }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = result.ResultType, message = "数据获取成功", total = pageArgs.RecordsCount, rows = (result.AppendData as List<User>) }, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return Json(new { code = result.ResultType, error = result.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = result.ResultType, message = result.Message }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult Add()
+        {
+            UserVM usrVM = new UserVM()
+            {
+                Enabled = true,
+                IsDeleted = false
+            };
+            return PartialView(usrVM);
+        }
+
+        [HttpPost]
+        public JsonResult Add(UserVM usrVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { code = OperationResultType.ParamError, message = "参数不合法" });
+            }
+
+
+
+            return Json(new { code = OperationResultType.Success, message = "添加成功" });
         }
     }
 }

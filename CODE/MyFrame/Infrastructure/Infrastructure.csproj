@@ -54,6 +54,7 @@
     <Compile Include="Common\EnumExtensions.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
     <Compile Include="Common\TypeExtensions.cs" />
+    <Compile Include="Dynamic\MyDynamicObject.cs" />
     <Compile Include="Exception\ExceptionExtensions.cs" />
     <Compile Include="Expression\ExpressionExtensions.cs" />
     <Compile Include="Expression\OrderByArgs.cs" />

@@ -19,7 +19,7 @@
     参数：
         grid：列表，可以#id,也可以直接传dom元素值或jquery对象
         options：
-            url:字符串，请求后台数据的url（相对网站根目录的路径）
+            url:字符串，请求后台数据的url（绝对路径）
             method:字符串，请求方式，get/post
             dataField:字符串，查询结果json对象中存放实际数据集的属性名称
             height:整数值，高度
@@ -32,7 +32,7 @@
     */
     initgrid: function (grid, options) {
         $(grid).bootstrapTable({
-            url: gFunc.getRootPath() + options.url,//请求后台的URL（*）
+            url: options.url,//请求后台的URL（*）
             method: options.method,                      //请求方式（*）
             //toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -66,13 +66,23 @@
                 //console.log(data);
                 if (data.code !== 0) {
                     //console.log(data.error);
-                    toastr.warning(data.error);
+                    toastr.warning(data.message);
                 }
             },
             onLoadError: function (status, res) {
                 toastr.error('网络错误:' + status);
             },
             columns: options.columns
+        });
+    },
+    setCheckBoxStyle: function (target) {
+        if (gFunc.isNull(target)) {
+            return;
+        }
+        $(target).iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
         });
     },
 };

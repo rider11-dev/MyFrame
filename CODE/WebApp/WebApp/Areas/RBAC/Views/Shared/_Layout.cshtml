@@ -59,19 +59,29 @@
         <!-- /.control-sidebar -->
         <!-- Add the sidebar's background. This div must be placed
              immediately after the control sidebar -->
+        @Html.Partial("_Modal")
         <div class="control-sidebar-bg"></div>
+
     </div>
     <!-- ./wrapper -->
     <!-- jQuery 2.2.0 -->
     <script src="~/libs/plugins/jQuery/jQuery-2.2.0.min.js"></script>
     <!-- Bootstrap 3.3.6 -->
     <script src="~/libs/plugins/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="~/libs/plugins/iCheck/icheck.min.js"></script>
+    <script src="~/libs/plugins/validate/jquery.validate.min.js"></script>
+    <script src="~/libs/plugins/validate/jquery.validate.unobtrusive.min.js"></script>
+    @*
+            <script src="~/libs/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <script src="~/libs/plugins/fastclick/fastclick.min.js"></script>
+    *@
     <!--通知插件-->
     <script src="~/libs/plugins/toastr/toastr.js"></script>
     <!-- AdminLTE App -->
     <script src="~/libs/AdminLTE/js/app.min.js"></script>
     <script src="~/libs/rbac/base.js"></script>
     <script src="~/libs/rbac/index.js"></script>
+    <script src="~/libs/rbac/modalForm.js"></script>
     <script>
         $(function () {
             toastr.options = { positionClass: "toast-top-center", showDuration: "150", hideDuration: "1000", showMethod: "fadeIn", closeButton: 'true' };

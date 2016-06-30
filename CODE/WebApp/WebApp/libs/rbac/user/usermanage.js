@@ -5,7 +5,16 @@
     btnDelete: $('#btnDelete'),
     btnSearch: $('#btnSearch'),
     txtSearchUserName: $('#txtSearchUserName'),
-    init: function () {
+    urlAdd: "",
+    urlEdit: "",
+    urlDelete: "",
+    urlSearch: "",
+    init: function (options) {
+        usermanage.urlAdd = options.urlAdd;
+        usermanage.urlEdit = options.urlEdit;
+        usermanage.urlDelete = options.urlDelete;
+        usermanage.urlSearch = options.urlSearch;
+
         usermanage.initgrid();
         usermanage.bindingEventArgs();
     },
@@ -17,7 +26,7 @@
     },
     initgrid: function () {
         var options = {
-            url: '/RBAC/User/GetUsersByPage',
+            url: usermanage.urlSearch,
             method: 'get',
             dataField: 'rows',
             height: 400,
@@ -60,8 +69,15 @@
         gFunc.initgrid(usermanage.grid, options);
     },
     funcBtnAdd: function () {
-        var checkedRows = usermanage.grid.bootstrapTable('getSelections');
-        //console.log(checkedRows.length);
+        //alert('hahahx');
+        modalForm.show({
+            title: '添加用户',
+            contentUrl: usermanage.urlAdd,
+            urlParams: {},
+            submitCallback: function () {
+                usermanage.grid.bootstrapTable('refresh');
+            }
+        });
     },
     funcBtnEdit: function () {
         var checkedRows = usermanage.grid.bootstrapTable('getSelections');

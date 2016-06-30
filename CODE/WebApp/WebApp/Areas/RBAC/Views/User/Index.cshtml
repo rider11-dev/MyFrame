@@ -39,6 +39,11 @@
 <script src="~/libs/rbac/user/usermanage.js"></script>
 <script type="text/javascript">
     $(function () {
-        usermanage.init();
+        usermanage.init({
+            urlAdd: "@Url.Action("Add")",
+            urlEdit: "@Url.Action("Edit")",
+            urlSearch: "@Url.Action("GetUsersByPage")",
+            urlDelete: "@Url.Action("Delete")"
+        });
     });
 </script>
