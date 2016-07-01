@@ -7,7 +7,7 @@ using Test.entity;
 
 namespace Test.bll
 {
-    public interface IUsersService : IBaseService<User>
+    interface IUsersService : IBaseService<User>
     {
     }
 }

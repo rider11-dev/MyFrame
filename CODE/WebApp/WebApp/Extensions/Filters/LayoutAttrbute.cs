@@ -13,7 +13,7 @@ namespace WebApp.Extensions.Filters
     public class LayoutAttrbute : ActionFilterAttribute
     {
         #region Autofac属性注入,Filter的注入不同于Controller, Controller的注入是通过构造函数注入的，而Filter是通过属性注入的
-        public IModuleServiceWrapper ModuleSrvWrapper { get; set; }
+        public IModuleService ModuleSrv { get; set; }
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace WebApp.Extensions.Filters
         private List<ModuleVM> GetModulesForTree()
         {
             List<ModuleVM> listVM = new List<ModuleVM>();
-            var result = ModuleSrvWrapper.Find(m => m.Enabled == true && m.IsDeleted == false);
+            var result = ModuleSrv.Find(m => m.Enabled == true && m.IsDeleted == false);
             if (result.ResultType == OperationResultType.Success)
             {
                 //获取所有模块数据

@@ -10,8 +10,11 @@ namespace MyFrame.Service.RBAC
 {
     public class ModuleService : BaseService<Module>, IModuleService
     {
-        public ModuleService(IModuleRepository _moduleRep)
-            : base(_moduleRep)
-        { }
+        IModuleRepository _moduleRepository;
+        public ModuleService(IModuleRepository moduleRep)
+            : base(moduleRep)
+        {
+            _moduleRepository = moduleRep;
+        }
     }
 }

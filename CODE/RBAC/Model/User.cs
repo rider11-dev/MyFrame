@@ -34,7 +34,6 @@ namespace MyFrame.Model.RBAC
         [StringLength(32)]
         public string Password { get; set; }
 
-        [Required]
         [Display(Name = "邮箱")]
         [StringLength(50)]
         public string Email { get; set; }

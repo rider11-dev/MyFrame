@@ -51,9 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bll\IUsersService.cs" />
-    <Compile Include="bll\IUsersServiceWrapper.cs" />
     <Compile Include="bll\UsersService.cs" />
-    <Compile Include="bll\UsersServiceWrapper.cs" />
     <Compile Include="dal\EFDbContextProviderRBAC.cs" />
     <Compile Include="dal\EFDbContextRBAC.cs" />
     <Compile Include="dal\IUsersRepository.cs" />

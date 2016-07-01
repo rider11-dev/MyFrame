@@ -1,4 +1,5 @@
-﻿using MyFrame.Model.RBAC;
+﻿using MyFrame.Infrastructure.OptResult;
+using MyFrame.Model.RBAC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ namespace MyFrame.IService.RBAC
 {
     public interface IUserService : IBaseService<User>
     {
-        User FindByUserName(string userName);
+        OperationResult FindByUserName(string userName);
+
+        OperationResult UpdateDetail(User usr);
     }
 }

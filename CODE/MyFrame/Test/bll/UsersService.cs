@@ -10,10 +10,8 @@ namespace Test.bll
 {
     public class UsersService : BaseService<User>, IUsersService
     {
-        public UsersService(IUsersRepository _usersRep)
-            : base(_usersRep)
+        public UsersService(IUsersRepository _repository)
+            : base(_repository)
         { }
-
-
     }
 }

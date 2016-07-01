@@ -10,12 +10,11 @@ namespace Test
 {
     public class UsersTest
     {
-        IUsersServiceWrapper srvWrapper;
+        IUsersService srvWrapper;
         public UsersTest()
         {
             IUsersRepository rep = new UsersRepository();
-            IUsersService srv = new UsersService(rep);
-            srvWrapper = new UsersServiceWrapper(srv);
+            srvWrapper = new UsersService(rep);
         }
         public void GetCount()
         {

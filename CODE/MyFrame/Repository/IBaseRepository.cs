@@ -16,10 +16,7 @@ namespace MyFrame.IRepository
         TEntity Add(TEntity entity);
 
         int Count(Expression<Func<TEntity, bool>> where = null);
-
-        bool Delete(TEntity entity);
         bool Delete(Expression<Func<TEntity, bool>> where);
-        bool Update(TEntity entity);
         bool Update(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, TEntity>> update);
         bool Exists(Expression<Func<TEntity, bool>> where);
 

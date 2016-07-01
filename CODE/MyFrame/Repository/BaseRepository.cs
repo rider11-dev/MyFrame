@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using EntityFramework.Extensions;
+using MyFrame.Infrastructure.Logger;
 
 namespace MyFrame.Repository
 {
@@ -19,6 +20,12 @@ namespace MyFrame.Repository
         /// 当前数据库上下文
         /// </summary>
         protected EFDbContext dbContext = EFDbContextFactory.GetCurrentContext();
+        ILogHelper<TEntity> _logger;
+        public BaseRepository()
+        {
+            _logger = LogHelperFactory.GetLogHelper<TEntity>();
+        }
+
         public virtual IQueryable<TEntity> Entities
         {
             get
@@ -29,9 +36,18 @@ namespace MyFrame.Repository
 
         public virtual TEntity Add(TEntity entity)
         {
-            dbContext.Entry<TEntity>(entity).State = EntityState.Added;
-            dbContext.SaveChanges();
+            try
+            {
+                dbContext.Entry<TEntity>(entity).State = EntityState.Added;
+                dbContext.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                var msg = BuildValidationErrorMessage(ex);
+                _logger.LogError(msg);
 
+                throw ex;
+            }
             return entity;
         }
 
@@ -49,15 +65,6 @@ namespace MyFrame.Repository
             return count;
         }
 
-        public virtual bool Delete(TEntity entity)
-        {
-            int rst = 0;
-            dbContext.Set<TEntity>().Attach(entity);
-            dbContext.Entry<TEntity>(entity).State = EntityState.Deleted;
-            rst = dbContext.SaveChanges();
-            return rst > 0;
-        }
-
         public bool Delete(Expression<Func<TEntity, bool>> where)
         {
             if (where == null)
@@ -65,15 +72,6 @@ namespace MyFrame.Repository
                 return false;
             }
             int rst = Entities.Where(where).Delete();
-            return rst > 0;
-        }
-
-        public virtual bool Update(TEntity entity)
-        {
-            int rst = 0;
-            dbContext.Set<TEntity>().Attach(entity);
-            dbContext.Entry<TEntity>(entity).State = EntityState.Modified;
-            rst = dbContext.SaveChanges();
             return rst > 0;
         }
         public bool Update(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, TEntity>> update)
@@ -139,6 +137,26 @@ namespace MyFrame.Repository
             _list = _list.Skip((pageArgs.PageIndex - 1) * pageArgs.PageSize).Take(pageArgs.PageSize);
             //4、返回
             return _list;
+        }
+
+        /// <summary>
+        /// 构造ef校验异常信息
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
+        protected string BuildValidationErrorMessage(DbEntityValidationException ex)
+        {
+            StringBuilder sbErrors = new StringBuilder();
+            var valResults = ex.EntityValidationErrors;
+            foreach (var result in valResults)
+            {
+                var errors = result.ValidationErrors;
+                foreach (var error in errors)
+                {
+                    sbErrors.AppendFormat("{0}:{1}", error.PropertyName, error.ErrorMessage);
+                }
+            }
+            return sbErrors.ToString();
         }
 
     }

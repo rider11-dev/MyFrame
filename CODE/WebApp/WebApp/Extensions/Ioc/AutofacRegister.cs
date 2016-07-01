@@ -46,17 +46,14 @@ namespace WebApp.Extensions.Ioc
             //用户
             builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerRequest();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerRequest();
-            builder.RegisterType<UserServiceWrapper>().As<IUserServiceWrapper>().InstancePerRequest();
 
             //角色
             builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerRequest();
             builder.RegisterType<RoleService>().As<IRoleService>().InstancePerRequest();
-            builder.RegisterType<RoleServiceWrapper>().As<IRoleServiceWrapper>().InstancePerRequest();
 
             //模块
             builder.RegisterType<ModuleRepository>().As<IModuleRepository>().InstancePerRequest();
             builder.RegisterType<ModuleService>().As<IModuleService>().InstancePerRequest();
-            builder.RegisterType<ModuleServiceWrapper>().As<IModuleServiceWrapper>().InstancePerRequest();
         }
     }
 }

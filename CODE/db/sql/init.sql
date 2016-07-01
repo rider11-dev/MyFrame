@@ -3,7 +3,7 @@ CREATE TABLE Users(
 	Id int IDENTITY(1,1) primary key,
 	UserName nvarchar(20) NOT NULL,
 	Password nvarchar(32) NOT NULL,
-	Email nvarchar(50) NOT NULL,
+	Email nvarchar(50) NULL,
 	Phone nvarchar(50) NULL,
 	Address nvarchar(300) NULL,
 	Creator int NULL,

@@ -64,5 +64,10 @@ namespace MyFrame.Infrastructure.OptResult
         /// </summary>
         [Description("操作引发错误。")]
         Error = 64,
+        /// <summary>
+        ///     操作前校验失败
+        /// </summary>
+        [Description("操作前校验失败。")]
+        CheckFailedBeforeProcess = 128
     }
 }

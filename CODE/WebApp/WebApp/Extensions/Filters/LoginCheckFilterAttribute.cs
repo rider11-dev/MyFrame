@@ -33,7 +33,7 @@ namespace WebApp.Extensions.Filters
 
             if (EnableCheck)
             {
-                if (filterContext.HttpContext.Session[SessionConfig.KEY_USER_ID] == null)
+                if (filterContext.HttpContext.Session.GetUserId() == null)
                 {
                     filterContext.HttpContext.Response.Redirect("~/RBAC/Account/Index");
                 }

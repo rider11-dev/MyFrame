@@ -16,10 +16,10 @@ namespace WebApp.Areas.RBAC.Controllers
 {
     public class AccountController : BaseController
     {
-        readonly IUserServiceWrapper _usrSrvWrapper;
-        public AccountController(IUserServiceWrapper usrSrvWrapper)
+        readonly IUserService _usrSrv;
+        public AccountController(IUserService usrSrv)
         {
-            _usrSrvWrapper = usrSrvWrapper;
+            _usrSrv = usrSrv;
         }
         //
         // GET: /RBAC/User/
@@ -38,7 +38,7 @@ namespace WebApp.Areas.RBAC.Controllers
             }
             try
             {
-                var result = _usrSrvWrapper.FindByUserName(loginVM.UserName);
+                var result = _usrSrv.FindByUserName(loginVM.UserName);
                 if (result.ResultType == OperationResultType.Success)
                 {
                     var usr = (User)result.AppendData;
@@ -56,7 +56,7 @@ namespace WebApp.Areas.RBAC.Controllers
                         }
                         //登录成功
                         //登记session
-                        HttpContext.Session.Add(SessionConfig.KEY_USER_ID, usr.Id);
+                        HttpContext.Session.SetUser(usr);
                         //重定向
                         return RedirectToHome();
                     }

@@ -1,4 +1,25 @@
-﻿var gFunc = {
+﻿/*——————————————————全局扩展——————————————————*/
+//日期格式化扩展
+Date.prototype.Format = function (fmt) {
+    var o = {
+        "M+": this.getMonth() + 1,                 //月份
+        "d+": this.getDate(),                    //日
+        "h+": this.getHours(),                   //小时
+        "m+": this.getMinutes(),                 //分
+        "s+": this.getSeconds(),                 //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds()             //毫秒
+    };
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+};
+
+/*——————————————————全局函数——————————————————*/
+var gFunc = {
     isNull: function (value) {
         return typeof (value) == 'undefined' || value == null;
     },
@@ -66,11 +87,11 @@
                 //console.log(data);
                 if (data.code !== 0) {
                     //console.log(data.error);
-                    toastr.warning(data.message);
+                    gMessager.warning(data.message);
                 }
             },
             onLoadError: function (status, res) {
-                toastr.error('网络错误:' + status);
+                gMessager.error('网络错误:' + status);
             },
             columns: options.columns
         });
@@ -107,5 +128,35 @@ var gFormatter = {
                 return null;
             }
         }
+    },
+    datetime: {
+        //参数格式"/Date(1415169703000)/"
+        formatter: function (value) {
+            if (gFunc.isNull(value)) {
+                return null;
+            }
+            var formatdate = eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+            return formatdate.Format('yyyy-MM-dd');
+        }
+    }
+};
+
+/*——————————————————全局对象——————————————————*/
+var gMessager = {
+    error: function (message, title) {
+        toastr.clear();
+        toastr.error(message, title);
+    },
+    info: function (message, title) {
+        toastr.clear();
+        toastr.info(message, title);
+    },
+    success: function (message, title) {
+        toastr.clear();
+        toastr.success(message, title);
+    },
+    warning: function (message, title) {
+        toastr.clear();
+        toastr.warning(message, title);
     }
 };

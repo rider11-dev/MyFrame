@@ -10,8 +10,11 @@ namespace MyFrame.Service.RBAC
 {
     public class RoleService : BaseService<Role>, IRoleService
     {
-        public RoleService(IRoleRepository _roleRep)
-            : base(_roleRep)
-        { }
+        IRoleRepository _roleRepository;
+        public RoleService(IRoleRepository roleRep)
+            : base(roleRep)
+        {
+            _roleRepository = roleRep;
+        }
     }
 }

@@ -39,10 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseServiceWrapper.cs" />
     <Compile Include="BaseService.cs" />
     <Compile Include="IBaseService.cs" />
-    <Compile Include="IBaseServiceWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

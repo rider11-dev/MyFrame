@@ -5,6 +5,7 @@
     btnDelete: $('#btnDelete'),
     btnSearch: $('#btnSearch'),
     txtSearchUserName: $('#txtSearchUserName'),
+    ckSearchIsDeleted: $('#ckSearchIsDeleted'),
     urlAdd: "",
     urlEdit: "",
     urlDelete: "",
@@ -35,6 +36,8 @@
                 //添加额外参数
                 if (!gFunc.isNull(usermanage.txtSearchUserName.val())) {
                     params.UserName = usermanage.txtSearchUserName.val();
+                    console.log(usermanage.ckSearchIsDeleted.checked);
+                    params.IsDeleted = usermanage.ckSearchIsDeleted.checked;
                 }
                 return params;//必须返回params
             },
@@ -73,9 +76,13 @@
         modalForm.show({
             title: '添加用户',
             contentUrl: usermanage.urlAdd,
-            urlParams: {},
-            submitCallback: function () {
+            contentUrlParams: {},
+            submitUrl: usermanage.urlAdd,
+            submitSucceedCallback: function () {
                 usermanage.grid.bootstrapTable('refresh');
+            },
+            onLoadCallback: function () {
+
             }
         });
     },
@@ -83,22 +90,83 @@
         var checkedRows = usermanage.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
         if (checkedRows.length < 1) {
-            toastr.warning('请选择要修改的数据');
+            gMessager.warning('请选择要修改的数据');
             return;
         }
         if (checkedRows.length > 1) {
-            toastr.warning('请选择一条数据进行修改');
+            gMessager.warning('请选择一条数据进行修改');
             return;
         }
+        var data = checkedRows[0];
+        modalForm.show({
+            title: '修改用户信息',
+            contentUrl: usermanage.urlAdd,
+            contentUrlParams: {},
+            submitUrl: usermanage.urlEdit,
+            onLoadCallback: function () {
+                $('#Id').val(data.Id);
+                $('#UserName').val(data.UserName);
+                $('#UserName').attr({ 'readonly': 'readonly' });//用户名不能修改
+                $('#Email').val(data.Email);
+                $('#Phone').val(data.Phone);
+                $('#Address').val(data.Address);
+                if (data.Enabled) {
+                    $('#Enabled').iCheck('check');
+                }
+                if (data.IsDeleted) {
+                    $('#IsDeleted').iCheck('check');
+                }
+                $('#Remark').val(data.Remark);
+            },
+            submitSucceedCallback: function () {
+                usermanage.grid.bootstrapTable('refresh');
+            }
+        });
     },
     funcBtnDelete: function () {
         var checkedRows = usermanage.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
         if (checkedRows.length < 1) {
-            toastr.warning('请选择要删除的数据');
+            gMessager.warning('请选择要删除的数据');
             return;
         }
-
+        var usrIds = [];
+        $(checkedRows).each(function (index, item) {
+            //校验
+            //入栈
+            usrIds.push(item.Id);
+        });
+        if (usrIds.length < 1) {
+            gMessager.warning("没有可删除的数据");
+            return;
+        }
+        if (usrIds.length > 0) {
+            WinMsg.confirm({ message: '确定要删除选中的数据吗？' }).on(function (e) {
+                if (!e) {
+                    return;
+                }
+                //
+                $.ajax({
+                    type: 'post',
+                    url: usermanage.urlDelete,
+                    data: JSON.stringify(usrIds),
+                    success: function (result, status, XHR) {
+                        if (result.code == 0) {
+                            usermanage.grid.bootstrapTable('refresh');
+                            gMessager.warning('删除成功');
+                        } else {
+                            gMessager.warning(result.message);
+                        }
+                    },
+                    error: function (XHR, status, error) {
+                        gMessager.error("网络错误：" + status + "\r\n" + error);
+                    },
+                    complete: function (XHR, status) {
+                        //console.log('delete users completed,status:' + status);
+                    }
+                });
+            });
+        }
     },
     funcBtnSearch: function () {
         usermanage.grid.bootstrapTable('refresh');
