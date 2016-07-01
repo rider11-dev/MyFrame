@@ -1,4 +1,5 @@
-﻿using MyFrame.Infrastructure.OptResult;
+﻿using MyFrame.Infrastructure.Extension;
+using MyFrame.Infrastructure.OptResult;
 using MyFrame.IRepository.RBAC;
 using MyFrame.IService.RBAC;
 using MyFrame.Model.RBAC;
@@ -64,7 +65,7 @@ namespace MyFrame.Service.RBAC
             //2、设置默认密码
             if (entity.Password == null || string.IsNullOrEmpty(entity.Password.Trim()))
             {
-                entity.Password = "123456";
+                entity.Password = EncryptionHelper.GetMd5Hash("123456");
             }
             result.ResultType = OperationResultType.Success;
             return result;
@@ -74,7 +75,7 @@ namespace MyFrame.Service.RBAC
         public OperationResult UpdateDetail(User usr)
         {
             OperationResult result = new OperationResult();
-            if(usr==null)
+            if (usr == null)
             {
                 result.ResultType = OperationResultType.ParamError;
                 result.Message = "参数错误，用户实体不能为空";
@@ -93,5 +94,7 @@ namespace MyFrame.Service.RBAC
                       LastModifyTime = usr.LastModifyTime
                   });
         }
+
+
     }
 }

@@ -14,6 +14,7 @@ using MyFrame.Infrastructure.OptResult;
 using WebApp.Extensions.Session;
 using WebApp.Extensions.ActionResult;
 using WebApp.Controllers;
+using WebApp.Extensions.Filters;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -30,6 +31,7 @@ namespace WebApp.Areas.RBAC.Controllers
         /// 列表界面
         /// </summary>
         /// <returns></returns>
+        [LoginCheckFilter]
         public ActionResult Index()
         {
             return View();

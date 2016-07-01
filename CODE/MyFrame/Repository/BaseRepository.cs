@@ -26,7 +26,7 @@ namespace MyFrame.Repository
             _logger = LogHelperFactory.GetLogHelper<TEntity>();
         }
 
-        public virtual IQueryable<TEntity> Entities
+        public IQueryable<TEntity> Entities
         {
             get
             {
@@ -34,7 +34,7 @@ namespace MyFrame.Repository
             }
         }
 
-        public virtual TEntity Add(TEntity entity)
+        public TEntity Add(TEntity entity)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace MyFrame.Repository
             return entity;
         }
 
-        public virtual int Count(Expression<Func<TEntity, bool>> where = null)
+        public int Count(Expression<Func<TEntity, bool>> where = null)
         {
             int count = 0;
             if (where == null)
@@ -91,18 +91,17 @@ namespace MyFrame.Repository
             }
             return rst > 0;
         }
-        public virtual bool Exists(Expression<Func<TEntity, bool>> where)
+        public bool Exists(Expression<Func<TEntity, bool>> where)
         {
             return Entities.Any(where);
         }
 
-        public virtual IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where)
+        public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where)
         {
             return Entities.Where(where);
         }
 
-
-        public virtual IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs)
+        public IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs)
         {
             //1、处理分页参数
             var _list = Entities.Where(where);

@@ -239,6 +239,7 @@
     <Content Include="libs\plugins\validate\jquery.validate.unobtrusive.min.js" />
     <Content Include="libs\rbac\base.js" />
     <Content Include="libs\rbac\modalForm.js" />
+    <Content Include="libs\rbac\role\rolemanage.js" />
     <Content Include="libs\rbac\user\usermanage.js" />
     <Content Include="libs\rbac\index.js" />
     <Content Include="Content\bootstrap\bootstrap-theme.css" />
@@ -2093,6 +2094,7 @@
     <Content Include="Content\bootstrap\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap\bootstrap.css.map" />
+    <Content Include="libs\rbac\WinMsg.js" />
     <Content Include="log4net.config" />
     <Content Include="Areas\RBAC\Views\Home\Index.cshtml" />
     <Content Include="libs\plugins\font-awesome\fonts\fontawesome-webfont.eot" />
