@@ -1,11 +1,16 @@
 ﻿using MyFrame.Infrastructure.Extension;
 using MyFrame.Infrastructure.OptResult;
+using MyFrame.Infrastructure.OrderBy;
+using MyFrame.Infrastructure.Pagination;
+using MyFrame.IRepository;
 using MyFrame.IRepository.RBAC;
 using MyFrame.IService.RBAC;
 using MyFrame.Model.RBAC;
+using MyFrame.ViewModel.RBAC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace MyFrame.Service.RBAC
@@ -39,8 +44,6 @@ namespace MyFrame.Service.RBAC
             catch (Exception ex)
             {
                 base.ProcessException(result, string.Format("根据用户名获取{0}数据实体出错", base.EntityType), ex);
-                result.ResultType = OperationResultType.Error;
-                result.Message = "用户名查询失败";
             }
             return result;
         }
@@ -87,7 +90,6 @@ namespace MyFrame.Service.RBAC
                       Email = usr.Email,
                       Phone = usr.Phone,
                       Address = usr.Address,
-                      IsDeleted = usr.IsDeleted,
                       Enabled = usr.Enabled,
                       Remark = usr.Remark,
                       LastModifier = usr.LastModifier,
@@ -95,6 +97,44 @@ namespace MyFrame.Service.RBAC
                   });
         }
 
-
+        public OperationResult FindByPageWithFullInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                //先分页
+                var userPaged = _usrRepository.FindByPage(where, orderBy, pageArgs);
+                //再连接
+                var query = from usr in userPaged
+                            join creator in _usrRepository.Entities on usr.Creator equals creator.Id into creatorQuery
+                            from c in creatorQuery.DefaultIfEmpty()
+                            join lastmodifier in _usrRepository.Entities on usr.LastModifier equals lastmodifier.Id into lastmodifierQuery
+                            from m in lastmodifierQuery.DefaultIfEmpty()
+                            select new
+                            {
+                                Id = usr.Id,
+                                UserName = usr.UserName,
+                                Email = usr.Email,
+                                Phone = usr.Phone,
+                                Address = usr.Address,
+                                IsDeleted = usr.IsDeleted,
+                                Enabled = usr.Enabled,
+                                Remark = usr.Remark,
+                                Creator = usr.Creator,
+                                CreatorName = c.UserName,
+                                CreateTime = usr.CreateTime,
+                                LastModifier = usr.LastModifier,
+                                LastModifierName = m.UserName,
+                                LastModifyTime = usr.LastModifyTime,
+                            };
+                result.ResultType = OperationResultType.Success;
+                result.AppendData = query.ToList();
+            }
+            catch (Exception ex)
+            {
+                ProcessException(result, string.Format("分页获取{0}用户详细信息失败", EntityType), ex);
+            }
+            return result;
+        }
     }
 }

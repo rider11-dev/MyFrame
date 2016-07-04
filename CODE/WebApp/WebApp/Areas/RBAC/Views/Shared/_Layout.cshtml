@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="~/libs/plugins/ionicons/ionicons.min.css">
     <!--通知插件-->
     <link href="~/libs/plugins/toastr/toastr.css" rel="stylesheet" />
+    <!--bootstraptable-->
+    <link href="~/libs/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
     <!-- Theme style -->
     <link href="~/libs/AdminLTE/css/AdminLTE.min.css" rel="stylesheet" />
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -27,6 +29,7 @@
     <script src="~/libs/misc/respond.min.js"></script>
     <script src="~/libs/misc/html5shiv.min.js"></script>
     <![endif]-->
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
@@ -79,12 +82,16 @@
     *@
     <!--通知插件-->
     <script src="~/libs/plugins/toastr/toastr.js"></script>
+    <!--bootstraptable-->
+    <script src="~/libs/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="~/libs/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/libs/AdminLTE/js/app.min.js"></script>
     <script src="~/libs/rbac/base.js"></script>
     <script src="~/libs/rbac/index.js"></script>
     <script src="~/libs/rbac/modalForm.js"></script>
     <script src="~/libs/rbac/WinMsg.js"></script>
+
     <script>
         $(function () {
             toastr.options = { positionClass: "toast-top-center", showDuration: "150", hideDuration: "1000", showMethod: "fadeIn", closeButton: 'true' };

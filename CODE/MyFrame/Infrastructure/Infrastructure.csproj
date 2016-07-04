@@ -61,7 +61,6 @@
     <Compile Include="Dynamic\MyDynamicObject.cs" />
     <Compile Include="Exception\ExceptionExtensions.cs" />
     <Compile Include="Expression\ExpressionExtensions.cs" />
-    <Compile Include="Expression\OrderByArgs.cs" />
     <Compile Include="Logger\ILogHelper.cs" />
     <Compile Include="Logger\ILogHelperProvider.cs" />
     <Compile Include="Logger\Log4NetHelper.cs" />
@@ -70,6 +69,8 @@
     <Compile Include="OptResult\OperationResult.cs" />
     <Compile Include="OptResult\OperationResultExtension.cs" />
     <Compile Include="OptResult\OperationResultType.cs" />
+    <Compile Include="OrderBy\IOrderable.cs" />
+    <Compile Include="OrderBy\Orderable.cs" />
     <Compile Include="Pagination\PageArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\JsonSerializerExtension.cs" />

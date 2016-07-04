@@ -1,6 +1,7 @@
 ﻿using MyFrame.Infrastructure.OptResult;
 using MyFrame.IService.RBAC;
 using MyFrame.Model.RBAC;
+using MyFrame.ViewModel.RBAC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,15 +29,15 @@ namespace WebApp.Extensions.Filters
         /// 获取所有功能模块，树结构
         /// </summary>
         /// <returns></returns>
-        private List<ModuleVM> GetModulesForTree()
+        private List<ModuleViewModel> GetModulesForTree()
         {
-            List<ModuleVM> listVM = new List<ModuleVM>();
+            List<ModuleViewModel> listVM = new List<ModuleViewModel>();
             var result = ModuleSrv.Find(m => m.Enabled == true && m.IsDeleted == false);
             if (result.ResultType == OperationResultType.Success)
             {
                 //获取所有模块数据
                 var modules = (from module in (result.AppendData as List<Module>)
-                               select new ModuleVM
+                               select new ModuleViewModel
                                {
                                    Id = module.Id,
                                    Code = module.Code,
@@ -67,7 +68,7 @@ namespace WebApp.Extensions.Filters
             return listVM;
         }
 
-        private void SetSubModules(ModuleVM parent, List<ModuleVM> srcList)
+        private void SetSubModules(ModuleViewModel parent, List<ModuleViewModel> srcList)
         {
             if (parent == null || srcList == null || srcList.Count < 1 || !parent.HasChild)
             {

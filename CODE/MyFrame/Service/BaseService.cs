@@ -1,5 +1,4 @@
-﻿using MyFrame.Infrastructure.Expression;
-using MyFrame.Infrastructure.OptResult;
+﻿using MyFrame.Infrastructure.OptResult;
 using MyFrame.Infrastructure.Pagination;
 using MyFrame.IRepository;
 using System;
@@ -10,6 +9,7 @@ using System.Text;
 using MyFrame.Infrastructure.Extension;
 using MyFrame.IService;
 using MyFrame.Infrastructure.Logger;
+using MyFrame.Infrastructure.OrderBy;
 
 namespace MyFrame.Service
 {
@@ -147,7 +147,7 @@ namespace MyFrame.Service
             return result;
         }
 
-        public OperationResult FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs)
+        public OperationResult FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs)
         {
             OperationResult result = new OperationResult();
             if (pageArgs == null)
@@ -158,7 +158,7 @@ namespace MyFrame.Service
             }
             try
             {
-                var data = _repository.FindByPage(where, orderByList, pageArgs);
+                var data = _repository.FindByPage(where, orderBy, pageArgs);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data.ToList();
             }

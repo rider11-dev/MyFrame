@@ -25,12 +25,12 @@ namespace WebApp.Areas.RBAC.Controllers
         // GET: /RBAC/User/
         public ActionResult Login()
         {
-            return View(new LoginVM());
+            return View(new LoginViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]//防止xss攻击
-        public ActionResult Login(LoginVM loginVM)
+        public ActionResult Login(LoginViewModel loginVM)
         {
             if (!ModelState.IsValid)
             {

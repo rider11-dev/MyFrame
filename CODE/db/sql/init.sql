@@ -41,7 +41,7 @@ CREATE TABLE Modules(
 	HasChild bit not null default 0,
 	Enabled bit not null default 0,
 	IsSystem bit not null default 0,
-	SortOrder int not null default 10,
+	SortOrder int,
 	Remark nvarchar(255),
 	Creator int,
 	CreateTime date,

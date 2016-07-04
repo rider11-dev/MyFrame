@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebApp.ViewModels.RBAC
 {
-    public class LoginVM
+    public class LoginViewModel
     {
         [Required(ErrorMessage = "用户名不能为空")]
         [Display(Name = "用户名")]

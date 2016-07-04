@@ -24,11 +24,13 @@ namespace MyFrame.Model.RBAC
         [Description("主键")]
         public int Id { get; set; }
 
+        [Required]
         [Description("模块编号")]
         [StringLength(20)]
         public string Code { get; set; }
+
         [Required]
-        [Description("名称")]
+        [Description("模块名称")]
         [StringLength(20)]
         public string Name { get; set; }
         [Description("链接地址")]
@@ -38,7 +40,7 @@ namespace MyFrame.Model.RBAC
         [StringLength(50)]
         public string Icon { get; set; }
 
-        [Description("是否是菜单")]
+        [Description("是否菜单")]
         public bool IsMenu { get; set; }
         [Description("父模块Id")]
         public int? ParentId { get; set; }
@@ -48,13 +50,15 @@ namespace MyFrame.Model.RBAC
         [Description("备注")]
         [StringLength(255)]
         public string Remark { get; set; }
+
         [Description("是否激活")]
         public bool Enabled { get; set; }
+
         [Description("是否系统模块")]
         public bool IsSystem { get; set; }
+
         [Description("排序号")]
         public int SortOrder { get; set; }
-
 
         [Description("创建时间")]
         public DateTime? CreateTime { get; set; }

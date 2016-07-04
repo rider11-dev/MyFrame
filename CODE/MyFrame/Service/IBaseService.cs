@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using MyFrame.Infrastructure.Expression;
 using MyFrame.Infrastructure.Pagination;
+using MyFrame.Infrastructure.OrderBy;
 
 namespace MyFrame.IService
 {
@@ -20,6 +20,6 @@ namespace MyFrame.IService
 
         OperationResult Find(Expression<Func<TEntity, bool>> where);
 
-        OperationResult FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs);
+        OperationResult FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs);
     }
 }

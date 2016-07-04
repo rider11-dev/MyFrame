@@ -5,7 +5,6 @@
     btnDelete: $('#btnDelete'),
     btnSearch: $('#btnSearch'),
     txtSearchUserName: $('#txtSearchUserName'),
-    ckSearchIsDeleted: $('#ckSearchIsDeleted'),
     urlAdd: "",
     urlEdit: "",
     urlDelete: "",
@@ -36,13 +35,11 @@
                 //添加额外参数
                 if (!gFunc.isNull(usermanage.txtSearchUserName.val())) {
                     params.UserName = usermanage.txtSearchUserName.val();
-                    console.log(usermanage.ckSearchIsDeleted.checked);
-                    params.IsDeleted = usermanage.ckSearchIsDeleted.checked;
                 }
                 return params;//必须返回params
             },
             columns: [
-                 { field: 'Id', visible: false },
+                    { field: 'Id', visible: false },
                     {
                         field: 'rownumber', formatter: function (value, row, index) {
                             return index + 1;
@@ -52,7 +49,14 @@
                     { field: 'UserName', title: '用户名', align: 'center', valign: 'center', width: 80 },
                     { field: 'Email', title: '邮箱', align: 'center', valign: 'center', width: 100 },
                     { field: 'Phone', title: '电话', align: 'center', valign: 'center', width: 100 },
-                    { field: 'Address', title: '地址', align: 'center', valign: 'center', width: 120 },
+                    {
+                        field: 'Address', title: '地址', align: 'center', valign: 'center', width: 120,
+                        cellStyle: function (value, row, index, field) {
+                            return {
+                                css: { "min-width": "200px" }
+                            };
+                        }
+                    },
                     {
                         field: 'Enabled', title: '是否激活', align: 'center', valign: 'center', width: 80,
                         formatter: gFormatter.trueOrFalse.formatter
@@ -61,11 +65,32 @@
                         field: 'IsDeleted', title: '是否删除', align: 'center', valign: 'center', width: 80,
                         formatter: gFormatter.trueOrFalse.formatter
                     },
-                    { field: 'Creator', title: '创建人', align: 'center', valign: 'center', width: 80 },
-                    { field: 'CreateTime', title: '创建时间', align: 'center', valign: 'center', width: 100 },
-                    { field: 'LastModifier', title: '最后修改人', align: 'center', valign: 'center', width: 80 },
-                    { field: 'LastModifyTime', title: '最后修改时间', align: 'center', valign: 'center', width: 100 },
-                    { field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140 }
+                    { field: 'CreatorName', title: '创建人', align: 'center', valign: 'center', width: 80 },
+                    {
+                        field: 'CreateTime', title: '创建时间', align: 'center', valign: 'center', width: 100,
+                        cellStyle: function (value, row, index, field) {
+                            return {
+                                css: { "min-width": "140px" }
+                            };
+                        }
+                    },
+                    { field: 'LastModifierName', title: '最后修改人', align: 'center', valign: 'center', width: 80 },
+                    {
+                        field: 'LastModifyTime', title: '最后修改时间', align: 'center', valign: 'center', width: 100,
+                        cellStyle: function (value, row, index, field) {
+                            return {
+                                css: { "min-width": "140px" }
+                            };
+                        }
+                    },
+                    {
+                        field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140,
+                        cellStyle: function (value, row, index, field) {
+                            return {
+                                css: { "min-width": "200px" }
+                            };
+                        }
+                    }
             ]
         };
         //调用公共函数，初始化表格

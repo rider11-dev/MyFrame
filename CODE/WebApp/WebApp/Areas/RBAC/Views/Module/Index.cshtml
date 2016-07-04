@@ -1,8 +1,9 @@
-﻿<div class="row" style="margin-top:10px;">
+﻿
+<div class="row" style="margin-top:10px;">
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">用户管理</h3>
+                <h3 class="box-title">模块管理</h3>
             </div>
             <div class="box-body">
                 <div id="toolbar" class="container" style="margin:4px 0px;">
@@ -19,7 +20,10 @@
                             </button>
                         </div>
                         <div class="col-sm-2" style="padding:0px;">
-                            <input type="text" id="txtSearchUserName" name="UserName" class="form-control" placeholder="用户名" />
+                            <input type="text" id="txtSearchCode" name="Code" class="form-control" placeholder="模块编号" />
+                        </div>
+                        <div class="col-sm-2" style="padding:0px;">
+                            <input type="text" id="txtSearchName" name="Name" class="form-control" placeholder="模块名称" />
                         </div>
                         <div class="col-sm-1" style="padding-left:2px;">
                             <button id="btnSearch" type="button" class="btn btn-success">
@@ -33,13 +37,13 @@
         </div>
     </div>
 </div>
-<script src="~/libs/rbac/user/index.js"></script>
+<script src="~/libs/rbac/module/index.js"></script>
 <script type="text/javascript">
     $(function () {
-        usermanage.init({
+        modulemanage.init({
             urlAdd: "@Url.Action("Add")",
             urlEdit: "@Url.Action("Edit")",
-            urlSearch: "@Url.Action("GetUserFullInfoByPage")",
+            urlSearch: "@Url.Action("GetModulesFullInfoByPage")",
             urlDelete: "@Url.Action("Delete")"
         });
     });

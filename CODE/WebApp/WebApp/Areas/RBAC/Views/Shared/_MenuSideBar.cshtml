@@ -1,7 +1,7 @@
-﻿@using WebApp.ViewModels.RBAC
+﻿@using MyFrame.ViewModel.RBAC
 @using System.Text
 @{
-    var moduleList = ViewData["ModuleTreeData"] as List<ModuleVM>;
+    var moduleList = ViewData["ModuleTreeData"] as List<ModuleViewModel>;
 }
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -34,7 +34,7 @@
                 <a href="#"><i class="fa fa-home"></i><span>主页</span></a>
             </li>
             @{
-                Action<ModuleVM, StringBuilder> actionFormatTreeMenu = null;
+                Action<ModuleViewModel, StringBuilder> actionFormatTreeMenu = null;
                 actionFormatTreeMenu = (m, sb) =>
                 {
                     if (m == null)

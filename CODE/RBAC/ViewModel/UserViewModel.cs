@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Text;
 
-namespace WebApp.ViewModels.RBAC
+namespace MyFrame.ViewModel.RBAC
 {
-    public class UserVM
+    public class UserViewModel
     {
         [Display(Name = "用户id")]
         public int Id { get; set; }

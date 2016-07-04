@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Text;
 
-namespace WebApp.ViewModels.RBAC
+namespace MyFrame.ViewModel.RBAC
 {
-    public class ModuleVM
+    public class ModuleViewModel
     {
-        public ModuleVM() { }
+        public ModuleViewModel() { }
         [Display(Name = "模块id")]
         public int Id { get; set; }
 
@@ -22,7 +23,6 @@ namespace WebApp.ViewModels.RBAC
         [MaxLength(20, ErrorMessage = "模块名称不能超过{1}个字符")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "模块链接不能为空")]
         [Display(Name = "模块链接")]
         [MaxLength(100, ErrorMessage = "模块链接不能超过{1}个字符")]
         public string LinkUrl { get; set; }
@@ -41,7 +41,7 @@ namespace WebApp.ViewModels.RBAC
         public int? ParentId { get; set; }
 
         [Display(Name = "父模块")]
-        public int ParentName { get; set; }
+        public string ParentName { get; set; }
 
         [Display(Name = "是否包含子模块")]
         public bool HasChild { get; set; }
@@ -51,6 +51,9 @@ namespace WebApp.ViewModels.RBAC
 
         [Display(Name = "是否系统模块")]
         public bool IsSystem { get; set; }
+
+        [Display(Name = "已删除")]
+        public bool IsDeleted { get; set; }
 
         [Display(Name = "备注")]
         [MaxLength(255, ErrorMessage = "备注不能超过{1}个字符")]
@@ -75,6 +78,6 @@ namespace WebApp.ViewModels.RBAC
         /// <summary>
         /// 子模块列表
         /// </summary>
-        public IList<ModuleVM> SubModules { get; set; }
+        public IList<ModuleViewModel> SubModules { get; set; }
     }
 }

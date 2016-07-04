@@ -8,13 +8,14 @@ using System.Web;
 using System.Web.Mvc;
 using WebApp.ViewModels.RBAC;
 using MyFrame.Infrastructure.Extension;
-using MyFrame.Infrastructure.Expression;
 using MyFrame.Infrastructure.Pagination;
 using MyFrame.Infrastructure.OptResult;
 using WebApp.Extensions.Session;
 using WebApp.Extensions.ActionResult;
 using WebApp.Controllers;
 using WebApp.Extensions.Filters;
+using MyFrame.ViewModel.RBAC;
+using MyFrame.Infrastructure.OrderBy;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -38,35 +39,30 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         /// <summary>
-        /// 分页获取
+        /// 分页获取用户完整信息
         /// </summary>
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public JsonResult GetUsersByPage(int pageNumber, int pageSize)
+        public JsonResult GetUserFullInfoByPage(int pageNumber, int pageSize)
         {
-            Expression<Func<User, bool>> where = u => true;
+            Expression<Func<User, bool>> where = u => u.IsDeleted == false;
             var userName = HttpContext.Request["UserName"];
             if (!string.IsNullOrEmpty(userName))
             {
                 where = where.And(u => u.UserName.Contains(userName));
             }
             var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
-            var result = _userSrv.FindByPage(where, new List<OrderByArgs<User>>()
-            {
-                new OrderByArgs<User>{
-                    Expression = u => u.UserName,
-                    OrderByType = OrderByType.Asc
-                }
-            }, pageArgs);
+
+            var result = _userSrv.FindByPageWithFullInfo(where, query => query.OrderBy(u => u.UserName), pageArgs);
 
             if (result.ResultType == OperationResultType.Success)
             {
                 return new JsonNetResult
                 {
-                    Data = new { code = result.ResultType, message = "数据获取成功", total = pageArgs.RecordsCount, rows = (result.AppendData as List<User>) },
+                    Data = new { code = result.ResultType, message = "数据获取成功", total = pageArgs.RecordsCount, rows = result.AppendData },
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                    DateTimeFormat = "yyyy-MM-dd"
+                    DateTimeFormat = "yyyy-MM-dd HH:mm:ss"
                 };
             }
             else
@@ -77,12 +73,12 @@ namespace WebApp.Areas.RBAC.Controllers
 
         public ActionResult Add()
         {
-            UserVM usrVM = new UserVM();
+            UserViewModel usrVM = new UserViewModel();
             return PartialView(usrVM);
         }
 
         [HttpPost]
-        public JsonResult Add(UserVM usrVM)
+        public JsonResult Add(UserViewModel usrVM)
         {
             if (!ModelState.IsValid)
             {
@@ -109,7 +105,7 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        public JsonResult Edit(UserVM usrVM)
+        public JsonResult Edit(UserViewModel usrVM)
         {
             if (!ModelState.IsValid)
             {
@@ -124,7 +120,6 @@ namespace WebApp.Areas.RBAC.Controllers
                 Phone = usrVM.Phone,
                 Address = usrVM.Address,
                 Enabled = usrVM.Enabled,
-                IsDeleted = usrVM.IsDeleted,
                 LastModifier = HttpContext.Session.GetUserId(),
                 LastModifyTime = DateTime.Now,
                 Remark = usrVM.Remark
@@ -157,7 +152,7 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = OperationResultType.ParamError, message = "用户id列表不能为空" });
             }
-            OperationResult result = _userSrv.Delete(u => usrIds.Contains(u.Id));
+            OperationResult result = _userSrv.Update(u => usrIds.Contains(u.Id), u => new User { IsDeleted = true });
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using MyFrame.Infrastructure.Expression;
 using MyFrame.Infrastructure.Pagination;
+using MyFrame.Infrastructure.OrderBy;
 
 namespace MyFrame.IRepository
 {
@@ -22,6 +22,7 @@ namespace MyFrame.IRepository
 
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where);
 
-        IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, IList<OrderByArgs<TEntity>> orderByList, PageArgs pageArgs);
+        IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs);
+        IQueryable<TEntity> QueryByPage(IQueryable<TEntity> querable, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs);
     }
 }
