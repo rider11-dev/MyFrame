@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using WebApp.Extensions.Ioc;
+using WebApp.Extensions.Mapping;
 
 namespace WebApp
 {
@@ -30,6 +31,9 @@ namespace WebApp
 
             //注册autofac
             AutofacRegister.RegisterAutofac();
+            //注册automapper
+            AutoMapperRegister.Configure();
+
             //解析数据库上下文提供者
             EFDbContextFactory.DbContextProvider = DependencyResolver.Current.GetService<IEFDbContextProvider>();
 

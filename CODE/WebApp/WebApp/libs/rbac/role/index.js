@@ -99,7 +99,7 @@
                 roles.grid.bootstrapTable('refresh');
             },
             onLoadCallback: function () {
-
+                $('#SortOrder').val("10");
             }
         });
     },
@@ -124,14 +124,9 @@
                 $('#Id').val(data.Id);
                 $('#RoleName').val(data.RoleName);
                 $('#RoleName').attr({ 'readonly': 'readonly' });//角色名不能修改
-                $('#Email').val(data.Email);
-                $('#Phone').val(data.Phone);
-                $('#Address').val(data.Address);
+                $('#SortOrder').val(data.SortOrder);
                 if (data.Enabled) {
                     $('#Enabled').iCheck('check');
-                }
-                if (data.IsDeleted) {
-                    $('#IsDeleted').iCheck('check');
                 }
                 $('#Remark').val(data.Remark);
             },

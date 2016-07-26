@@ -103,12 +103,11 @@ namespace MyFrame.Service.RBAC
             return base.Update(r => r.Id == role.Id,
                 r => new Role
                 {
-                    RoleName = r.RoleName,
-                    Remark = r.Remark,
-                    Enabled = r.Enabled,
-                    SortOrder = r.SortOrder,
-                    LastModifier = r.LastModifier,
-                    LastModifyTime = r.LastModifyTime
+                    Remark = role.Remark,
+                    Enabled = role.Enabled,
+                    SortOrder = role.SortOrder,
+                    LastModifier = role.LastModifier,
+                    LastModifyTime = role.LastModifyTime
                 });
         }
 

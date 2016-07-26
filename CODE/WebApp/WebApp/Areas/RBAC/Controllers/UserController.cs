@@ -16,6 +16,7 @@ using WebApp.Controllers;
 using WebApp.Extensions.Filters;
 using MyFrame.ViewModel.RBAC;
 using MyFrame.Infrastructure.OrderBy;
+using AutoMapper;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -78,7 +79,7 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        public JsonResult Add(UserViewModel usrVM)  
+        public JsonResult Add(UserViewModel usrVM)
         {
             if (!ModelState.IsValid)
             {
@@ -86,17 +87,12 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
 
-            OperationResult result = _userSrv.Add(new User
-              {
-                  UserName = usrVM.UserName,
-                  Email = usrVM.Email,
-                  Phone = usrVM.Phone,
-                  Address = usrVM.Address,
-                  Enabled = usrVM.Enabled,
-                  Creator = HttpContext.Session.GetUserId(),
-                  CreateTime = DateTime.Now,
-                  Remark = usrVM.Remark
-              });
+            var usr = Mapper.Map<User>(usrVM);
+            usr.Creator = HttpContext.Session.GetUserId();
+            usr.CreateTime = DateTime.Now;
+
+            OperationResult result = _userSrv.Add(usr);
+
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });
@@ -112,18 +108,10 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
 
-            var usr = new User
-            {
-                Id = usrVM.Id,
-                UserName = usrVM.UserName,
-                Email = usrVM.Email,
-                Phone = usrVM.Phone,
-                Address = usrVM.Address,
-                Enabled = usrVM.Enabled,
-                LastModifier = HttpContext.Session.GetUserId(),
-                LastModifyTime = DateTime.Now,
-                Remark = usrVM.Remark
-            };
+            var usr = Mapper.Map<User>(usrVM);
+            usr.LastModifier = HttpContext.Session.GetUserId();
+            usr.LastModifyTime = DateTime.Now;
+
             OperationResult result = _userSrv.UpdateDetail(usr);
             if (result.ResultType != OperationResultType.Success)
             {
@@ -152,7 +140,7 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = OperationResultType.ParamError, message = "用户id列表不能为空" });
             }
-            OperationResult result = _userSrv.Update(u => usrIds.Contains(u.Id), u => new User { IsDeleted = true });
+            OperationResult result = _userSrv.Delete(u => usrIds.Contains(u.Id));
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });

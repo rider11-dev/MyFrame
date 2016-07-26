@@ -14,7 +14,9 @@ namespace MyFrame.ViewModel.RBAC
         [Display(Name = "角色名")]
         [MaxLength(20, ErrorMessage = "角色名不能超过20个字符")]
         public string RoleName { get; set; }
-        [Display(Name = "排序号")]
+        [Display(Name = "排序")]
+        [RegularExpression(@"\d+", ErrorMessage = "排序必须是数字")]
+        [Range(1, 99999)]
         public int SortOrder { get; set; }
         [Display(Name = "备注")]
         [MaxLength(255, ErrorMessage = "备注不能超过255个字符")]

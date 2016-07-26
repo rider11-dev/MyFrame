@@ -151,7 +151,7 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = OperationResultType.ParamError, message = "模块id列表不能为空" });
             }
-            OperationResult result = _moduleSrv.Update(u => moduleIds.Contains(u.Id), u => new Module { IsDeleted = true });
+            OperationResult result = _moduleSrv.Delete(m => moduleIds.Contains(m.Id));
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });

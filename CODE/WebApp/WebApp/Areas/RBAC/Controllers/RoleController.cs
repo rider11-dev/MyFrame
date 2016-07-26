@@ -14,6 +14,7 @@ using MyFrame.Infrastructure.OptResult;
 using WebApp.Extensions.ActionResult;
 using MyFrame.ViewModel.RBAC;
 using WebApp.Extensions.Session;
+using AutoMapper;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -74,15 +75,13 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
-            OperationResult result = _roleSrv.Add(new Role
-            {
-                RoleName = roleVM.RoleName,
-                Remark = roleVM.Remark,
-                Enabled = roleVM.Enabled,
-                SortOrder = roleVM.SortOrder,
-                Creator = HttpContext.Session.GetUserId(),
-                CreateTime = DateTime.Now,
-            });
+
+            var role = Mapper.Map<Role>(roleVM);
+            role.Creator = HttpContext.Session.GetUserId();
+            role.CreateTime = DateTime.Now;
+
+            OperationResult result = _roleSrv.Add(role);
+
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });
@@ -97,17 +96,13 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = OperationResultType.ParamError, messgae = base.ParseModelStateErrorMessage(ModelState) });
             }
-            var role = new Role
-            {
-                Id = roleVM.Id,
-                RoleName = roleVM.RoleName,
-                Remark = roleVM.Remark,
-                Enabled = roleVM.Enabled,
-                SortOrder = roleVM.SortOrder,
-                LastModifier = HttpContext.Session.GetUserId(),
-                LastModifyTime = DateTime.Now
-            };
+
+            var role = Mapper.Map<Role>(roleVM);
+            role.LastModifier = HttpContext.Session.GetUserId();
+            role.LastModifyTime = DateTime.Now;
+
             var rst = _roleSrv.UpdateDetail(role);
+
             if (rst.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = rst.ResultType, message = rst.Message });
@@ -134,7 +129,7 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = OperationResultType.ParamError, message = "角色id列表不能为空" });
             }
-            OperationResult result = _roleSrv.Update(u => roleIds.Contains(u.Id), u => new Role { IsDeleted = true });
+            OperationResult result = _roleSrv.Delete(r => roleIds.Contains(r.Id));
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });
