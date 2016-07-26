@@ -18,7 +18,7 @@ namespace MyFrame.Service.RBAC
     public class UserService : BaseService<User>, IUserService
     {
         IUserRepository _usrRepository;
-        const string Msg_Error_BeforeAdd = "保存前校验";
+        const string Msg_BeforeAdd = "保存前校验";
         public UserService(IUserRepository usrRep)
             : base(usrRep)
         {
@@ -54,7 +54,7 @@ namespace MyFrame.Service.RBAC
             if (entity == null)
             {
                 result.ResultType = OperationResultType.ParamError;
-                result.Message = string.Format("{0}失败，{1}", Msg_Error_BeforeAdd, "实体不能为空");
+                result.Message = string.Format("{0}失败，{1}", Msg_BeforeAdd, "实体不能为空");
                 return result;
             }
             //1、校验用户是否已存在
@@ -62,7 +62,7 @@ namespace MyFrame.Service.RBAC
             if (check)
             {
                 result.ResultType = OperationResultType.CheckFailedBeforeProcess;
-                result.Message = string.Format("{0}失败，{1}", Msg_Error_BeforeAdd, "用户名已存在");
+                result.Message = string.Format("{0}失败，{1}", Msg_BeforeAdd, "用户名已存在");
                 return result;
             }
             //2、设置默认密码

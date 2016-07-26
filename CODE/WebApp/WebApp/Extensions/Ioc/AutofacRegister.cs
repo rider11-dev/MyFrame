@@ -12,6 +12,7 @@ using MyFrame.Repository.RBAC;
 using MyFrame.IRepository.RBAC;
 using MyFrame.Repository.EF;
 using Autofac.Core;
+using System.IO;
 
 namespace WebApp.Extensions.Ioc
 {
@@ -23,6 +24,7 @@ namespace WebApp.Extensions.Ioc
             //开启了Controller的依赖注入功能,
             //这里使用Autofac提供的RegisterControllers扩展方法来对程序集中所有的Controller一次性的完成注册
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
+
             //开启了Filter的依赖注入功能，
             //为过滤器使用属性注入必须在容器创建之前调用RegisterFilterProvider方法，
             //并将其传到AutofacDependencyResolver
@@ -48,7 +50,7 @@ namespace WebApp.Extensions.Ioc
             builder.RegisterType<UserService>().As<IUserService>().InstancePerRequest();
 
             //角色
-            builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerRequest();
+            builder.RegisterType<RoleRepository>().As<IRoleRepository>().InstancePerRequest();
             builder.RegisterType<RoleService>().As<IRoleService>().InstancePerRequest();
 
             //模块

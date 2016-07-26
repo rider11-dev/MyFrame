@@ -1,12 +1,26 @@
-﻿using MyFrame.Model.RBAC;
+﻿using MyFrame.Infrastructure.OptResult;
+using MyFrame.Infrastructure.OrderBy;
+using MyFrame.Infrastructure.Pagination;
+using MyFrame.Model.RBAC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace MyFrame.IService.RBAC
 {
     public interface IRoleService : IBaseService<Role>
     {
+        OperationResult FindByName(string roleName);
+
+        /// <summary>
+        /// 更新指定角色详细信息
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        OperationResult UpdateDetail(Role role);
+
+        OperationResult FindByPageWithFullInfo(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs);
     }
 }

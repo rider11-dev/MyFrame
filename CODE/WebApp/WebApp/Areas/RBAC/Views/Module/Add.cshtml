@@ -1,0 +1,97 @@
+﻿@using MyFrame.ViewModel.RBAC
+@model ModuleViewModel
+<link href="~/libs/plugins/iCheck/square/blue.css" rel="stylesheet" />
+@Html.HiddenFor(m => m.Id)
+<div id="form-area">
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.Code, new { @class = "control-label pull-right" })
+        </div>
+        <div class="col-sm-8">
+            @Html.TextBoxFor(m => m.Code, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Code)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.Name, new { @class = "control-label pull-right" })
+        </div>
+        <div class="col-sm-8">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Name)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.LinkUrl, new { @class = "control-label pull-right" })
+        </div>
+        <div class="col-sm-8">
+            @Html.TextBoxFor(m => m.LinkUrl, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.LinkUrl)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.Icon, new { @class = "control-label pull-right" })
+        </div>
+        <div class="col-sm-8">
+            @Html.TextBoxFor(m => m.Icon, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Icon)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.SortOrder, new { @class = "control-label pull-right" })
+        </div>
+        <div class="col-sm-8">
+            @Html.TextBoxFor(m => m.SortOrder, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.SortOrder)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.IsMenu, new { @class = "control-label pull-right" })
+        </div>
+        <div class="checkbox icheck col-sm-8">
+            @Html.CheckBoxFor(m => m.IsMenu, new { @class = "myCheck" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.ParentName, new { @class = "control-label pull-right" })
+        </div>
+        <div class="checkbox icheck col-sm-8">
+            @Html.HiddenFor(m => m.ParentId)
+            @Html.TextBoxFor(m => m.ParentName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.HasChild, new { @class = "control-label pull-right" })
+        </div>
+        <div class="checkbox icheck col-sm-8">
+            @Html.CheckBoxFor(m => m.HasChild, new { @class = "myCheck" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.Enabled, new { @class = "control-label pull-right" })
+        </div>
+        <div class="checkbox icheck col-sm-8">
+            @Html.CheckBoxFor(m => m.Enabled, new { @class = "myCheck" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            @Html.LabelFor(m => m.IsSystem, new { @class = "control-label pull-right" })
+        </div>
+        <div class="checkbox icheck col-sm-8">
+            @Html.CheckBoxFor(m => m.IsSystem, new { @class = "myCheck" })
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        gFunc.setCheckBoxStyle('input.myCheck');
+    });
+</script>

@@ -159,6 +159,7 @@
     <Compile Include="Areas\RBAC\Controllers\HomeController.cs" />
     <Compile Include="Areas\RBAC\Controllers\AccountController.cs" />
     <Compile Include="Areas\RBAC\Controllers\ModuleController.cs" />
+    <Compile Include="Areas\RBAC\Controllers\RoleController.cs" />
     <Compile Include="Areas\RBAC\Controllers\UserController.cs" />
     <Compile Include="Areas\RBAC\RBACAreaRegistration.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -2137,6 +2138,9 @@
     <Content Include="Areas\RBAC\Views\User\Add.cshtml" />
     <Content Include="Areas\RBAC\Views\Shared\_Modal.cshtml" />
     <Content Include="Areas\RBAC\Views\Module\Index.cshtml" />
+    <Content Include="Areas\RBAC\Views\Module\Add.cshtml" />
+    <Content Include="Areas\RBAC\Views\Role\Index.cshtml" />
+    <Content Include="Areas\RBAC\Views\Role\Add.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

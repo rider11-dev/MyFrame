@@ -78,7 +78,7 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        public JsonResult Add(UserViewModel usrVM)
+        public JsonResult Add(UserViewModel usrVM)  
         {
             if (!ModelState.IsValid)
             {
@@ -157,7 +157,7 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = result.ResultType, message = result.Message });
             }
-            return Json(new { code = OperationResultType.Success, message = "修改成功" });
+            return Json(new { code = OperationResultType.Success, message = "删除成功" });
         }
     }
 }

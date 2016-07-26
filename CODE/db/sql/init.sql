@@ -19,7 +19,7 @@ INSERT into Users(UserName,Password,Email,Phone,Address,Enabled) values('admin',
 create table Roles(
 	Id int identity(1,1) primary key,
 	RoleName nvarchar(20) not null,
-	Remark nvarchar(100),
+	Remark nvarchar(255),
 	[Enabled] bit not null default 0,
 	SortOrder int null,
 	Creator int NULL,
@@ -61,3 +61,28 @@ INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,
 INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(23,'Logout','退出登录','/RBAC/Account/Logout','fa-sign-out',1,0,1,30,1,2);
 INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem)values(2,'MyAccountManage','我的账户',null,'fa-user',1,1,1,40,1);
 set IDENTITY_INSERT Modules off;
+
+
+--用户角色表
+Create Table UserRoleRelation(
+	Id int IDENTITY(1,1) PRIMARY KEY,
+	UserID int not null,
+	RoleID int not null
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
