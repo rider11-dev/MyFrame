@@ -32,7 +32,7 @@ namespace WebApp.Extensions.Filters
         private List<ModuleViewModel> GetModulesForTree()
         {
             List<ModuleViewModel> listVM = new List<ModuleViewModel>();
-            var result = ModuleSrv.Find(m => m.Enabled == true && m.IsDeleted == false);
+            var result = ModuleSrv.Find(m => m.Enabled == true);
             if (result.ResultType == OperationResultType.Success)
             {
                 //获取所有模块数据

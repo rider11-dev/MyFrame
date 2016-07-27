@@ -52,9 +52,6 @@ namespace MyFrame.ViewModel.RBAC
         [Display(Name = "是否系统模块")]
         public bool IsSystem { get; set; }
 
-        [Display(Name = "已删除")]
-        public bool IsDeleted { get; set; }
-
         [Display(Name = "备注")]
         [MaxLength(255, ErrorMessage = "备注不能超过{1}个字符")]
         public string Remark { get; set; }

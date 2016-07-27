@@ -4,16 +4,21 @@
     btnEdit: $('#btnEdit'),
     btnDelete: $('#btnDelete'),
     btnSearch: $('#btnSearch'),
+    btnSetRoles: $('#btnSetRoles'),
     txtSearchUserName: $('#txtSearchUserName'),
     urlAdd: "",
     urlEdit: "",
     urlDelete: "",
     urlSearch: "",
+    urlHelpRoles: "",
+    urlSetRoles: "",
     init: function (options) {
         usermanage.urlAdd = options.urlAdd;
         usermanage.urlEdit = options.urlEdit;
         usermanage.urlDelete = options.urlDelete;
         usermanage.urlSearch = options.urlSearch;
+        usermanage.urlHelpRoles = options.urlHelpRoles;
+        usermanage.urlSetRoles = options.urlSetRoles;
 
         usermanage.initgrid();
         usermanage.bindingEventArgs();
@@ -23,6 +28,7 @@
         usermanage.btnEdit.click(usermanage.funcBtnEdit);
         usermanage.btnDelete.click(usermanage.funcBtnDelete);
         usermanage.btnSearch.click(usermanage.funcBtnSearch);
+        usermanage.btnSetRoles.click(usermanage.funcBtnSetRoles);
     },
     initgrid: function () {
         var options = {
@@ -62,8 +68,12 @@
                         formatter: gFormatter.trueOrFalse.formatter
                     },
                     {
-                        field: 'IsDeleted', title: '是否删除', align: 'center', valign: 'center', width: 80,
-                        formatter: gFormatter.trueOrFalse.formatter
+                        field: 'Roles', title: '角色', align: 'center', valign: 'center', width: 100,
+                        cellStyle: function (value, row, index, field) {
+                            return {
+                                css: { "min-width": "140px" }
+                            };
+                        }
                     },
                     { field: 'CreatorName', title: '创建人', align: 'center', valign: 'center', width: 80 },
                     {
@@ -138,9 +148,7 @@
                 if (data.Enabled) {
                     $('#Enabled').iCheck('check');
                 }
-                if (data.IsDeleted) {
-                    $('#IsDeleted').iCheck('check');
-                }
+
                 $('#Remark').val(data.Remark);
             },
             submitSucceedCallback: function () {
@@ -195,5 +203,48 @@
     },
     funcBtnSearch: function () {
         usermanage.grid.bootstrapTable('refresh');
+    },
+    funcBtnSetRoles: function () {
+        //
+        var checkedRows = usermanage.grid.bootstrapTable('getSelections');
+        //console.log(checkedRows.length);
+        if (checkedRows.length < 1) {
+            gMessager.warning('请选择用户');
+            return;
+        }
+        var usrIds = [];
+        $(checkedRows).each(function (index, item) {
+            usrIds.push(item.Id);
+        });
+        modalForm.show({
+            title: '角色帮助',
+            contentUrl: usermanage.urlHelpRoles,
+            submitUrl: usermanage.urlSetRoles,
+            submitSucceedCallback: function () {
+                usermanage.grid.bootstrapTable('refresh');
+            },
+            onLoadCallback: function () {
+
+            },
+            funcGetSubmitParams: function () {
+                var rows = rolesGridHelp.grid.bootstrapTable('getSelections');
+                if (rows.length < 1) {
+                    gMessager.warning("请选择角色");
+                    return;
+                }
+                var roleIds = [];
+                $(rows).each(function (index, item) {
+                    roleIds.push(item.Id);
+                });
+                var data = {};
+                for (var i = 0; i < usrIds.length; i++) {
+                    data["usrIds[" + i + "]"] = usrIds[i];
+                }
+                for (var i = 0; i < roleIds.length; i++) {
+                    data["roleIds[" + i + "]"] = roleIds[i];
+                }
+                return data;
+            }
+        });
     }
 }

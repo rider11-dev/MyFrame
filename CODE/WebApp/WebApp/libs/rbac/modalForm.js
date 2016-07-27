@@ -7,6 +7,9 @@ var modalForm = {
     onLoadCallback: function () { },
     onSubmitSucceedCallback: function () { },
     submitUrl: '',
+    funcGetSubmitParams: function () {
+        return modalForm.content.serialize();
+    },
     /*
     弹出
     options属性说明：
@@ -24,6 +27,9 @@ var modalForm = {
         modalForm.onSubmitSucceedCallback = options.submitSucceedCallback;
         modalForm.onLoadCallback = options.onLoadCallback;
         modalForm.submitUrl = options.submitUrl;
+        if (!gFunc.isNull(options.funcGetSubmitParams)) {
+            modalForm.funcGetSubmitParams = options.funcGetSubmitParams;
+        }
         $.ajax({
             type: "get",
             url: options.contentUrl,
@@ -64,10 +70,12 @@ var modalForm = {
         if (!modalForm.content.valid()) {
             return;
         }
+        var data = modalForm.funcGetSubmitParams();
+        //console.log(data);
         $.ajax({
             type: 'post',
             url: modalForm.submitUrl,
-            data: modalForm.content.serialize(),
+            data: data,
             success: function (result, status, XHR) {
                 if (result.code === 0) {
                     gMessager.success(result.message);

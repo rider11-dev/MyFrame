@@ -35,7 +35,7 @@ namespace WebApp.Areas.RBAC.Controllers
 
         public JsonResult GetModulesFullInfoByPage(int pageNumber, int pageSize)
         {
-            Expression<Func<Module, bool>> where = m => m.IsDeleted == false;
+            Expression<Func<Module, bool>> where = m => true;
             var code = HttpContext.Request["Code"];
             if (!string.IsNullOrEmpty(code))
             {
@@ -89,7 +89,6 @@ namespace WebApp.Areas.RBAC.Controllers
                 IsMenu = vmModule.IsMenu,
                 ParentId = vmModule.ParentId,
                 Enabled = vmModule.Enabled,
-                IsDeleted = false,
                 IsSystem = vmModule.IsSystem,
                 SortOrder = vmModule.SortOrder,
                 Remark = vmModule.Remark,

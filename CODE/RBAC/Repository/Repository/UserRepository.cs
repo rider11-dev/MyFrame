@@ -1,5 +1,6 @@
 ﻿using MyFrame.IRepository.RBAC;
 using MyFrame.Model.RBAC;
+using MyFrame.Model.Unit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace MyFrame.Repository.RBAC
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
+        public UserRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
         public User FindByUserName(string userName)
         {
             if (string.IsNullOrEmpty(userName))

@@ -38,14 +38,40 @@ namespace WebApp.Areas.RBAC.Controllers
 
         public JsonResult GetRoleFullInfoByPage(int pageNumber, int pageSize)
         {
-            Expression<Func<Role, bool>> where = r => r.IsDeleted == false;
+            Expression<Func<Role, bool>> where = r => true;
             var roleName = HttpContext.Request["RoleName"];
             if (!string.IsNullOrEmpty(roleName))
             {
-                where = where.And(r => r.RoleName == roleName);
+                where = where.And(r => r.RoleName.Contains(roleName));
             }
             var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
             var result = _roleSrv.FindByPageWithFullInfo(where, query => query.OrderBy(r => r.SortOrder), pageArgs);
+
+            if (result.ResultType == OperationResultType.Success)
+            {
+                return new JsonNetResult
+                {
+                    Data = new { code = result.ResultType, message = "数据获取成功", total = pageArgs.RecordsCount, rows = result.AppendData },
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    DateTimeFormat = "yyyy-MM-dd HH:mm:ss"
+                };
+            }
+            else
+            {
+                return Json(new { code = result.ResultType, message = result.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult GetRolesForGridHelpByPage(int pageNumber, int pageSize)
+        {
+            Expression<Func<Role, bool>> where = r => r.Enabled == true;//只能是激活的角色
+            var roleName = HttpContext.Request["RoleName"];
+            if (!string.IsNullOrEmpty(roleName))
+            {
+                where = where.And(r => r.RoleName.Contains(roleName));
+            }
+            var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
+            var result = _roleSrv.FindRolesForGridHelp(where, query => query.OrderBy(r => r.SortOrder), pageArgs);
 
             if (result.ResultType == OperationResultType.Success)
             {
@@ -66,6 +92,15 @@ namespace WebApp.Areas.RBAC.Controllers
         {
             RoleViewModel roleVM = new RoleViewModel();
             return PartialView(roleVM);
+        }
+
+        /// <summary>
+        /// 列表帮助
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GridHelp()
+        {
+            return PartialView();
         }
 
         [HttpPost]

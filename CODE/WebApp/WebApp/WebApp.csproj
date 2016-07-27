@@ -177,6 +177,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Content Include="libs\rbac\role\grid_help.js" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\RBAC\LoginViewModel.cs" />
   </ItemGroup>
@@ -2145,6 +2146,7 @@
     <Content Include="Areas\RBAC\Views\Module\Add.cshtml" />
     <Content Include="Areas\RBAC\Views\Role\Index.cshtml" />
     <Content Include="Areas\RBAC\Views\Role\Add.cshtml" />
+    <Content Include="Areas\RBAC\Views\Role\GridHelp.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

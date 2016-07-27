@@ -15,29 +15,23 @@ namespace MyFrame.Model.RBAC
     /// </summary>
     [Description("模块")]
     [Table("Modules")]
-    public class Module : IKey<int>, IDataTrack, ILogicalDelete
+    public class Module : IKey<int>, IDataTrack
     {
         public Module()
         {
         }
-        [Required]
+        [Key]
         [Description("主键")]
         public int Id { get; set; }
 
-        [Required]
         [Description("模块编号")]
-        [StringLength(20)]
         public string Code { get; set; }
 
-        [Required]
         [Description("模块名称")]
-        [StringLength(20)]
         public string Name { get; set; }
         [Description("链接地址")]
-        [StringLength(100)]
         public string LinkUrl { get; set; }
         [Description("图标")]
-        [StringLength(50)]
         public string Icon { get; set; }
 
         [Description("是否菜单")]
@@ -48,7 +42,6 @@ namespace MyFrame.Model.RBAC
         public bool HasChild { get; set; }
 
         [Description("备注")]
-        [StringLength(255)]
         public string Remark { get; set; }
 
         [Description("是否激活")]
@@ -71,9 +64,6 @@ namespace MyFrame.Model.RBAC
 
         [Description("最后修改时间")]
         public DateTime? LastModifyTime { get; set; }
-
-        [Description("是否已删除")]
-        public bool IsDeleted { get; set; }
 
     }
 }

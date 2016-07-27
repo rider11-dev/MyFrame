@@ -23,8 +23,7 @@ namespace MyFrame.ViewModel.RBAC
         public string Remark { get; set; }
         [Display(Name = "是否激活")]
         public bool Enabled { get; set; }
-        [Display(Name = "是否已删除")]
-        public bool IsDeleted { get; set; }
+
         [Display(Name = "创建人")]
         public int? Creator { get; set; }
         [Display(Name = "创建人")]

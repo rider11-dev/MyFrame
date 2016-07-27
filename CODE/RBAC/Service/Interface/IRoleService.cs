@@ -22,5 +22,7 @@ namespace MyFrame.IService.RBAC
         OperationResult UpdateDetail(Role role);
 
         OperationResult FindByPageWithFullInfo(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs);
+
+        OperationResult FindRolesForGridHelp(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs);
     }
 }

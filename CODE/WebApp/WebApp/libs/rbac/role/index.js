@@ -54,10 +54,6 @@
                         formatter: gFormatter.trueOrFalse.formatter
                     },
                     {
-                        field: 'IsDeleted', title: '是否删除', align: 'center', valign: 'center', width: 80,
-                        formatter: gFormatter.trueOrFalse.formatter
-                    },
-                    {
                         field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140,
                         cellStyle: function (value, row, index, field) {
                             return {

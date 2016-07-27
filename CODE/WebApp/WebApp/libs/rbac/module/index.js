@@ -80,10 +80,6 @@
                         field: 'Enabled', title: '是否激活', align: 'center', valign: 'center', width: 80,
                         formatter: gFormatter.trueOrFalse.formatter
                     },
-                    {
-                        field: 'IsDeleted', title: '已删除', align: 'center', valign: 'center', width: 80,
-                        formatter: gFormatter.trueOrFalse.formatter
-                    },
                     { field: 'CreatorName', title: '创建人', align: 'center', valign: 'center', width: 80 },
                     {
                         field: 'CreateTime', title: '创建时间', align: 'center', valign: 'center', width: 100,
@@ -156,9 +152,6 @@
                 //$('#Address').val(data.Address);
                 if (data.Enabled) {
                     $('#Enabled').iCheck('check');
-                }
-                if (data.IsDeleted) {
-                    $('#IsDeleted').iCheck('check');
                 }
                 $('#Remark').val(data.Remark);
             },

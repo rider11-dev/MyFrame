@@ -4,6 +4,7 @@ using MyFrame.Infrastructure.Pagination;
 using MyFrame.IRepository.RBAC;
 using MyFrame.IService.RBAC;
 using MyFrame.Model.RBAC;
+using MyFrame.Model.Unit;
 using MyFrame.ViewModel.RBAC;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,13 @@ namespace MyFrame.Service.RBAC
 {
     public class ModuleService : BaseService<Module>, IModuleService
     {
-        IModuleRepository _moduleRepository;
-        IUserRepository _usrRepository;
-        public ModuleService(IModuleRepository moduleRep, IUserRepository usrRepository)
-            : base(moduleRep)
+        private IModuleRepository _moduleRepository;
+        private IUserRepository _usrRepository;
+        public ModuleService(IUnitOfWork unitOfWork, IModuleRepository moduleRep, IUserRepository usrRep)
+            : base(unitOfWork)
         {
             _moduleRepository = moduleRep;
-            _usrRepository = usrRepository;
+            _usrRepository = usrRep;
         }
 
         public OperationResult FindByModuleCode(string moduleCode)
@@ -107,8 +108,7 @@ namespace MyFrame.Service.RBAC
                                 CreateTime = module.CreateTime,
                                 LastModifier = module.LastModifier,
                                 LastModifierName = m.UserName,
-                                LastModifyTime = module.LastModifyTime,
-                                IsDeleted = module.IsDeleted
+                                LastModifyTime = module.LastModifyTime
                             };
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = query.ToList();

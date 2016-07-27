@@ -47,7 +47,7 @@ namespace WebApp.Areas.RBAC.Controllers
         /// <returns></returns>
         public JsonResult GetUserFullInfoByPage(int pageNumber, int pageSize)
         {
-            Expression<Func<User, bool>> where = u => u.IsDeleted == false;
+            Expression<Func<User, bool>> where = u => true;
             var userName = HttpContext.Request["UserName"];
             if (!string.IsNullOrEmpty(userName))
             {
@@ -146,6 +146,25 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = result.ResultType, message = result.Message });
             }
             return Json(new { code = OperationResultType.Success, message = "删除成功" });
+        }
+
+        [HttpPost]
+        public JsonResult SetRoles(int[] usrIds, int[] roleIds)
+        {
+            if (usrIds == null || usrIds.Length < 1)
+            {
+                return Json(new { code = OperationResultType.ParamError, message = "请选择用户" });
+            }
+            if (roleIds == null || roleIds.Length < 1)
+            {
+                return Json(new { code = OperationResultType.ParamError, message = "请选择用户所属角色" });
+            }
+            OperationResult result = _userSrv.SetRoles(usrIds, roleIds);
+            if (result.ResultType != OperationResultType.Success)
+            {
+                return Json(new { code = result.ResultType, message = result.Message });
+            }
+            return Json(new { code = OperationResultType.Success, message = "角色设置成功" });
         }
     }
 }

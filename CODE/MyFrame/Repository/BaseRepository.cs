@@ -11,26 +11,34 @@ using System.Text;
 using EntityFramework.Extensions;
 using MyFrame.Infrastructure.Logger;
 using MyFrame.Infrastructure.OrderBy;
+using MyFrame.Model.Unit;
 
 namespace MyFrame.Repository
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        /// <summary>
-        /// 当前数据库上下文
-        /// </summary>
-        protected EFDbContext dbContext = EFDbContextFactory.GetCurrentContext();
+        IUnitOfWork _unitOfWork;
+        protected DbContext _dbContext;
         ILogHelper<TEntity> _logger;
+        public BaseRepository(IUnitOfWork unitOfWork)
+            : this()
+        {
+            _unitOfWork = unitOfWork;
+            _dbContext = unitOfWork.DbContext;
+
+            _logger = LogHelperFactory.GetLogHelper<TEntity>();
+        }
+
         public BaseRepository()
         {
-            _logger = LogHelperFactory.GetLogHelper<TEntity>();
+            // TODO: Complete member initialization
         }
 
         public IQueryable<TEntity> Entities
         {
             get
             {
-                return dbContext.Set<TEntity>();
+                return _dbContext.Set<TEntity>();
             }
         }
 
@@ -38,8 +46,11 @@ namespace MyFrame.Repository
         {
             try
             {
-                dbContext.Entry<TEntity>(entity).State = EntityState.Added;
-                dbContext.SaveChanges();
+                _dbContext.Entry<TEntity>(entity).State = EntityState.Added;
+                if (_unitOfWork.AutoCommit)
+                {
+                    _dbContext.SaveChanges();
+                }
             }
             catch (DbEntityValidationException ex)
             {
@@ -56,11 +67,11 @@ namespace MyFrame.Repository
             int count = 0;
             if (where == null)
             {
-                count = dbContext.Set<TEntity>().Count();
+                count = _dbContext.Set<TEntity>().Count();
             }
             else
             {
-                count = dbContext.Set<TEntity>().Count(where);
+                count = _dbContext.Set<TEntity>().Count(where);
             }
             return count;
         }
@@ -91,6 +102,7 @@ namespace MyFrame.Repository
             }
             return rst > 0;
         }
+
         public bool Exists(Expression<Func<TEntity, bool>> where)
         {
             return Entities.Any(where);

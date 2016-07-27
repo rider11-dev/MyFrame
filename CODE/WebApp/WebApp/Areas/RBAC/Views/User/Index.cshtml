@@ -7,7 +7,7 @@
             <div class="box-body">
                 <div id="toolbar" class="container" style="margin:4px 0px;">
                     <div class="row">
-                        <div class="col-sm-3 btn-group">
+                        <div class="col-sm-4 btn-group">
                             <button id="btnAdd" type="button" class="btn btn-success">
                                 <span class="glyphicon glyphicon-plus">新增</span>
                             </button>
@@ -16,6 +16,9 @@
                             </button>
                             <button id="btnDelete" type="button" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove">删除</span>
+                            </button>
+                            <button id="btnSetRoles" type="button" class="btn btn-success">
+                                <span class="glyphicon glyphicon-certificate">角色</span>
                             </button>
                         </div>
                         <div class="col-sm-2" style="padding:0px;">
@@ -40,7 +43,9 @@
             urlAdd: "@Url.Action("Add")",
             urlEdit: "@Url.Action("Edit")",
             urlSearch: "@Url.Action("GetUserFullInfoByPage")",
-            urlDelete: "@Url.Action("Delete")"
+            urlDelete: "@Url.Action("Delete")",
+            urlHelpRoles: "@Url.Action("GridHelp", "Role")",
+            urlSetRoles: "@Url.Action("SetRoles")"
         });
     });
 </script>

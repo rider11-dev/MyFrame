@@ -10,16 +10,30 @@ using MyFrame.Infrastructure.Extension;
 using MyFrame.IService;
 using MyFrame.Infrastructure.Logger;
 using MyFrame.Infrastructure.OrderBy;
+using MyFrame.Model.Unit;
+using MyFrame.Repository;
 
 namespace MyFrame.Service
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
     {
-        protected IBaseRepository<TEntity> _repository = null;
-        ILogHelper<TEntity> _logger;
-        public BaseService(IBaseRepository<TEntity> repository)
+        IBaseRepository<TEntity> _repository;
+        protected IBaseRepository<TEntity> CurrentRepository
         {
-            _repository = repository;
+            get
+            {
+                if (_repository == null)
+                {
+                    _repository = UnitOfWork == null ? new BaseRepository<TEntity>() : new BaseRepository<TEntity>(UnitOfWork);
+                }
+                return _repository;
+            }
+        }
+        protected IUnitOfWork UnitOfWork;
+        ILogHelper<TEntity> _logger;
+        public BaseService(IUnitOfWork unitOfWork)
+        {
+            UnitOfWork = unitOfWork;
             _logger = LogHelperFactory.GetLogHelper<TEntity>();
         }
 
@@ -46,7 +60,7 @@ namespace MyFrame.Service
             //新增
             try
             {
-                var data = _repository.Add(entity);
+                var data = CurrentRepository.Add(entity);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
@@ -62,7 +76,7 @@ namespace MyFrame.Service
             OperationResult result = new OperationResult();
             try
             {
-                var data = _repository.Count(where);
+                var data = CurrentRepository.Count(where);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
@@ -83,7 +97,7 @@ namespace MyFrame.Service
             }
             try
             {
-                var data = _repository.Delete(where);
+                var data = CurrentRepository.Delete(where);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
@@ -105,7 +119,7 @@ namespace MyFrame.Service
             }
             try
             {
-                var data = _repository.Update(where, update);
+                var data = CurrentRepository.Update(where, update);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
@@ -120,7 +134,7 @@ namespace MyFrame.Service
             OperationResult result = new OperationResult();
             try
             {
-                var data = _repository.Exists(where);
+                var data = CurrentRepository.Exists(where);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
@@ -136,7 +150,7 @@ namespace MyFrame.Service
             OperationResult result = new OperationResult();
             try
             {
-                var data = _repository.Find(where);
+                var data = CurrentRepository.Find(where);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data.ToList();
             }
@@ -158,7 +172,7 @@ namespace MyFrame.Service
             }
             try
             {
-                var data = _repository.FindByPage(where, orderBy, pageArgs);
+                var data = CurrentRepository.FindByPage(where, orderBy, pageArgs);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data.ToList();
             }

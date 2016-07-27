@@ -4,6 +4,7 @@ using MyFrame.Infrastructure.Pagination;
 using MyFrame.IRepository.RBAC;
 using MyFrame.IService.RBAC;
 using MyFrame.Model.RBAC;
+using MyFrame.Model.Unit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,9 @@ namespace MyFrame.Service.RBAC
         const string Msg_BeforeAdd = "保存角色前校验";
         const string Msg_UpdateDetail = "更新角色信息";
         const string Msg_SearchFullInfoByPage = "分页获取角色详细信息";
-        public RoleService(IRoleRepository roleRep, IUserRepository userRep)
-            : base(roleRep)
+        const string Msg_SearchSimpleInfoByPage = "分页获取角色精简信息";
+        public RoleService(IUnitOfWork unitOfWork, IRoleRepository roleRep, IUserRepository userRep)
+            : base(unitOfWork)
         {
             _roleRepository = roleRep;
             _userRepository = userRep;
@@ -130,7 +132,6 @@ namespace MyFrame.Service.RBAC
                                 RoleName = role.RoleName,
                                 Remark = role.Remark,
                                 Enabled = role.Enabled,
-                                IsDeleted = role.IsDeleted,
                                 SortOrder = role.SortOrder,
                                 Creator = role.Creator,
                                 CreatorName = c.UserName,
@@ -144,7 +145,32 @@ namespace MyFrame.Service.RBAC
             }
             catch (Exception ex)
             {
-                base.ProcessException(result, string.Format(Msg_SearchFullInfoByPage + ",失败"), ex);
+                base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
+            }
+            return result;
+        }
+
+        public OperationResult FindRolesForGridHelp(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                //先分页
+                var rolePaged = _roleRepository.FindByPage(where, orderBy, pageArgs);
+                //再连接
+                var query = from role in rolePaged
+                            select new
+                            {
+                                Id = role.Id,
+                                RoleName = role.RoleName,
+                                Remark = role.Remark
+                            };
+                result.ResultType = OperationResultType.Success;
+                result.AppendData = query.ToList();
+            }
+            catch (Exception ex)
+            {
+                base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
             }
             return result;
         }

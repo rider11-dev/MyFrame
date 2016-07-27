@@ -23,5 +23,7 @@ namespace MyFrame.IService.RBAC
         OperationResult UpdateDetail(User usr);
 
         OperationResult FindByPageWithFullInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs);
+
+        OperationResult SetRoles(int[] usrIds, int[] roleIds);
     }
 }

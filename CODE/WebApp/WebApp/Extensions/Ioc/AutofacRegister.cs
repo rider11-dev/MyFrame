@@ -13,6 +13,7 @@ using MyFrame.IRepository.RBAC;
 using MyFrame.Repository.EF;
 using Autofac.Core;
 using System.IO;
+using MyFrame.Model.Unit;
 
 namespace WebApp.Extensions.Ioc
 {
@@ -45,6 +46,9 @@ namespace WebApp.Extensions.Ioc
         }
         private static void RegisterInstanceForRBAC(ContainerBuilder builder)
         {
+            //工作单元
+            builder.RegisterType<EFUnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+
             //用户
             builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerRequest();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerRequest();
@@ -52,6 +56,8 @@ namespace WebApp.Extensions.Ioc
             //角色
             builder.RegisterType<RoleRepository>().As<IRoleRepository>().InstancePerRequest();
             builder.RegisterType<RoleService>().As<IRoleService>().InstancePerRequest();
+            //用户角色关系
+            builder.RegisterType<UserRoleRelRepository>().As<IUserRoleRelRepository>().InstancePerRequest();
 
             //模块
             builder.RegisterType<ModuleRepository>().As<IModuleRepository>().InstancePerRequest();

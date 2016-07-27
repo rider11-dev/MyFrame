@@ -13,7 +13,7 @@ namespace MyFrame.Model.RBAC
     /// </summary>
     [Description("用户——角色关系")]
     [Table("UserRoleRelation")]
-    public class UserRoleRelation
+    public class UserRoleRelation : IKey<int>
     {
         public UserRoleRelation() { }
 
@@ -27,6 +27,6 @@ namespace MyFrame.Model.RBAC
 
         [Required]
         [Description("角色id")]
-        public string RoleId { get; set; }
+        public int RoleId { get; set; }
     }
 }

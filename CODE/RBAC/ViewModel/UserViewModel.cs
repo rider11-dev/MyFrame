@@ -36,9 +36,6 @@ namespace MyFrame.ViewModel.RBAC
         [MaxLength(255, ErrorMessage = "备注不能超过255个字符")]
         public string Remark { get; set; }
 
-        [Display(Name = "是否已删除")]
-        public bool IsDeleted { get; set; }
-
         [Display(Name = "创建人")]
         public int? Creator { get; set; }
         [Display(Name = "创建人")]
