@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using AutoMapper;
-using MyFrame.Model.RBAC;
-using MyFrame.ViewModel.RBAC;
+using MyFrame.RBAC.Model;
+using MyFrame.RBAC.ViewModel;
+using MyFrame.RBAC.Configure;
 
 namespace WebApp.Extensions.Mapping
 {
@@ -17,11 +18,7 @@ namespace WebApp.Extensions.Mapping
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<RoleViewModel, Role>();
-                cfg.CreateMap<UserViewModel, User>()
-                    .ForMember(m => m.Password, opt => opt.Ignore());
-                cfg.CreateMap<ModuleViewModel, Module>();
-
+                new RbacConfigure().Map(cfg);
             });
             //校验
             Mapper.AssertConfigurationIsValid();

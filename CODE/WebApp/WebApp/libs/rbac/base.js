@@ -43,6 +43,7 @@ var gFunc = {
             url:字符串，请求后台数据的url（绝对路径）
             method:字符串，请求方式，get/post
             dataField:字符串，查询结果json对象中存放实际数据集的属性名称
+            singleSelect:是否单选
             height:整数值，高度
             uniqueId:字符串，每一行的唯一标识，一般为主键列
             queryParams:函数，如function (params) {
@@ -77,6 +78,7 @@ var gFunc = {
             //showColumns: true,                  //是否显示所有的列
             //showRefresh: true,                  //是否显示刷新按钮
             clickToSelect: true,                //是否启用点击选中行
+            singleSelect: options.singleSelect,//是否单选
             height: options.height,              //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
             uniqueId: "Id",                     //每一行的唯一标识，一般为主键列
             //showToggle: true,                    //是否显示详细视图和列表视图的切换按钮

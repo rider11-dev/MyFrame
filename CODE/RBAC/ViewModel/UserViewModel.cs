@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
-namespace MyFrame.ViewModel.RBAC
+namespace MyFrame.RBAC.ViewModel
 {
     public class UserViewModel
     {

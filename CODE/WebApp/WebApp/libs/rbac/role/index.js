@@ -4,16 +4,21 @@
     btnEdit: $('#btnEdit'),
     btnDelete: $('#btnDelete'),
     btnSearch: $('#btnSearch'),
+    btnAssign: $('#btnAssign'),
     txtSearchRoleName: $('#txtSearchRoleName'),
     urlAdd: "",
     urlEdit: "",
     urlDelete: "",
     urlSearch: "",
+    urlHelpUsers: "",
+    urlAssign: "",
     init: function (options) {
         roles.urlAdd = options.urlAdd;
         roles.urlEdit = options.urlEdit;
         roles.urlDelete = options.urlDelete;
         roles.urlSearch = options.urlSearch;
+        roles.urlHelpUsers = options.urlHelpUsers;
+        roles.urlAssign = options.urlAssign;
 
         roles.initgrid();
         roles.bindingEventArgs();
@@ -23,6 +28,7 @@
         roles.btnEdit.click(roles.funcBtnEdit);
         roles.btnDelete.click(roles.funcBtnDelete);
         roles.btnSearch.click(roles.funcBtnSearch);
+        roles.btnAssign.click(roles.funcBtnAssign);
     },
     initgrid: function () {
         var options = {
@@ -161,7 +167,7 @@
                     success: function (result, status, XHR) {
                         if (result.code == 0) {
                             roles.grid.bootstrapTable('refresh');
-                            gMessager.warning('删除成功');
+                            gMessager.info('删除成功');
                         } else {
                             gMessager.warning(result.message);
                         }
@@ -178,5 +184,50 @@
     },
     funcBtnSearch: function () {
         roles.grid.bootstrapTable('refresh');
+    },
+    funcBtnAssign: function () {
+        //
+        var checkedRows = roles.grid.bootstrapTable('getSelections');
+        //console.log(checkedRows.length);
+        if (checkedRows.length < 1) {
+            gMessager.warning('请选择角色');
+            return;
+        }
+        var roleIds = [];
+        $(checkedRows).each(function (index, item) {
+            roleIds.push(item.Id);
+        });
+        modalForm.show({
+            title: '用户帮助',
+            contentUrl: roles.urlHelpUsers,
+            submitUrl: roles.urlAssign,
+            submitSucceedCallback: function () {
+                roles.grid.bootstrapTable('refresh');
+            },
+            onLoadCallback: function () {
+
+            },
+            funcGetSubmitParams: function () {
+                var data = { cancel: false };
+                var rows = usersGridHelp.grid.bootstrapTable('getSelections');
+                if (rows.length < 1) {
+                    gMessager.warning("请选择用户");
+                    data.cancel = true;
+                    return data;
+                }
+                var usrIds = [];
+                $(rows).each(function (index, item) {
+                    usrIds.push(item.Id);
+                });
+                var data = {};
+                for (var i = 0; i < roleIds.length; i++) {
+                    data["roleIds[" + i + "]"] = roleIds[i];
+                }
+                for (var i = 0; i < usrIds.length; i++) {
+                    data["usrIds[" + i + "]"] = usrIds[i];
+                }
+                return data;
+            }
+        });
     }
 };

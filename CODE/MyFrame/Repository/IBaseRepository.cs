@@ -7,7 +7,7 @@ using System.Text;
 using MyFrame.Infrastructure.Pagination;
 using MyFrame.Infrastructure.OrderBy;
 
-namespace MyFrame.IRepository
+namespace MyFrame.Repository
 {
     public interface IBaseRepository<TEntity> where TEntity : class
     {

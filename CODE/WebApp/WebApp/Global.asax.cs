@@ -1,4 +1,4 @@
-﻿using MyFrame.IRepository.RBAC;
+﻿using MyFrame.RBAC.Repository;
 using MyFrame.Repository.EF;
 using System;
 using System.Collections.Generic;
@@ -29,9 +29,9 @@ namespace WebApp
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            //注册autofac
+            //ioc配置
             AutofacRegister.RegisterAutofac();
-            //注册automapper
+            //automapper配置
             AutoMapperRegister.Configure();
 
             //解析数据库上下文提供者

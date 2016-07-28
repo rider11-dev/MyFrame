@@ -1,4 +1,5 @@
 ﻿
+using MyFrame.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFrame.Model.RBAC
+namespace MyFrame.RBAC.Model
 {
     /// <summary>
     /// 模块---实体

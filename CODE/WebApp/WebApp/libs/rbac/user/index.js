@@ -5,6 +5,7 @@
     btnDelete: $('#btnDelete'),
     btnSearch: $('#btnSearch'),
     btnSetRoles: $('#btnSetRoles'),
+    btnClearRoles: $('#btnClearRoles'),
     txtSearchUserName: $('#txtSearchUserName'),
     urlAdd: "",
     urlEdit: "",
@@ -12,6 +13,7 @@
     urlSearch: "",
     urlHelpRoles: "",
     urlSetRoles: "",
+    urlClearRoles: "",
     init: function (options) {
         usermanage.urlAdd = options.urlAdd;
         usermanage.urlEdit = options.urlEdit;
@@ -19,6 +21,7 @@
         usermanage.urlSearch = options.urlSearch;
         usermanage.urlHelpRoles = options.urlHelpRoles;
         usermanage.urlSetRoles = options.urlSetRoles;
+        usermanage.urlClearRoles = options.urlClearRoles;
 
         usermanage.initgrid();
         usermanage.bindingEventArgs();
@@ -29,6 +32,7 @@
         usermanage.btnDelete.click(usermanage.funcBtnDelete);
         usermanage.btnSearch.click(usermanage.funcBtnSearch);
         usermanage.btnSetRoles.click(usermanage.funcBtnSetRoles);
+        usermanage.btnClearRoles.click(usermanage.funcBtnClearRoles);
     },
     initgrid: function () {
         var options = {
@@ -186,7 +190,7 @@
                     success: function (result, status, XHR) {
                         if (result.code == 0) {
                             usermanage.grid.bootstrapTable('refresh');
-                            gMessager.warning('删除成功');
+                            gMessager.info('删除成功');
                         } else {
                             gMessager.warning(result.message);
                         }
@@ -208,7 +212,7 @@
         //
         var checkedRows = usermanage.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
-        if (checkedRows.length < 1) {
+        if (checkedRows.length <= 0) {
             gMessager.warning('请选择用户');
             return;
         }
@@ -227,16 +231,17 @@
 
             },
             funcGetSubmitParams: function () {
+                var data = { cancel: false };
                 var rows = rolesGridHelp.grid.bootstrapTable('getSelections');
                 if (rows.length < 1) {
                     gMessager.warning("请选择角色");
-                    return;
+                    data.cancel = true;
+                    return data;
                 }
                 var roleIds = [];
                 $(rows).each(function (index, item) {
                     roleIds.push(item.Id);
                 });
-                var data = {};
                 for (var i = 0; i < usrIds.length; i++) {
                     data["usrIds[" + i + "]"] = usrIds[i];
                 }
@@ -245,6 +250,43 @@
                 }
                 return data;
             }
+        });
+    },
+    funcBtnClearRoles: function () {
+        var checkedRows = usermanage.grid.bootstrapTable('getSelections');
+        //console.log(checkedRows.length);
+        if (checkedRows.length <= 0) {
+            gMessager.warning('请选择用户');
+            return;
+        }
+        var usrIds = [];
+        $(checkedRows).each(function (index, item) {
+            usrIds.push(item.Id);
+        });
+        WinMsg.confirm({ message: '确定要清除选中用户的角色吗？' }).on(function (e) {
+            if (!e) {
+                return;
+            }
+            //
+            $.ajax({
+                type: 'post',
+                url: usermanage.urlClearRoles,
+                data: JSON.stringify(usrIds),
+                success: function (result, status, XHR) {
+                    if (result.code == 0) {
+                        usermanage.grid.bootstrapTable('refresh');
+                        gMessager.info('清除成功');
+                    } else {
+                        gMessager.warning(result.message);
+                    }
+                },
+                error: function (XHR, status, error) {
+                    gMessager.error("网络错误：" + status + "\r\n" + error);
+                },
+                complete: function (XHR, status) {
+                    //console.log('delete users completed,status:' + status);
+                }
+            });
         });
     }
 }

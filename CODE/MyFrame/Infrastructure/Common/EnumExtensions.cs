@@ -108,5 +108,34 @@ namespace MyFrame.Infrastructure.Extension
         {
             return Convert.ToInt64(o);
         }
+
+        public static string GetEnumName<T>(this Enum o)
+        {
+            Type enumType = typeof(T);
+            if (enumType.IsEnum)
+            {
+                return o.GetEnumName(enumType);
+            }
+            return "";
+        }
+
+        public static string GetEnumName(this Enum o, Type enumType)
+        {
+            try
+            {
+                string name = Enum.GetName(enumType, o);
+                return name;
+            }
+            catch
+            {
+
+            }
+            return null;
+        }
+
+        public static T ToEnum<T>(this int n) where T : struct
+        {
+            return (T)Enum.ToObject(typeof(T), n);
+        }
     }
 }

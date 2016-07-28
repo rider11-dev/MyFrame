@@ -1,7 +1,7 @@
 ﻿using MyFrame.Infrastructure.Extension;
 using MyFrame.Infrastructure.OptResult;
-using MyFrame.IService.RBAC;
-using MyFrame.Model.RBAC;
+using MyFrame.RBAC.Service;
+using MyFrame.RBAC.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Web.Mvc;
 using WebApp.Extensions.ActionResult;
 using WebApp.Extensions.Filters;
 using MyFrame.Infrastructure.Pagination;
-using MyFrame.ViewModel.RBAC;
+using MyFrame.RBAC.ViewModel;
 using WebApp.Controllers;
 using WebApp.Extensions.Session;
 using MyFrame.Infrastructure.OrderBy;
@@ -51,6 +51,32 @@ namespace WebApp.Areas.RBAC.Controllers
             var result = _moduleSrv.FindByPageWithFullInfo(where,
                 query => query.OrderBy(m => m.ParentId).ThenBy(m => m.SortOrder),
                 pageArgs);
+
+            if (result.ResultType == OperationResultType.Success)
+            {
+                return new JsonNetResult
+                {
+                    Data = new { code = result.ResultType, message = "数据获取成功", total = pageArgs.RecordsCount, rows = result.AppendData },
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    DateTimeFormat = "yyyy-MM-dd HH:mm:ss"
+                };
+            }
+            else
+            {
+                return Json(new { code = result.ResultType, message = result.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult GetModulesSimpleInfoByPage(int pageNumber, int pageSize)
+        {
+            Expression<Func<Module, bool>> where = r => true;//
+            var moduleName = HttpContext.Request["ModuleName"];
+            if (!string.IsNullOrEmpty(moduleName))
+            {
+                where = where.And(m => m.Name.Contains(moduleName));
+            }
+            var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
+            var result = _moduleSrv.FindByPageWithSimpleInfo(where, query => query.OrderBy(r => r.SortOrder), pageArgs);
 
             if (result.ResultType == OperationResultType.Success)
             {

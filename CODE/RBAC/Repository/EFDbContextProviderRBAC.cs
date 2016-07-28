@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MyFrame.IRepository.RBAC
+namespace MyFrame.RBAC.Repository
 {
     public class EFDbContextProviderRBAC : IEFDbContextProvider
     {

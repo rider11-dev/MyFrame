@@ -1,15 +1,16 @@
 ﻿using MyFrame.Infrastructure.OptResult;
 using MyFrame.Infrastructure.OrderBy;
 using MyFrame.Infrastructure.Pagination;
-using MyFrame.IRepository;
-using MyFrame.Model.RBAC;
+
+using MyFrame.IService;
+using MyFrame.RBAC.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace MyFrame.IService.RBAC
+namespace MyFrame.RBAC.Service
 {
     public interface IUserService : IBaseService<User>
     {
@@ -24,6 +25,6 @@ namespace MyFrame.IService.RBAC
 
         OperationResult FindByPageWithFullInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs);
 
-        OperationResult SetRoles(int[] usrIds, int[] roleIds);
+        OperationResult FindByPageWithSimpleInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs);
     }
 }

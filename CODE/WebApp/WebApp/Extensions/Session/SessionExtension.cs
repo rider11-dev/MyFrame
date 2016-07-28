@@ -1,4 +1,4 @@
-﻿using MyFrame.Model.RBAC;
+﻿using MyFrame.RBAC.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

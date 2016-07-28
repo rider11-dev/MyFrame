@@ -1,17 +1,18 @@
 ﻿using MyFrame.Infrastructure.OptResult;
 using MyFrame.Infrastructure.OrderBy;
 using MyFrame.Infrastructure.Pagination;
-using MyFrame.IRepository.RBAC;
-using MyFrame.IService.RBAC;
-using MyFrame.Model.RBAC;
+
+using MyFrame.RBAC.Model;
 using MyFrame.Model.Unit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using MyFrame.RBAC.Repository;
+using MyFrame.Service;
 
-namespace MyFrame.Service.RBAC
+namespace MyFrame.RBAC.Service
 {
     public class RoleService : BaseService<Role>, IRoleService
     {
@@ -150,7 +151,7 @@ namespace MyFrame.Service.RBAC
             return result;
         }
 
-        public OperationResult FindRolesForGridHelp(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs)
+        public OperationResult FindByPageWithSimpleInfo(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs)
         {
             OperationResult result = new OperationResult();
             try

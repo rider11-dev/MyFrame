@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyFrame.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
-namespace MyFrame.Model.RBAC
+namespace MyFrame.RBAC.Model
 {
     /// <summary>
     /// 模块---实体
@@ -17,15 +18,12 @@ namespace MyFrame.Model.RBAC
     {
         public UserRoleRelation() { }
 
-        [Required]
         [Description("主键")]
         public int Id { get; set; }
 
-        [Required]
         [Description("用户id")]
         public int UserId { get; set; }
 
-        [Required]
         [Description("角色id")]
         public int RoleId { get; set; }
     }

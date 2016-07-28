@@ -71,6 +71,10 @@ var modalForm = {
             return;
         }
         var data = modalForm.funcGetSubmitParams();
+        if (data.cancel == true) {
+            //console.log('return');
+            return;
+        }
         //console.log(data);
         $.ajax({
             type: 'post',

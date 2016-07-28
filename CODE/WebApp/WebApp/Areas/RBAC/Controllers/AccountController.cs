@@ -1,7 +1,7 @@
 ﻿using MyFrame.Infrastructure.Extension;
 using MyFrame.Infrastructure.OptResult;
-using MyFrame.IService.RBAC;
-using MyFrame.Model.RBAC;
+using MyFrame.RBAC.Service;
+using MyFrame.RBAC.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

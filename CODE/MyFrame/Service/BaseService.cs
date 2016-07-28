@@ -1,6 +1,5 @@
 ﻿using MyFrame.Infrastructure.OptResult;
 using MyFrame.Infrastructure.Pagination;
-using MyFrame.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;

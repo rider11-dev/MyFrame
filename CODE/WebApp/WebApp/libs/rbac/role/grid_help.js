@@ -1,19 +1,18 @@
 ﻿var rolesGridHelp = {
     grid: $('#gridHelpRoles'),
-    btnHelpSearch: $('#btnHelpSearch'),
+    btnRolesHelpSearch: $('#btnRolesHelpSearch'),
     txtHelpRoleName: $('#txtHelpRoleName'),
     urlSearch: "",
     init: function (options) {
         rolesGridHelp.urlSearch = options.urlSearch;
         rolesGridHelp.initgrid();
-        rolesGridHelp.btnHelpSearch.click(rolesGridHelp.funcbtnHelpSearch);
+        rolesGridHelp.btnRolesHelpSearch.click(rolesGridHelp.funcbtnRolesHelpSearch);
     },
     initgrid: function () {
         var options = {
             url: rolesGridHelp.urlSearch,
             method: 'get',
             dataField: 'rows',
-            height: 160,
             uniqueId: 'Id',
             queryParams: function (params) {
                 //添加额外参数
@@ -45,7 +44,7 @@
         //调用公共函数，初始化表格
         gFunc.initgrid(rolesGridHelp.grid, options);
     },
-    funcbtnHelpSearch: function () {
+    funcbtnRolesHelpSearch: function () {
         rolesGridHelp.grid.bootstrapTable('refresh');
     }
 }

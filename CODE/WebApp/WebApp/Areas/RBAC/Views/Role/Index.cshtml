@@ -7,7 +7,7 @@
             <div class="box-body">
                 <div id="toolbar" class="container" style="margin:4px 0px;">
                     <div class="row">
-                        <div class="col-sm-3 btn-group">
+                        <div class="col-sm-5 btn-group">
                             <button id="btnAdd" type="button" class="btn btn-success">
                                 <span class="glyphicon glyphicon-plus">新增</span>
                             </button>
@@ -17,9 +17,12 @@
                             <button id="btnDelete" type="button" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove">删除</span>
                             </button>
+                            <button id="btnAssign" type="button" class="btn btn-success">
+                                <span class="glyphicon glyphicon-cog">用户分配</span>
+                            </button>
                         </div>
                         <div class="col-sm-2" style="padding:0px;">
-                            <input type="text" id="txtSearchRoleName" name="UserName" class="form-control" placeholder="角色名" />
+                            <input type="text" id="txtSearchRoleName" name="RoleName" class="form-control" placeholder="角色名" />
                         </div>
                         <div class="col-sm-1" style="padding-left:2px;">
                             <button id="btnSearch" type="button" class="btn btn-success">
@@ -40,7 +43,9 @@
             urlAdd: "@Url.Action("Add")",
             urlEdit: "@Url.Action("Edit")",
             urlSearch: "@Url.Action("GetRoleFullInfoByPage")",
-            urlDelete: "@Url.Action("Delete")"
+            urlDelete: "@Url.Action("Delete")",
+            urlHelpUsers: "@Url.Action("GridHelp", "User")",
+            urlAssign: "@Url.Action("Assign", "UserRoleRelation")"
         });
     });
 </script>

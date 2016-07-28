@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace MyFrame.Model.RBAC
+namespace MyFrame.RBAC.Model
 {
     [Description("用户信息")]
     [Table("Users")]

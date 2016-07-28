@@ -1,23 +1,24 @@
 ﻿using MyFrame.Infrastructure.OptResult;
 using MyFrame.Infrastructure.OrderBy;
 using MyFrame.Infrastructure.Pagination;
-using MyFrame.IRepository.RBAC;
-using MyFrame.IService.RBAC;
-using MyFrame.Model.RBAC;
+using MyFrame.RBAC.Model;
 using MyFrame.Model.Unit;
-using MyFrame.ViewModel.RBAC;
+using MyFrame.RBAC.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using MyFrame.RBAC.Repository;
+using MyFrame.Service;
 
-namespace MyFrame.Service.RBAC
+namespace MyFrame.RBAC.Service
 {
     public class ModuleService : BaseService<Module>, IModuleService
     {
         private IModuleRepository _moduleRepository;
         private IUserRepository _usrRepository;
+        const string Msg_SearchSimpleInfoByPage = "分页获取模块精简信息";
         public ModuleService(IUnitOfWork unitOfWork, IModuleRepository moduleRep, IUserRepository usrRep)
             : base(unitOfWork)
         {
@@ -116,6 +117,35 @@ namespace MyFrame.Service.RBAC
             catch (Exception ex)
             {
                 ProcessException(result, string.Format("分页获取{0}模块详细信息失败", EntityType), ex);
+            }
+            return result;
+        }
+
+
+        public OperationResult FindByPageWithSimpleInfo(Expression<Func<Module, bool>> where, Action<IOrderable<Module>> orderBy, PageArgs pageArgs)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                //先分页
+                var modulePaged = _moduleRepository.FindByPage(where, orderBy, pageArgs);
+                //再连接
+                var query = from module in modulePaged
+                            select new
+                            {
+                                Id = module.Id,
+                                Code = module.Code,
+                                Name = module.Name,
+                                LinkUrl = module.LinkUrl,
+                                Enabled = module.Enabled,
+                                Remark = module.Remark
+                            };
+                result.ResultType = OperationResultType.Success;
+                result.AppendData = query.ToList();
+            }
+            catch (Exception ex)
+            {
+                base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
             }
             return result;
         }

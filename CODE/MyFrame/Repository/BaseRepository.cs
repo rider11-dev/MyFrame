@@ -1,5 +1,4 @@
 ﻿using MyFrame.Infrastructure.Pagination;
-using MyFrame.IRepository;
 using MyFrame.Repository.EF;
 using System;
 using System.Collections.Generic;

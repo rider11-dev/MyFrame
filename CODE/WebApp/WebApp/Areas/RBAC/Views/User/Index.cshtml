@@ -7,7 +7,7 @@
             <div class="box-body">
                 <div id="toolbar" class="container" style="margin:4px 0px;">
                     <div class="row">
-                        <div class="col-sm-4 btn-group">
+                        <div class="col-sm-5 btn-group">
                             <button id="btnAdd" type="button" class="btn btn-success">
                                 <span class="glyphicon glyphicon-plus">新增</span>
                             </button>
@@ -18,7 +18,10 @@
                                 <span class="glyphicon glyphicon-remove">删除</span>
                             </button>
                             <button id="btnSetRoles" type="button" class="btn btn-success">
-                                <span class="glyphicon glyphicon-certificate">角色</span>
+                                <span class="glyphicon glyphicon-certificate">角色设置</span>
+                            </button>
+                            <button id="btnClearRoles" type="button" class="btn btn-warning">
+                                <span class="glyphicon glyphicon-remove">清除角色</span>
                             </button>
                         </div>
                         <div class="col-sm-2" style="padding:0px;">
@@ -45,7 +48,8 @@
             urlSearch: "@Url.Action("GetUserFullInfoByPage")",
             urlDelete: "@Url.Action("Delete")",
             urlHelpRoles: "@Url.Action("GridHelp", "Role")",
-            urlSetRoles: "@Url.Action("SetRoles")"
+            urlSetRoles: "@Url.Action("SetRoles", "UserRoleRelation")",
+            urlClearRoles: "@Url.Action("ClearRoles", "UserRoleRelation")"
         });
     });
 </script>

@@ -1,5 +1,5 @@
-﻿using MyFrame.IService.RBAC;
-using MyFrame.Model.RBAC;
+﻿using MyFrame.RBAC.Service;
+using MyFrame.RBAC.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using MyFrame.Infrastructure.Extension;
 using MyFrame.Infrastructure.Pagination;
 using MyFrame.Infrastructure.OptResult;
 using WebApp.Extensions.ActionResult;
-using MyFrame.ViewModel.RBAC;
+using MyFrame.RBAC.ViewModel;
 using WebApp.Extensions.Session;
 using AutoMapper;
 
@@ -62,16 +62,16 @@ namespace WebApp.Areas.RBAC.Controllers
             }
         }
 
-        public JsonResult GetRolesForGridHelpByPage(int pageNumber, int pageSize)
+        public JsonResult GetRolesSimpleInfoByPage(int pageNumber, int pageSize)
         {
-            Expression<Func<Role, bool>> where = r => r.Enabled == true;//只能是激活的角色
+            Expression<Func<Role, bool>> where = r => true;//
             var roleName = HttpContext.Request["RoleName"];
             if (!string.IsNullOrEmpty(roleName))
             {
                 where = where.And(r => r.RoleName.Contains(roleName));
             }
             var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
-            var result = _roleSrv.FindRolesForGridHelp(where, query => query.OrderBy(r => r.SortOrder), pageArgs);
+            var result = _roleSrv.FindByPageWithSimpleInfo(where, query => query.OrderBy(r => r.SortOrder), pageArgs);
 
             if (result.ResultType == OperationResultType.Success)
             {

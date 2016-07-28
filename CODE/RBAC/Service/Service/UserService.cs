@@ -2,20 +2,18 @@
 using MyFrame.Infrastructure.OptResult;
 using MyFrame.Infrastructure.OrderBy;
 using MyFrame.Infrastructure.Pagination;
-using MyFrame.IRepository;
-using MyFrame.IRepository.RBAC;
-using MyFrame.IService.RBAC;
-using MyFrame.Model.RBAC;
+using MyFrame.RBAC.Model;
 using MyFrame.Model.Unit;
-using MyFrame.Repository.RBAC;
-using MyFrame.ViewModel.RBAC;
+using MyFrame.RBAC.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using MyFrame.RBAC.Repository;
+using MyFrame.Service;
 
-namespace MyFrame.Service.RBAC
+namespace MyFrame.RBAC.Service
 {
     public class UserService : BaseService<User>, IUserService
     {
@@ -24,6 +22,7 @@ namespace MyFrame.Service.RBAC
         IUserRepository _usrRepository;
         const string Msg_BeforeAdd = "保存前校验";
         const string Msg_SetRoles = "设置用户角色";
+        const string Msg_SearchSimpleInfoByPage = "分页获取用户精简信息";
         public UserService(IUnitOfWork unitOfWork, IUserRepository usrRep, IUserRoleRelRepository usrRoleRelRep, IRoleRepository roleRep)
             : base(unitOfWork)
         {
@@ -160,52 +159,29 @@ namespace MyFrame.Service.RBAC
             }
             return result;
         }
-
-
-        public OperationResult SetRoles(int[] usrIds, int[] roleIds)
+        public OperationResult FindByPageWithSimpleInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs)
         {
             OperationResult result = new OperationResult();
-            if (usrIds == null || usrIds.Length < 1)
-            {
-                result.ResultType = OperationResultType.ParamError;
-                result.Message = Msg_SetRoles + "失败，usrIds不能为空";
-                return result;
-            }
-            if (roleIds == null || roleIds.Length < 1)
-            {
-                result.ResultType = OperationResultType.ParamError;
-                result.Message = Msg_SetRoles + "失败，roleIds不能为空";
-                return result;
-            }
-            /*
-             * 1、删除用户现有角色
-             * 2、添加新角色
-             * */
-            var query = from usr in usrIds
-                        join role in roleIds on 1 equals 1
-                        select new UserRoleRelation
-                        {
-                            UserId = usr,
-                            RoleId = role
-                        };
-            base.UnitOfWork.AutoCommit = false;
-            base.UnitOfWork.BeginTransaction();
             try
             {
-                _usrRoleRelRepository.Delete(r => usrIds.Contains(r.UserId));
-                _usrRoleRelRepository.Add(query.ToList());
-                base.UnitOfWork.Commit();
-
+                //先分页
+                var usrPaged = _usrRepository.FindByPage(where, orderBy, pageArgs);
+                //再连接
+                var query = from usr in usrPaged
+                            select new
+                            {
+                                Id = usr.Id,
+                                UserName = usr.UserName,
+                                Remark = usr.Remark
+                            };
                 result.ResultType = OperationResultType.Success;
+                result.AppendData = query.ToList();
             }
             catch (Exception ex)
             {
-                base.UnitOfWork.Rollback();
-                base.ProcessException(result, Msg_SetRoles + "失败", ex);
+                base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
             }
-
             return result;
         }
-
     }
 }

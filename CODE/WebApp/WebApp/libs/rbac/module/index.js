@@ -190,7 +190,7 @@
                     success: function (result, status, XHR) {
                         if (result.code == 0) {
                             modulemanage.grid.bootstrapTable('refresh');
-                            gMessager.warning('删除成功');
+                            gMessager.info('删除成功');
                         } else {
                             gMessager.warning(result.message);
                         }

@@ -1,12 +1,14 @@
-﻿using MyFrame.IRepository.RBAC;
-using MyFrame.Model.RBAC;
+﻿
 using MyFrame.Model.Unit;
+using MyFrame.RBAC.Model;
+using MyFrame.RBAC.Repository;
+using MyFrame.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MyFrame.Repository.RBAC
+namespace MyFrame.RBAC.Repository
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {

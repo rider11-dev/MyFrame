@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyFrame.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
-namespace MyFrame.Model.RBAC
+namespace MyFrame.RBAC.Model
 {
     [Description("角色信息")]
     [Table("Roles")]
