@@ -164,7 +164,7 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = OperationResultType.ParamError, message = "角色id列表不能为空" });
             }
-            OperationResult result = _roleSrv.Delete(r => roleIds.Contains(r.Id));
+            OperationResult result = _roleSrv.DeleteWithRelations(roleIds);
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });

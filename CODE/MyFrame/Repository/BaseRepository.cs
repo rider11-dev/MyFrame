@@ -109,7 +109,9 @@ namespace MyFrame.Repository
 
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where)
         {
-            return Entities.Where(where);
+            var query = Entities.Where(where);
+
+            return query;
         }
 
         /// <summary>
@@ -134,7 +136,7 @@ namespace MyFrame.Repository
 
         public IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs)
         {
-            var querable = Entities.Where(where);
+            var querable = Find(where);
 
             return QueryByPage(querable, orderBy, pageArgs);
         }
@@ -160,5 +162,6 @@ namespace MyFrame.Repository
             var _list = linq.Queryable.Skip((pageArgs.PageIndex - 1) * pageArgs.PageSize).Take(pageArgs.PageSize);
             return _list;
         }
+
     }
 }

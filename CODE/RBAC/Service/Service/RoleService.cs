@@ -18,16 +18,24 @@ namespace MyFrame.RBAC.Service
     {
         IRoleRepository _roleRepository;
         IUserRepository _userRepository;
+        IRolePermissionRepository _rolePermissionRep;
+        IUserRoleRelRepository _usrRoleRelRep;
         const string Msg_SearchByName = "根据角色名称查询";
         const string Msg_BeforeAdd = "保存角色前校验";
         const string Msg_UpdateDetail = "更新角色信息";
         const string Msg_SearchFullInfoByPage = "分页获取角色详细信息";
         const string Msg_SearchSimpleInfoByPage = "分页获取角色精简信息";
-        public RoleService(IUnitOfWork unitOfWork, IRoleRepository roleRep, IUserRepository userRep)
+        const string Msg_DeleteWithRelations = "删除角色（包含关系数据）";
+        public RoleService(IUnitOfWork unitOfWork, IRoleRepository roleRep,
+            IUserRepository userRep,
+            IRolePermissionRepository rolePermissionRep,
+            IUserRoleRelRepository usrRoleRelRep)
             : base(unitOfWork)
         {
             _roleRepository = roleRep;
             _userRepository = userRep;
+            _rolePermissionRep = rolePermissionRep;
+            _usrRoleRelRep = usrRoleRelRep;
         }
 
         public OperationResult FindByName(string roleName)
@@ -172,6 +180,44 @@ namespace MyFrame.RBAC.Service
             catch (Exception ex)
             {
                 base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 级联删除
+        /// </summary>
+        /// <param name="roleIds"></param>
+        public OperationResult DeleteWithRelations(int[] roleIds)
+        {
+            OperationResult result = new OperationResult();
+            if (roleIds == null || roleIds.Length < 1)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = string.Format("{0}失败，{1}", Msg_DeleteWithRelations, "角色id不能为空");
+                return result;
+            }
+            if (_usrRoleRelRep.Exists(r => roleIds.Contains(r.RoleId)))
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = string.Format("{0}失败，{1}", Msg_DeleteWithRelations, "要删除的角色已分配到用户");
+                return result;
+            }
+            base.UnitOfWork.AutoCommit = false;
+            try
+            {
+                base.UnitOfWork.BeginTransaction();
+                _rolePermissionRep.Delete(r => roleIds.Contains(r.RoleId));
+                _roleRepository.Delete(r => roleIds.Contains(r.Id));
+                base.UnitOfWork.Commit();
+
+                result.ResultType = OperationResultType.Success;
+                result.Message = Msg_DeleteWithRelations + "成功";
+            }
+            catch (Exception ex)
+            {
+                base.UnitOfWork.Rollback();
+                base.ProcessException(result, Msg_DeleteWithRelations + "失败", ex);
             }
             return result;
         }

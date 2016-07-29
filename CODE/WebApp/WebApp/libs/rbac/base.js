@@ -110,6 +110,7 @@ var gFunc = {
     },
 };
 
+/*——————————————————全局格式化器——————————————————*/
 var gFormatter = {
     trueOrFalse: {
         formatter: function (value) {
@@ -161,4 +162,28 @@ var gMessager = {
         toastr.clear();
         toastr.warning(message, title);
     }
+};
+
+/*——————————————————表单全局函数——————————————————*/
+var gFormFunc = {
+    // 将Form序列化为JSON对象
+    serializeToJson: function (form) {
+        if (gFunc.isNull(form)) {
+            return null;
+        }
+
+        var o = {};
+        var a = $(form).serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    },
 };

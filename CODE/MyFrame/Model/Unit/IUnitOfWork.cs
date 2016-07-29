@@ -12,7 +12,7 @@ namespace MyFrame.Model.Unit
     /// </summary>
     public interface IUnitOfWork
     {
-        DbContext DbContext { get; }
+        DbContext DbContext { get; set; }
         void BeginTransaction();
 
         /// <summary>

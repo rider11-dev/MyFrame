@@ -25,5 +25,7 @@ namespace MyFrame.RBAC.Service
         OperationResult FindByPageWithFullInfo(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs);
 
         OperationResult FindByPageWithSimpleInfo(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs);
+
+        OperationResult DeleteWithRelations(int[] roleIds);
     }
 }

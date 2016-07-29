@@ -16,6 +16,9 @@ namespace MyFrame.RBAC.Service
         OperationResult FindByModuleCode(string moduleCode);
         OperationResult FindByPageWithFullInfo(Expression<Func<Module, bool>> where, Action<IOrderable<Module>> orderBy, PageArgs pageArgs);
         OperationResult FindByPageWithSimpleInfo(Expression<Func<Module, bool>> where, Action<IOrderable<Module>> orderBy, PageArgs pageArgs);
+
+        OperationResult FindByRolesWithSimpleInfo(int[] roleIds);
+
         /// <summary>
         /// 更新指定模块详细信息
         /// </summary>

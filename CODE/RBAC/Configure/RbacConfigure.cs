@@ -8,6 +8,7 @@ using MyFrame.RBAC.ViewModel;
 using MyFrame.Repository.EF;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,8 +22,8 @@ namespace MyFrame.RBAC.Configure
     {
         public void Register(ContainerBuilder builder)
         {
-            //1、注册rbac数据上下文提供器
-            builder.RegisterType<EFDbContextProviderRBAC>().As<IEFDbContextProvider>().InstancePerLifetimeScope();
+            //1、注册rbac数据上下文
+            builder.RegisterType<EFDbContextRBAC>().As<DbContext>().InstancePerRequest();
 
             //2、注册业务模块
             //用户
@@ -45,6 +46,8 @@ namespace MyFrame.RBAC.Configure
             //模块
             builder.RegisterType<ModuleRepository>().As<IModuleRepository>().InstancePerRequest();
             builder.RegisterType<ModuleService>().As<IModuleService>().InstancePerRequest();
+
+            
         }
 
         public void Map(IMapperConfiguration cfg)
@@ -53,6 +56,8 @@ namespace MyFrame.RBAC.Configure
             cfg.CreateMap<UserViewModel, User>()
                 .ForMember(m => m.Password, opt => opt.Ignore());
             cfg.CreateMap<ModuleViewModel, MyFrame.RBAC.Model.Module>();
+
+            
         }
     }
 }

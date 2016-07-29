@@ -35,7 +35,7 @@ namespace WebApp
             AutoMapperRegister.Configure();
 
             //解析数据库上下文提供者
-            EFDbContextFactory.DbContextProvider = DependencyResolver.Current.GetService<IEFDbContextProvider>();
+            //EFDbContextFactory.DbContextProvider = DependencyResolver.Current.GetService<IEFDbContextProvider>();
         }
     }
 }

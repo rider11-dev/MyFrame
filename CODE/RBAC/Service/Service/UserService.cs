@@ -21,6 +21,7 @@ namespace MyFrame.RBAC.Service
         IRoleRepository _roleRepository;
         IUserRepository _usrRepository;
         const string Msg_BeforeAdd = "保存前校验";
+        const string Msg_DeleteWithRelations = "删除用户（包含关系数据）";
         const string Msg_SetRoles = "设置用户角色";
         const string Msg_SearchSimpleInfoByPage = "分页获取用户精简信息";
         public UserService(IUnitOfWork unitOfWork, IUserRepository usrRep, IUserRoleRelRepository usrRoleRelRep, IRoleRepository roleRep)
@@ -80,6 +81,37 @@ namespace MyFrame.RBAC.Service
             return result;
         }
 
+        /// <summary>
+        /// 级联删除
+        /// </summary>
+        /// <param name="usrIds"></param>
+        public OperationResult DeleteWithRelations(int[] usrIds)
+        {
+            OperationResult result = new OperationResult();
+            if (usrIds == null || usrIds.Length < 1)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = string.Format("{0}失败，{1}", Msg_DeleteWithRelations, "用户id不能为空");
+                return result;
+            }
+            base.UnitOfWork.AutoCommit = false;
+            try
+            {
+                base.UnitOfWork.BeginTransaction();
+                _usrRepository.Delete(u => usrIds.Contains(u.Id));
+                _usrRoleRelRepository.Delete(r => usrIds.Contains(r.UserId));
+                base.UnitOfWork.Commit();
+
+                result.ResultType = OperationResultType.Success;
+                result.Message = Msg_DeleteWithRelations + "成功";
+            }
+            catch (Exception ex)
+            {
+                base.UnitOfWork.Rollback();
+                base.ProcessException(result, Msg_DeleteWithRelations + "失败", ex);
+            }
+            return result;
+        }
 
         public OperationResult UpdateDetail(User usr)
         {

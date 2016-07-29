@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApp.ViewModels.RBAC;
+using WebApp.Extensions.Session;
 
 namespace WebApp.Extensions.Filters
 {
@@ -22,40 +23,22 @@ namespace WebApp.Extensions.Filters
         {
             base.OnResultExecuting(filterContext);
             //设置菜单树数据源
-            (filterContext.Result as ViewResult).ViewData["ModuleTreeData"] = GetModulesForTree();
+            (filterContext.Result as ViewResult).ViewData["ModuleTreeData"] = GetModulesForTree(filterContext.HttpContext.Session);
         }
 
         /// <summary>
         /// 获取所有功能模块，树结构
         /// </summary>
         /// <returns></returns>
-        private List<ModuleViewModel> GetModulesForTree()
+        private List<ModuleSimpleViewModel> GetModulesForTree(HttpSessionStateBase session)
         {
-            List<ModuleViewModel> listVM = new List<ModuleViewModel>();
-            var result = ModuleSrv.Find(m => m.Enabled == true);
+            List<ModuleSimpleViewModel> listVM = new List<ModuleSimpleViewModel>();
+            var roles = session.GetRoleIds();
+            var result = ModuleSrv.FindByRolesWithSimpleInfo(roles);
             if (result.ResultType == OperationResultType.Success)
             {
                 //获取所有模块数据
-                var modules = (from module in (result.AppendData as List<Module>)
-                               select new ModuleViewModel
-                               {
-                                   Id = module.Id,
-                                   Code = module.Code,
-                                   Name = module.Name,
-                                   LinkUrl = module.LinkUrl,
-                                   Icon = module.Icon,
-                                   SortOrder = module.SortOrder,
-                                   IsMenu = module.IsMenu,
-                                   ParentId = module.ParentId,
-                                   HasChild = module.HasChild,
-                                   Enabled = module.Enabled,
-                                   IsSystem = module.IsSystem,
-                                   Remark = module.Remark,
-                                   Creator = module.Creator,
-                                   CreateTime = module.CreateTime,
-                                   LastModifier = module.LastModifier,
-                                   LastModifyTime = module.LastModifyTime
-                               }).ToList();
+                var modules = result.AppendData as List<ModuleSimpleViewModel>;
                 //递归构建菜单树
                 var firstList = modules.Where(m => m.ParentId == null).OrderBy(m => m.SortOrder);
                 foreach (var vm in firstList)
@@ -68,7 +51,7 @@ namespace WebApp.Extensions.Filters
             return listVM;
         }
 
-        private void SetSubModules(ModuleViewModel parent, List<ModuleViewModel> srcList)
+        private void SetSubModules(ModuleSimpleViewModel parent, List<ModuleSimpleViewModel> srcList)
         {
             if (parent == null || srcList == null || srcList.Count < 1 || !parent.HasChild)
             {

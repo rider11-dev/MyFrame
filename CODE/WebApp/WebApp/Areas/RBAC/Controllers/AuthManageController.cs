@@ -9,6 +9,7 @@ using WebApp.Controllers;
 using MyFrame.Infrastructure.Extension;
 using MyFrame.RBAC.Model;
 using WebApp.Extensions.ActionResult;
+using WebApp.Extensions.Filters;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -23,8 +24,7 @@ namespace WebApp.Areas.RBAC.Controllers
             _rolePermissionSrv = rolePermissionSrv;
         }
 
-        //
-        // GET: /RBAC/RolePerAssign/
+        [LoginCheckFilter]
         public ActionResult Index()
         {
             return View();

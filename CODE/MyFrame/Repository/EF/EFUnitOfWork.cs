@@ -10,19 +10,11 @@ namespace MyFrame.Repository.EF
 {
     public class EFUnitOfWork : IUnitOfWork
     {
-        private DbContext _dbContext;
-        public DbContext DbContext
-        {
-            get
-            {
-                if (_dbContext == null)
-                {
-                    _dbContext = EFDbContextFactory.GetCurrentContext();
-                }
-                return _dbContext;
-            }
-        }
-        private readonly IsolationLevel _isolationLevel;
+        /// <summary>
+        /// 数据上下文，使用属性依赖注入
+        /// </summary>
+        public DbContext DbContext { get; set; }
+        private IsolationLevel _isolationLevel;
         private DbContextTransaction _transaction;
         public EFUnitOfWork()
         {

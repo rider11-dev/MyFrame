@@ -1,0 +1,49 @@
+﻿@using WebApp.ViewModels.RBAC
+@model ChangePwdViewModel
+<div class="row" style="margin:10px 0px;">
+    <div class="col-xs-12">
+        <div class="box" style="min-height: 500px;">
+            <div class="box-header">
+                <h3 class="box-title">修改密码</h3>
+            </div>
+            <div class="box-body">
+                @using (Html.BeginForm("ChangePwd", "Account", new { Area = "RBAC" }, FormMethod.Post, new { @class = "form-signin container", style = "max-width:300px;", id = "editForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div style="color:red;">
+                        @Html.ValidationSummary()
+                    </div>
+                    <div class="form-group has-feedback">
+                        @Html.PasswordFor(p => p.OldPassword, new { @class = "form-control", placeholder = "旧密码" })
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        @Html.PasswordFor(p => p.NewPassword, new { @class = "form-control", placeholder = "新密码" })
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        @Html.PasswordFor(p => p.NewPassword2, new { @class = "form-control", placeholder = "密码确认" })
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <button id="btnSubmit" class="btn btn-lg btn-primary btn-block" type="submit">确认修改</button>
+                }
+                <script src="~/Scripts/jquery.validate.min.js"></script>
+                <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+                <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+                <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+                <!--[if lt IE 9]>
+                    <script src="~/Scripts/html5shiv.min.js"></script>
+                    <script src="~/Scripts/respond.min.js"></script>
+                <![endif]-->
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/libs/rbac/account/changepwd.js"></script>
+<script src="~/libs/plugins/form/jquery.form.js"></script>
+<script type="text/javascript">
+    $(function () {
+        changepwd.init();
+    });
+</script>

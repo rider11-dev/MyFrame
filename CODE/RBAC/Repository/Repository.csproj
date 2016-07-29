@@ -63,7 +63,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EFDbContextProviderRBAC.cs" />
     <Compile Include="EFDbContextRBAC.cs" />
     <Compile Include="Interface\IModuleRepository.cs" />
     <Compile Include="Interface\IRolePermissionRepository.cs" />

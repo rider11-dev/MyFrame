@@ -60,11 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseRepository.cs" />
-    <Compile Include="EF\EFDbContextProviderDefault.cs" />
     <Compile Include="EF\EFDbContext.cs" />
-    <Compile Include="EF\EFDbContextFactory.cs" />
     <Compile Include="EF\EFUnitOfWork.cs" />
-    <Compile Include="EF\IEFDbContextProvider.cs" />
     <Compile Include="IBaseRepository.cs" />
     <Compile Include="IBaseRepositoryExtend.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

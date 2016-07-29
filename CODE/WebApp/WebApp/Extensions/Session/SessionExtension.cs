@@ -9,18 +9,44 @@ namespace WebApp.Extensions.Session
 {
     public static class SessionExtension
     {
-        public const string KEY_USER_ID = "UserId";
-        public const string KEY_USER_NAME = "UserName";
-
+        const string KEY_USER_ID = "UserId";
+        const string KEY_USER_NAME = "UserName";
+        const string KEY_ROLEID_LIST = "RoleIds";
+        const string KEY_ROLE_TEXT = "RoleText";
         public static int? GetUserId(this HttpSessionStateBase state)
         {
             return state.Get<int?>(KEY_USER_ID);
+        }
+
+        public static string GetUserName(this HttpSessionStateBase state)
+        {
+            return state.Get<string>(KEY_USER_NAME);
         }
 
         public static void SetUser(this HttpSessionStateBase state, User usr)
         {
             state.Set(KEY_USER_ID, usr.Id);
             state.Set(KEY_USER_NAME, usr.UserName);
+        }
+
+        public static void SetRoleIds(this HttpSessionStateBase state, int[] roleIds)
+        {
+            state.Set(KEY_ROLEID_LIST, roleIds);
+        }
+
+        public static void SetRoleText(this HttpSessionStateBase state, string roles)
+        {
+            state.Set(KEY_ROLE_TEXT, roles);
+        }
+
+        public static int[] GetRoleIds(this HttpSessionStateBase state)
+        {
+            return state.Get<int[]>(KEY_ROLEID_LIST);
+        }
+
+        public static string GetRoleText(this HttpSessionStateBase state)
+        {
+            return state.Get<string>(KEY_ROLE_TEXT);
         }
 
         public static void Set(this HttpSessionStateBase state, string key, object value)

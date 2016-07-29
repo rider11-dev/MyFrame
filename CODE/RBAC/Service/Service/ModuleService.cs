@@ -18,12 +18,20 @@ namespace MyFrame.RBAC.Service
     {
         private IModuleRepository _moduleRepository;
         private IUserRepository _usrRepository;
+        private IRolePermissionRepository _rolePermissionRep;
+        private IRoleRepository _roleRep;
         const string Msg_SearchSimpleInfoByPage = "分页获取模块精简信息";
-        public ModuleService(IUnitOfWork unitOfWork, IModuleRepository moduleRep, IUserRepository usrRep)
+        const string Msg_SearchSimpleInfoByRoles = "根据角色获取模块精简信息";
+        public ModuleService(IUnitOfWork unitOfWork, IModuleRepository moduleRep,
+            IUserRepository usrRep,
+            IRolePermissionRepository rolePermissionRep,
+            IRoleRepository roleRep)
             : base(unitOfWork)
         {
             _moduleRepository = moduleRep;
             _usrRepository = usrRep;
+            _rolePermissionRep = rolePermissionRep;
+            _roleRep = roleRep;
         }
 
         public OperationResult FindByModuleCode(string moduleCode)
@@ -146,6 +154,45 @@ namespace MyFrame.RBAC.Service
             catch (Exception ex)
             {
                 base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
+            }
+            return result;
+        }
+
+        public OperationResult FindByRolesWithSimpleInfo(int[] roleIds)
+        {
+            OperationResult result = new OperationResult();
+            if (roleIds == null || roleIds.Length < 1)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = "参数错误，角色不能为空";
+                return result;
+            }
+            var query = from module in _moduleRepository.Entities
+                        join per in _rolePermissionRep.Entities on module.Id equals per.PermissionId
+                        join role in _roleRep.Entities on per.RoleId equals role.Id
+                        where roleIds.Contains(per.RoleId)
+                            && module.Enabled == true
+                            && role.Enabled == true
+                        select new ModuleSimpleViewModel
+                        {
+                            Id = module.Id,
+                            Code = module.Code,
+                            Name = module.Name,
+                            LinkUrl = module.LinkUrl,
+                            Icon = module.Icon,
+                            SortOrder = module.SortOrder,
+                            IsMenu = module.IsMenu,
+                            ParentId = module.ParentId,
+                            HasChild = module.HasChild
+                        };
+            try
+            {
+                result.ResultType = OperationResultType.Success;
+                result.AppendData = query.Distinct().ToList();//去重
+            }
+            catch (Exception ex)
+            {
+                base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByRoles + ",失败"), ex);
             }
             return result;
         }

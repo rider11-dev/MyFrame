@@ -42,8 +42,8 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 @*<h1>
-                    控制面板
-                </h1>*@
+                        控制面板
+                    </h1>*@
                 <!--位置导航-->
                 <ol class="breadcrumb">
                     <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -95,7 +95,9 @@
     <script>
         $(function () {
             toastr.options = { positionClass: "toast-top-center", showDuration: "150", hideDuration: "1000", showMethod: "fadeIn", closeButton: 'true' };
-            index.initMenuTree();
+            index.init({
+                urlGetAccount: "@Url.Action("GetCurrentAccountInfo", "Account")"
+            });
         });
     </script>
 </body>
