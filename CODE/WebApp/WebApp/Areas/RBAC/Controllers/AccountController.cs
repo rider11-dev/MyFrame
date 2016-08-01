@@ -68,7 +68,8 @@ namespace WebApp.Areas.RBAC.Controllers
                     ModelState.AddModelError("", "用户未激活");
                     return View(loginVM);
                 }
-
+                //设置当前用户
+                RBACContext.CurrentUser = usr;
                 //登录成功 登记session
                 HttpContext.Session.SetUser(usr);
                 //角色id
@@ -103,7 +104,7 @@ namespace WebApp.Areas.RBAC.Controllers
         public ActionResult Logout()
         {
             HttpContext.Session.Clear();
-
+            RBACContext.CurrentUser = null;
             return base.RedirectToHome();
         }
 

@@ -18,7 +18,7 @@
         authmanage.urlGetPermission = options.urlGetPermission;
 
         authmanage.initRolesGrid();
-        authmanage.initModulesGrid();
+        authmanage.initModulesTree();
 
         authmanage.btnSearchRoles.click(authmanage.searchRoles);
         authmanage.btnSearchModules.click(authmanage.searchModules);
@@ -62,7 +62,7 @@
         gFunc.initgrid(authmanage.gridRoles, options);
         //注册列表事件
         authmanage.gridRoles.on('check.bs.table', function (e, row) {
-            authmanage.gridModules.bootstrapTable('uncheckAll');
+            treeviewExt.uncheckAll();
             var roleId = row.Id;
             if (gFunc.isNull(roleId)) {
                 return;
@@ -77,15 +77,15 @@
                         //gMessager.success('角色权限获取成功');
                         //下面设置右侧列表选中
                         var permissions = result.rows;
-                        var moduleRows = authmanage.gridModules.bootstrapTable('getData', true);
-                        $(moduleRows).each(function (index, row) {
-                            var match = false;
-                            $(permissions).each(function (idx, r) {
-                                if (r.PermissionId == row.Id) {
-                                    authmanage.gridModules.bootstrapTable('check', index);
-                                }
-                            });
-                        })
+                        if (gFunc.isNull(permissions) || permissions.length < 1) {
+                            return;
+                        }
+                        var permModuleIds = [];
+                        $(permissions).each(function (idx, perm) {
+                            permModuleIds.push(perm.PermissionId.toString());//这里toString是为了利用bootstrap-treeview的查询匹配（字符串）
+                        });
+                        //console.log(permModuleIds);
+                        treeviewExt.setCheckedNodes(permModuleIds);
                     } else {
                         gMessager.warning(result.message);
                     }
@@ -99,61 +99,26 @@
             });
         });
     },
-    initModulesGrid: function () {
-        var options = {
-            url: authmanage.urlSearchModules,
-            method: 'get',
+    initModulesTree: function () {
+        treeviewExt.initTree({
+            treeId: 'treeModule',
+            dataId: 'id',
             dataField: 'rows',
-            height: 500,
-            uniqueId: 'Id',
-            queryParams: function (params) {
-                //添加额外参数
-                if (!gFunc.isNull(authmanage.txtSearchModuleName.val())) {
-                    params.ModuleName = authmanage.txtSearchModuleName.val();
-                }
-                return params;//必须返回params
-            },
-            columns: [
-                   { field: 'Id', visible: false },
-                   {
-                       field: 'rownumber', formatter: function (value, row, index) {
-                           return index + 1;
-                       },
-                       width: 40
-                   },
-                   { field: 'check', checkbox: true, width: 40 },
-                   { field: 'Code', title: '模块编号', align: 'center', valign: 'center', width: 80 },
-                    { field: 'Name', title: '模块名称', align: 'center', valign: 'center', width: 100 },
-                    {
-                        field: 'LinkUrl', title: '链接', align: 'center', valign: 'center', width: 120,
-                        cellStyle: function (value, row, index, field) {
-                            return {
-                                css: { "min-width": "120px" }
-                            };
-                        }
-                    },
-                    {
-                        field: 'Enabled', title: '是否激活', align: 'center', valign: 'center', width: 80,
-                        formatter: gFormatter.trueOrFalse.formatter
-                    },
-                    {
-                        field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140,
-                        cellStyle: function (value, row, index, field) {
-                            return {
-                                css: { "min-width": "100px" }
-                            };
-                        }
-                    }
-            ]
-        };
-        //调用公共函数，初始化表格
-        gFunc.initgrid(authmanage.gridModules, options);
+            dataUrl: authmanage.urlSearchModules
+        });
     },
     searchRoles: function () {
         authmanage.gridRoles.bootstrapTable('refresh');
     },
     searchModules: function () {
-        authmanage.gridModules.bootstrapTable('refresh');
+        //查询文本
+        var name = authmanage.txtSearchModuleName.val();
+
+        var nodes = treeviewExt.tree.treeview('search', [name, {
+            ignoreCase: true,     // case insensitive
+            exactMatch: false,    // like or equals
+            revealResults: true,  // reveal matching nodes
+        }]);
     },
     saveModulePer: function () {
         //保存角色功能权限
@@ -162,15 +127,15 @@
             gMessager.warning("请选择角色");
             return;
         }
-        var moduleRows = authmanage.gridModules.bootstrapTable('getSelections');
-        if (moduleRows.length < 1) {
+        var moduleIds = treeviewExt.getCheckedDataIds();
+        if (moduleIds.length < 1) {
             gMessager.warning("请选择模块");
             return;
         }
         var data = { roleId: roleRows[0].Id, perType: 0 };
         var idx = 0;
-        for (var idx = 0; idx < moduleRows.length; idx++) {
-            data["perIds[" + idx + "]"] = moduleRows[idx].Id;
+        for (var idx = 0; idx < moduleIds.length; idx++) {
+            data["perIds[" + idx + "]"] = moduleIds[idx];
         }
         $.ajax({
             type: 'post',

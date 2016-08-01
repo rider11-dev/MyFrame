@@ -139,14 +139,17 @@ namespace MyFrame.RBAC.Service
                 var modulePaged = _moduleRepository.FindByPage(where, orderBy, pageArgs);
                 //再连接
                 var query = from module in modulePaged
-                            select new
+                            select new ModuleSimpleViewModel
                             {
                                 Id = module.Id,
                                 Code = module.Code,
                                 Name = module.Name,
                                 LinkUrl = module.LinkUrl,
-                                Enabled = module.Enabled,
-                                Remark = module.Remark
+                                Icon = module.Icon,
+                                SortOrder = module.SortOrder,
+                                IsMenu = module.IsMenu,
+                                ParentId = module.ParentId,
+                                HasChild = module.HasChild
                             };
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = query.ToList();

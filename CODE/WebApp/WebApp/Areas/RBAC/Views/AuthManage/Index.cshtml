@@ -25,6 +25,17 @@
                         </div>
                         <table id="gridRoles" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
                     </div>
+                    @*<div class="col-xs-7">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" id="txtSearchModuleName" name="ModuleName" class="form-control" placeholder="模块名称" />
+                                    <button id="btnSearchModules" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-search">查询</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <table id="gridModules" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
+                        </div>*@
                     <div class="col-xs-7">
                         <div class="form-inline">
                             <div class="form-group">
@@ -34,19 +45,21 @@
                                 </button>
                             </div>
                         </div>
-                        <table id="gridModules" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
+                        <div id="treeModule"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="~/libs/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
+<script src="~/libs/rbac/treeviewExt.js"></script>
 <script src="~/libs/rbac/authmanage/index.js"></script>
 <script>
     $(function () {
         authmanage.init({
             urlSearchRoles: "@Html.Raw(Url.Action("GetRolesSimpleInfoByPage","Role", new { pageNumber = 1, pageSize = 20 }))",
-            urlSearchModules: "@Html.Raw(Url.Action("GetModulesSimpleInfoByPage", "Module", new { pageNumber = 1, pageSize = 20 }))",
+            urlSearchModules: "@Html.Raw(Url.Action("GetModulesSimpleInfoByPage", "Module", new { pageNumber = 1, pageSize = 1000 }))",
             urlSavePermission: "@Url.Action("SavePermission", "AuthManage")",
             urlGetPermission: "@Url.Action("GetPermission", "AuthManage")",
         });

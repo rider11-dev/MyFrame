@@ -50,26 +50,25 @@ namespace MyFrame.RBAC.Service
                 return rst;
             }
             /*
-             * 1、删除指定角色指定权限
+             * 1、删除指定角色指定类型权限
              * 2、给指定角色添加新权限
              */
-            var query = from per in permissionIds
-                        select new RolePermission
-                        {
-                            RoleId = roleId,
-                            PermissionId = per,
-                            PerType = type
-                        };
+            var queryAdd = from per in permissionIds
+                           select new RolePermission
+                           {
+                               RoleId = roleId,
+                               PermissionId = per,
+                               PerType = type
+                           };
             base.UnitOfWork.AutoCommit = false;
             base.UnitOfWork.BeginTransaction();
             try
             {
                 _rolePermissionRep.Delete(r =>
                     r.RoleId == roleId &&
-                    r.PerType == type &&
-                    permissionIds.Contains(r.PermissionId));
+                    r.PerType == type);
 
-                _rolePermissionRep.Add(query.ToList());
+                _rolePermissionRep.Add(queryAdd.ToList());
 
                 base.UnitOfWork.Commit();
 

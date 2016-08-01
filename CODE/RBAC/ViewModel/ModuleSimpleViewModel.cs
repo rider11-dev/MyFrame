@@ -33,6 +33,6 @@ namespace MyFrame.RBAC.ViewModel
         /// <summary>
         /// 子模块列表
         /// </summary>
-        public IList<ModuleSimpleViewModel> SubModules { get; set; }
+        public IEnumerable<ModuleSimpleViewModel> SubModules { get; set; }
     }
 }

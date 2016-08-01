@@ -94,6 +94,12 @@ namespace MyFrame.Service
                 result.Message = string.Format("删除{0}实体失败，删除条件不能为空", EntityType);
                 return result;
             }
+            //删除前校验
+            result = OnBeforeDelete(where);
+            if (result.ResultType != OperationResultType.Success)
+            {
+                return result;
+            }
             try
             {
                 var data = CurrentRepository.Delete(where);
@@ -199,6 +205,11 @@ namespace MyFrame.Service
         }
 
         protected virtual OperationResult OnBeforeAdd(TEntity entity)
+        {
+            return new OperationResult { ResultType = OperationResultType.Success };
+        }
+
+        protected virtual OperationResult OnBeforeDelete(Expression<Func<TEntity, bool>> where)
         {
             return new OperationResult { ResultType = OperationResultType.Success };
         }

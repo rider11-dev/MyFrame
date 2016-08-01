@@ -80,9 +80,11 @@ namespace WebApp.Areas.RBAC.Controllers
 
             if (result.ResultType == OperationResultType.Success)
             {
+                var modules = BuildModulesTree(result.AppendData as List<ModuleSimpleViewModel>);
+                var formatObj = FormatDataForTreeView(modules);
                 return new JsonNetResult
                 {
-                    Data = new { code = result.ResultType, message = "数据获取成功", total = pageArgs.RecordsCount, rows = result.AppendData },
+                    Data = new { code = result.ResultType, message = "数据获取成功", total = pageArgs.RecordsCount, rows = formatObj },
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet,
                     DateTimeFormat = "yyyy-MM-dd HH:mm:ss"
                 };
@@ -182,6 +184,60 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = result.ResultType, message = result.Message });
             }
             return Json(new { code = OperationResultType.Success, message = "删除成功" });
+        }
+
+        public static List<ModuleSimpleViewModel> BuildModulesTree(List<ModuleSimpleViewModel> modules)
+        {
+            List<ModuleSimpleViewModel> listVM = new List<ModuleSimpleViewModel>();
+            if (modules == null || modules.Count < 1)
+            {
+                return listVM;
+            }
+            //递归构建菜单树
+            var firstList = modules.Where(m => m.ParentId == null).OrderBy(m => m.SortOrder);
+            foreach (var vm in firstList)
+            {
+                SetSubModules(vm, modules);
+            }
+            //只添加第一层即可
+            listVM.AddRange(firstList);
+
+            return listVM;
+        }
+
+        public IEnumerable<dynamic> FormatDataForTreeView(IEnumerable<ModuleSimpleViewModel> modules)
+        {
+            if (modules == null || modules.Count() < 1)
+            {
+                return new List<dynamic>();
+            }
+            List<dynamic> nodeTree = new List<dynamic>();
+            foreach (var module in modules)
+            {
+                var node = new { id = module.Id.ToString(), text = module.Name, sort = module.SortOrder, nodes = new List<dynamic> { } };
+                if (module.SubModules != null && module.SubModules.Count() > 0)
+                {
+                    node.nodes.AddRange(FormatDataForTreeView(module.SubModules));
+                }
+                nodeTree.Add(node);
+            }
+            return nodeTree;
+        }
+
+        private static void SetSubModules(ModuleSimpleViewModel parent, List<ModuleSimpleViewModel> srcList)
+        {
+            if (parent == null || srcList == null || srcList.Count < 1 || !parent.HasChild)
+            {
+                return;
+            }
+            var subList = srcList.Where(m => m.ParentId == parent.Id).OrderBy(m => m.SortOrder);
+            //设置parent
+            parent.SubModules = subList.ToList();
+            //递归处理subList
+            foreach (var vm in subList)
+            {
+                SetSubModules(vm, srcList);
+            }
         }
     }
 }

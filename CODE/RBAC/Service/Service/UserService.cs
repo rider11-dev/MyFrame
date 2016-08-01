@@ -55,31 +55,6 @@ namespace MyFrame.RBAC.Service
             return result;
         }
 
-        protected override OperationResult OnBeforeAdd(User entity)
-        {
-            OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.ResultType = OperationResultType.ParamError;
-                result.Message = string.Format("{0}失败，{1}", Msg_BeforeAdd, "实体不能为空");
-                return result;
-            }
-            //1、校验用户是否已存在
-            bool check = _usrRepository.Exists(u => u.UserName == entity.UserName);
-            if (check)
-            {
-                result.ResultType = OperationResultType.CheckFailedBeforeProcess;
-                result.Message = string.Format("{0}失败，{1}", Msg_BeforeAdd, "用户名已存在");
-                return result;
-            }
-            //2、设置默认密码
-            if (entity.Password == null || string.IsNullOrEmpty(entity.Password.Trim()))
-            {
-                entity.Password = EncryptionHelper.GetMd5Hash("123456");
-            }
-            result.ResultType = OperationResultType.Success;
-            return result;
-        }
 
         /// <summary>
         /// 级联删除
@@ -98,7 +73,12 @@ namespace MyFrame.RBAC.Service
             try
             {
                 base.UnitOfWork.BeginTransaction();
-                _usrRepository.Delete(u => usrIds.Contains(u.Id));
+                result = base.Delete(u => usrIds.Contains(u.Id));
+                if (result.ResultType != OperationResultType.Success)
+                {
+                    base.UnitOfWork.Rollback();
+                    return result;
+                }
                 _usrRoleRelRepository.Delete(r => usrIds.Contains(r.UserId));
                 base.UnitOfWork.Commit();
 
@@ -214,6 +194,52 @@ namespace MyFrame.RBAC.Service
                 base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
             }
             return result;
+        }
+
+        protected override OperationResult OnBeforeAdd(User entity)
+        {
+            OperationResult result = new OperationResult();
+            if (entity == null)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = string.Format("{0}失败，{1}", Msg_BeforeAdd, "实体不能为空");
+                return result;
+            }
+            //1、校验用户是否已存在
+            bool check = _usrRepository.Exists(u => u.UserName == entity.UserName);
+            if (check)
+            {
+                result.ResultType = OperationResultType.CheckFailedBeforeProcess;
+                result.Message = string.Format("{0}失败，{1}", Msg_BeforeAdd, "用户名已存在");
+                return result;
+            }
+            //2、设置默认密码
+            if (entity.Password == null || string.IsNullOrEmpty(entity.Password.Trim()))
+            {
+                entity.Password = EncryptionHelper.GetMd5Hash("123456");
+            }
+            result.ResultType = OperationResultType.Success;
+            return result;
+        }
+        protected override OperationResult OnBeforeDelete(Expression<Func<User, bool>> where)
+        {
+            OperationResult rst = new OperationResult { ResultType = OperationResultType.Success };
+            var query = _usrRepository.Find(where.And(u => u.UserName.Equals("admin", StringComparison.CurrentCultureIgnoreCase)));
+            if (query.Count() > 0)
+            {
+                rst.ResultType = OperationResultType.IllegalOperation;
+                rst.Message = "管理员不允许删除";
+                return rst;
+            }
+
+            query = _usrRepository.Find(where.And(u => u.Id == RBACContext.CurrentUser.Id));
+            if (query.Count() > 0)
+            {
+                rst.ResultType = OperationResultType.IllegalOperation;
+                rst.Message = "不能删除当前用户";
+            }
+
+            return rst;
         }
     }
 }

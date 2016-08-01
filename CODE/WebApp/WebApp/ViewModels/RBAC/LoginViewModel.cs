@@ -15,7 +15,6 @@ namespace WebApp.ViewModels.RBAC
 
         [Required(ErrorMessage = "密码不能为空")]
         [Display(Name = "密码")]
-        [StringLength(16, MinimumLength = 6, ErrorMessage = "密码长度必须在{2}和{1}之间")]
         public string Password { get; set; }
 
 

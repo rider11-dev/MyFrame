@@ -186,6 +186,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.css" />
+    <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.js" />
+    <Content Include="libs\rbac\treeviewExt.js" />
     <Content Include="libs\plugins\form\jquery.form.js" />
     <Content Include="libs\rbac\account\changepwd.js" />
     <Content Include="libs\rbac\authmanage\index.js" />
