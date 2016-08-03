@@ -71,7 +71,7 @@ namespace MyFrame.RBAC.Service.Impl
                     r.RoleId == roleId &&
                     r.PerType == type);
 
-                _rolePermissionRep.Add(queryAdd.ToList());
+                _rolePermissionRep.AddBatch(queryAdd.ToList());
 
                 base.UnitOfWork.Commit();
 

@@ -5,8 +5,8 @@ using System.Text;
 
 namespace MyFrame.Core.Repository
 {
-    public interface IBaseRepositoryExtend<TEntity> where TEntity : class
+    public interface IBaseRepositoryBatch<TEntity> where TEntity : class
     {
-        void Add(IEnumerable<TEntity> entities);
+        void AddBatch(IEnumerable<TEntity> entities);
     }
 }

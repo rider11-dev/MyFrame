@@ -19,5 +19,10 @@ namespace MyFrame.Core.Repository
         public EFDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         { }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer<EFDbContext>(null);
+        }
     }
 }

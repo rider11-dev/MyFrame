@@ -16,7 +16,7 @@ namespace MyFrame.RBAC.Repository.Impl
     {
         public UserRoleRelRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
 
-        public void Add(IEnumerable<UserRoleRelation> entities)
+        public void AddBatch(IEnumerable<UserRoleRelation> entities)
         {
             if (entities != null && entities.Count() > 0)
             {

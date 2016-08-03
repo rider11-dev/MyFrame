@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using MyFrame.Core.UnitOfWork;
 using MyFrame.RBAC.Repository.Interface;
+using System.Linq.Expressions;
 
 namespace MyFrame.RBAC.Repository.Impl
 {

@@ -21,5 +21,7 @@ namespace MyFrame.Core.Service
         OperationResult Find(Expression<Func<TEntity, bool>> where);
 
         OperationResult FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs);
+        OperationResult FindBySelector(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector);
+        OperationResult FindBySelectorByPage(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs);
     }
 }

@@ -12,6 +12,7 @@ using MyFrame.Infrastructure.Logger;
 using MyFrame.Infrastructure.OrderBy;
 using MyFrame.Core.Model;
 using MyFrame.Core.UnitOfWork;
+using System.Data;
 
 namespace MyFrame.Core.Repository
 {
@@ -46,7 +47,7 @@ namespace MyFrame.Core.Repository
         {
             try
             {
-                _dbContext.Entry<TEntity>(entity).State = EntityState.Added;
+                _dbContext.Entry<TEntity>(entity).State = System.Data.Entity.EntityState.Added;
                 if (_unitOfWork.AutoCommit)
                 {
                     _dbContext.SaveChanges();

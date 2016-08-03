@@ -16,7 +16,9 @@ namespace MyFrame.RBAC.Repository
         { }
         public EFDbContextRBAC(string nameOrConnectionString)
             : base(nameOrConnectionString)
-        { }
+        {
+
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -24,5 +26,11 @@ namespace MyFrame.RBAC.Repository
         public DbSet<UserRoleRelation> UserRoleRelations { get; set; }
 
         public DbSet<RolePermission> RolePermissionRelations { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //让Entity Framework启动不再效验__MigrationHistory表
+            Database.SetInitializer<EFDbContextRBAC>(null);
+        }
     }
 }

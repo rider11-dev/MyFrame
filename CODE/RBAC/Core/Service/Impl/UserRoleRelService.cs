@@ -76,7 +76,7 @@ namespace MyFrame.RBAC.Service.Impl
             try
             {
                 _usrRoleRelRepository.Delete(r => usrIds.Contains(r.UserId) && (delStrictly ? roleIds.Contains(r.RoleId) : true));
-                _usrRoleRelRepository.Add(query.ToList());
+                _usrRoleRelRepository.AddBatch(query.ToList());
 
                 base.UnitOfWork.Commit();
 

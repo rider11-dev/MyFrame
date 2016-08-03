@@ -1,5 +1,5 @@
 1、前端excel导入导出
-2、orm框架选择
+2、orm框架选择，EF吧
 3、aop
 4、action、controller，权限过滤
 5、ef miniprofiler整体监视下sql，优化

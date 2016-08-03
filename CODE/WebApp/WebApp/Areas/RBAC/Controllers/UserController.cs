@@ -82,7 +82,15 @@ namespace WebApp.Areas.RBAC.Controllers
                 where = where.And(u => u.UserName.Contains(usrName));
             }
             var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
-            var result = _userSrv.FindByPageWithSimpleInfo(where, query => query.OrderBy(u => u.UserName), pageArgs);
+            var result = _userSrv.FindBySelectorByPage(where,
+                u => new
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Remark = u.Remark
+                },
+                query => query.OrderBy(u => u.UserName),
+                pageArgs);
 
             if (result.ResultType == OperationResultType.Success)
             {

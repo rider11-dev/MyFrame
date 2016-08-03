@@ -72,7 +72,16 @@ namespace WebApp.Areas.RBAC.Controllers
                 where = where.And(r => r.RoleName.Contains(roleName));
             }
             var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
-            var result = _roleSrv.FindByPageWithSimpleInfo(where, query => query.OrderBy(r => r.SortOrder), pageArgs);
+            var result = _roleSrv.FindBySelectorByPage(where,
+                r => new
+                {
+                    Id = r.Id,
+                    RoleName = r.RoleName,
+                    Remark = r.Remark
+                },
+                query => query.OrderBy(r => r.SortOrder),
+                pageArgs);
+
             if (result.ResultType == OperationResultType.Success)
             {
                 return new JsonNetResult
@@ -86,6 +95,25 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = result.ResultType, message = result.Message }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+
+        public JsonResult GetRolesBySelector()
+        {
+            Expression<Func<Role, bool>> where = r => true;//
+            var result = _roleSrv.FindBySelectorByPage(where, r => new
+            {
+                Id = r.Id,
+                RoleName = r.RoleName,
+                HH = r.SortOrder,
+                Remark = r.Remark
+            }, query => query.OrderBy(r => r.SortOrder), new PageArgs { PageSize = 10, PageIndex = 1 });
+            return new JsonNetResult
+            {
+                Data = new { code = result.ResultType, message = "数据获取成功", total = 1000, rows = result.AppendData },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                DateTimeFormat = "yyyy-MM-dd HH:mm:ss"
+            };
         }
 
         public ActionResult Add()

@@ -174,31 +174,6 @@ namespace MyFrame.RBAC.Service.Impl
             }
             return result;
         }
-        public OperationResult FindByPageWithSimpleInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs)
-        {
-            OperationResult result = new OperationResult();
-            try
-            {
-                //先分页
-                var usrPaged = _usrRepository.FindByPage(where, orderBy, pageArgs);
-                //再连接
-                var query = from usr in usrPaged
-                            select new
-                            {
-                                Id = usr.Id,
-                                UserName = usr.UserName,
-                                Remark = usr.Remark
-                            };
-                result.ResultType = OperationResultType.Success;
-                result.AppendData = query.ToList();
-            }
-            catch (Exception ex)
-            {
-                base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
-            }
-            return result;
-        }
-
         protected override OperationResult OnBeforeAdd(User entity)
         {
             OperationResult result = new OperationResult();

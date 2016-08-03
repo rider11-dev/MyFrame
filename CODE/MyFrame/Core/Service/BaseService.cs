@@ -165,7 +165,24 @@ namespace MyFrame.Core.Service
             }
             return result;
         }
+        public OperationResult FindBySelector(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var data = CurrentRepository
+                    .Find(where)
+                    .Select(selector);
+                result.ResultType = OperationResultType.Success;
+                result.AppendData = data.ToList();
+            }
+            catch (Exception ex)
+            {
+                ProcessException(result, string.Format("获取{0}数据实体集出错", EntityType), ex);
+            }
+            return result;
 
+        }
         public OperationResult FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs)
         {
             OperationResult result = new OperationResult();
@@ -187,7 +204,29 @@ namespace MyFrame.Core.Service
             }
             return result;
         }
-
+        public OperationResult FindBySelectorByPage(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs)
+        {
+            OperationResult result = new OperationResult();
+            if (pageArgs == null)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = string.Format("分页获取{0}实体集失败，分页参数不能为空", EntityType);
+                return result;
+            }
+            try
+            {
+                var data = CurrentRepository
+                    .FindByPage(where, orderBy, pageArgs)
+                    .Select(selector);
+                result.ResultType = OperationResultType.Success;
+                result.AppendData = data.ToList();
+            }
+            catch (Exception ex)
+            {
+                ProcessException(result, string.Format("分页获取{0}实体集失败", EntityType), ex);
+            }
+            return result;
+        }
         protected void ProcessException(OperationResult result, string msg, Exception ex)
         {
             if (result == null)

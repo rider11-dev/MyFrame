@@ -24,8 +24,6 @@ namespace MyFrame.RBAC.Service.Interface
 
         OperationResult FindByPageWithFullInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs);
 
-        OperationResult FindByPageWithSimpleInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs);
-
         OperationResult DeleteWithRelations(int[] usrIds);
     }
 }

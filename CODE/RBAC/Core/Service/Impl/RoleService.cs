@@ -161,31 +161,6 @@ namespace MyFrame.RBAC.Service.Impl
             return result;
         }
 
-        public OperationResult FindByPageWithSimpleInfo(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs)
-        {
-            OperationResult result = new OperationResult();
-            try
-            {
-                //先分页
-                var rolePaged = _roleRepository.FindByPage(where, orderBy, pageArgs);
-                //再连接
-                var query = from role in rolePaged
-                            select new
-                            {
-                                Id = role.Id,
-                                RoleName = role.RoleName,
-                                Remark = role.Remark
-                            };
-                result.ResultType = OperationResultType.Success;
-                result.AppendData = query.ToList();
-            }
-            catch (Exception ex)
-            {
-                base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
-            }
-            return result;
-        }
-
         /// <summary>
         /// 级联删除
         /// </summary>

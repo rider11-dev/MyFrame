@@ -8,7 +8,7 @@ using System.Text;
 
 namespace MyFrame.RBAC.Repository.Interface
 {
-    public interface IUserRoleRelRepository : IBaseRepository<UserRoleRelation>, IBaseRepositoryExtend<UserRoleRelation>
+    public interface IUserRoleRelRepository : IBaseRepository<UserRoleRelation>, IBaseRepositoryBatch<UserRoleRelation>
     {
     }
 }
