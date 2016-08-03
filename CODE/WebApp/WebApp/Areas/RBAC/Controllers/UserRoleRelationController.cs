@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApp.Controllers;
 using MyFrame.Infrastructure.Extension;
+using MyFrame.RBAC.Service.Interface;
 
 namespace WebApp.Areas.RBAC.Controllers
 {

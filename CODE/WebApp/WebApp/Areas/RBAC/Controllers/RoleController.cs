@@ -15,6 +15,7 @@ using WebApp.Extensions.ActionResult;
 using MyFrame.RBAC.ViewModel;
 using WebApp.Extensions.Session;
 using AutoMapper;
+using MyFrame.RBAC.Service.Interface;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -72,7 +73,6 @@ namespace WebApp.Areas.RBAC.Controllers
             }
             var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
             var result = _roleSrv.FindByPageWithSimpleInfo(where, query => query.OrderBy(r => r.SortOrder), pageArgs);
-
             if (result.ResultType == OperationResultType.Success)
             {
                 return new JsonNetResult

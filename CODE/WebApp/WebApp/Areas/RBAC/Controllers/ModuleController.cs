@@ -15,6 +15,7 @@ using MyFrame.RBAC.ViewModel;
 using WebApp.Controllers;
 using WebApp.Extensions.Session;
 using MyFrame.Infrastructure.OrderBy;
+using MyFrame.RBAC.Service.Interface;
 
 namespace WebApp.Areas.RBAC.Controllers
 {

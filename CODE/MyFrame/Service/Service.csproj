@@ -51,14 +51,6 @@
       <Project>{7392f954-0758-496e-8557-bc8a673f32a3}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{8ff11b4f-4cb4-459f-88aa-5090bca26116}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Repository\Repository.csproj">
-      <Project>{3bfdaf93-19f6-43c5-820f-1aafb8d6d366}</Project>
-      <Name>Repository</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

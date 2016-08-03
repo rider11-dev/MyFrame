@@ -12,6 +12,7 @@ using WebApp.Extensions.Session;
 using MyFrame.Infrastructure.Common;
 using MyFrame.Infrastructure.Pagination;
 using WebApp.Areas.RBAC.Controllers;
+using MyFrame.RBAC.Service.Interface;
 
 namespace WebApp.Extensions.Filters
 {

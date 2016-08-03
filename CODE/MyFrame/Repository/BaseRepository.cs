@@ -66,11 +66,17 @@ namespace MyFrame.Repository
             int count = 0;
             if (where == null)
             {
-                count = _dbContext.Set<TEntity>().Count();
+                count = _dbContext
+                    .Set<TEntity>()
+                    .AsNoTracking()
+                    .Count();
             }
             else
             {
-                count = _dbContext.Set<TEntity>().Count(where);
+                count = _dbContext
+                    .Set<TEntity>()
+                    .AsNoTracking()
+                    .Count(where);
             }
             return count;
         }
@@ -81,7 +87,10 @@ namespace MyFrame.Repository
             {
                 return false;
             }
-            int rst = Entities.Where(where).Delete();
+            int rst = Entities
+                .Where(where)
+                .AsNoTracking()
+                .Delete();
             return rst > 0;
         }
         public bool Update(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, TEntity>> update)
@@ -93,23 +102,32 @@ namespace MyFrame.Repository
             int rst = 0;
             if (where != null)
             {
-                rst = Entities.Where(where).Update(update);
+                rst = Entities
+                    .Where(where)
+                    .AsNoTracking()
+                    .Update(update);
             }
             else
             {
-                rst = Entities.Update(update);
+                rst = Entities
+                    .AsNoTracking()
+                    .Update(update);
             }
             return rst > 0;
         }
 
         public bool Exists(Expression<Func<TEntity, bool>> where)
         {
-            return Entities.Any(where);
+            return Find(where)
+                .AsNoTracking()
+                .Count() > 0;
         }
 
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where)
         {
-            var query = Entities.Where(where);
+            var query = Entities
+                .AsNoTracking()
+                .Where(where);
 
             return query;
         }
@@ -137,7 +155,8 @@ namespace MyFrame.Repository
         public IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs)
         {
             var querable = Find(where);
-
+            var dd = from item in querable
+                     select new { };
             return QueryByPage(querable, orderBy, pageArgs);
         }
 

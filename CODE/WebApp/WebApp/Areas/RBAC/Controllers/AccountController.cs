@@ -12,6 +12,7 @@ using WebApp.Extensions.Filters;
 using WebApp.Extensions.Session;
 using WebApp.ViewModels.RBAC;
 using WebApp.Extensions.ActionResult;
+using MyFrame.RBAC.Service.Interface;
 
 namespace WebApp.Areas.RBAC.Controllers
 {

@@ -59,40 +59,28 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MyFrame.Configure">
-      <HintPath>..\..\dlls\RBAC\MyFrame.Configure.dll</HintPath>
+    <Reference Include="MiniProfiler, Version=3.0.11.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MiniProfiler.3.0.12\lib\net40\MiniProfiler.dll</HintPath>
     </Reference>
-    <Reference Include="MyFrame.Infrastructure">
+    <Reference Include="MiniProfiler.EntityFramework6, Version=3.0.11.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MiniProfiler.EF6.3.0.11\lib\net40\MiniProfiler.EntityFramework6.dll</HintPath>
+    </Reference>
+    <Reference Include="MyFrame.Core">
+      <HintPath>..\..\dlls\MyFrame\MyFrame.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MyFrame.Infrastructure, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dlls\MyFrame\MyFrame.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="MyFrame.Model">
-      <HintPath>..\..\dlls\MyFrame\MyFrame.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="MyFrame.RBAC.Configure">
-      <HintPath>..\..\dlls\RBAC\MyFrame.RBAC.Configure.dll</HintPath>
-    </Reference>
-    <Reference Include="MyFrame.RBAC.Model">
-      <HintPath>..\..\dlls\RBAC\MyFrame.RBAC.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="MyFrame.RBAC.Repository">
-      <HintPath>..\..\dlls\RBAC\MyFrame.RBAC.Repository.dll</HintPath>
-    </Reference>
-    <Reference Include="MyFrame.RBAC.Service">
-      <HintPath>..\..\dlls\RBAC\MyFrame.RBAC.Service.dll</HintPath>
-    </Reference>
-    <Reference Include="MyFrame.RBAC.ViewModel">
-      <HintPath>..\..\dlls\RBAC\MyFrame.RBAC.ViewModel.dll</HintPath>
-    </Reference>
-    <Reference Include="MyFrame.Repository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dlls\MyFrame\MyFrame.Repository.dll</HintPath>
-    </Reference>
-    <Reference Include="MyFrame.Service">
-      <HintPath>..\..\dlls\MyFrame\MyFrame.Service.dll</HintPath>
+    <Reference Include="MyFrame.RBAC">
+      <HintPath>..\..\dlls\RBAC\MyFrame.RBAC.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -101,7 +89,6 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />

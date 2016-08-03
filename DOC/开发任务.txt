@@ -1,0 +1,9 @@
+1、前端excel导入导出
+2、orm框架选择
+3、aop
+4、action、controller，权限过滤
+5、ef miniprofiler整体监视下sql，优化
+	① 预生成视图，https://msdn.microsoft.com/zh-cn/library/cc853327.aspx
+	② 查询时，NoTracking 
+	③ 返回正确的数据量	
+	④ 考虑手动打开数据库连接

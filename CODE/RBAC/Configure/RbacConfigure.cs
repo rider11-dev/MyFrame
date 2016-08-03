@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
-using MyFrame.Configure;
+using MyFrame.Core.Configure;
 using MyFrame.RBAC.Model;
 using MyFrame.RBAC.Repository;
 using MyFrame.RBAC.Service;
@@ -18,7 +18,7 @@ namespace MyFrame.RBAC.Configure
     /// <summary>
     /// rbac模块配置
     /// </summary>
-    public class RbacConfigure : IRegister, MyFrame.Configure.IMapper
+    public class RbacConfigure : IRegister, MyFrame.Core.Configure.IMapper
     {
         public void Register(ContainerBuilder builder)
         {

@@ -1,4 +1,5 @@
-﻿using MyFrame.Model.Unit;
+﻿using MyFrame.Infrastructure.Logger;
+using MyFrame.Model.Unit;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace MyFrame.Repository.EF
 {
-    public class EFUnitOfWork : IUnitOfWork
+    public class EFUnitOfWork : IUnitOfWork, IDisposable
     {
         /// <summary>
         /// 数据上下文，使用属性依赖注入
@@ -16,9 +17,12 @@ namespace MyFrame.Repository.EF
         public DbContext DbContext { get; set; }
         private IsolationLevel _isolationLevel;
         private DbContextTransaction _transaction;
+        ILogHelper<EFUnitOfWork> _logHelper;
         public EFUnitOfWork()
         {
             AutoCommit = true;
+            _logHelper = LogHelperFactory.GetLogHelper<EFUnitOfWork>();
+            _logHelper.LogInfo("EFUnitOfWork");
         }
 
         public EFUnitOfWork(IsolationLevel isolationLevel)
@@ -73,7 +77,7 @@ namespace MyFrame.Repository.EF
             _transaction = null;
         }
 
-        private void Dispose(Boolean disposing)
+        private void Dispose(Boolean disposing = true)
         {
             if (disposing)
             {
@@ -87,7 +91,13 @@ namespace MyFrame.Repository.EF
         }
         ~EFUnitOfWork()
         {
+            _logHelper.LogInfo("~EFUnitOfWork");
             Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

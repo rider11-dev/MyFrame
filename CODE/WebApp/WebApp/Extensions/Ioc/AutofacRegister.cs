@@ -8,11 +8,11 @@ using System.Reflection;
 using System.Web.Mvc;
 using MyFrame.RBAC.Service;
 using MyFrame.RBAC.Repository;
-using MyFrame.Repository.EF;
+using MyFrame.Core.Repository;
 using Autofac.Core;
 using System.IO;
-using MyFrame.Model.Unit;
-using MyFrame.Configure;
+using MyFrame.Core.Model;
+using MyFrame.Core.Configure;
 using MyFrame.RBAC.Configure;
 
 namespace WebApp.Extensions.Ioc

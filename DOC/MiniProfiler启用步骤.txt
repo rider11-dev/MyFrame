@@ -1,0 +1,40 @@
+1、Install-Package MiniProfiler.EF6
+说明：会自动解析依赖
+
+2、web.config
+<system.webServer>
+    <handlers>
+      <!--MiniProfiler配置-->
+      <add name="MiniProfiler" path="mini-profiler-resources/*" verb="*" type="System.Web.Routing.UrlRoutingModule" resourceType="Unspecified" preCondition="integratedMode" />
+    </handlers>
+</system.webServer>
+
+3、Global.asax.cs
+protected void Application_Start()
+{
+    //MiniProfilerEF6初始化，必须放在第一行
+	//因为要监控ef，所以要在ef初始化之前
+    MiniProfilerEF6.Initialize();
+}
+
+protected void Application_BeginRequest()
+{
+    //这里是允许本地访问启动监控,可不写
+    if (Request.IsLocal)
+    {
+        MiniProfiler.Start();
+    }
+}
+
+protected void Application_EndRequest()
+{
+    MiniProfiler.Stop();
+}
+
+4、_Layout.cshtml（公共页面，在这里配置后，将监控所有页面）
+@using StackExchange.Profiling
+<!DOCTYPE html>
+。。。。。
+ @MiniProfiler.RenderIncludes();
+</body>
+</html>

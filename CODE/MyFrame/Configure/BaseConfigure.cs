@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFrame.Configure
+namespace MyFrame.Core.Configure
 {
     /// <summary>
     /// 框架基础配置

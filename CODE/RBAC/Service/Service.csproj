@@ -71,14 +71,6 @@
     <Compile Include="Service\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{f9f78552-22d3-4018-a063-d31ab66a30ab}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Repository\Repository.csproj">
-      <Project>{94c58547-423d-4aaf-a99e-70c7ec7eccc9}</Project>
-      <Name>Repository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
       <Project>{c72fa350-0fec-4632-a1f3-9464c1bae927}</Project>
       <Name>ViewModel</Name>

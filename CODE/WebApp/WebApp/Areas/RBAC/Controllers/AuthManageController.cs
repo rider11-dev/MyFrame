@@ -10,6 +10,7 @@ using MyFrame.Infrastructure.Extension;
 using MyFrame.RBAC.Model;
 using WebApp.Extensions.ActionResult;
 using WebApp.Extensions.Filters;
+using MyFrame.RBAC.Service.Interface;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
