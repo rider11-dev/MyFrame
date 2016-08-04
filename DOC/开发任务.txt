@@ -7,3 +7,8 @@
 	② 查询时，NoTracking 
 	③ 返回正确的数据量	
 	④ 考虑手动打开数据库连接
+
+6、模块管理完善
+7、findbyselector
+8、httpmodule理解
+9、全局异常处理

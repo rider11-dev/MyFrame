@@ -72,8 +72,6 @@
     <Compile Include="OptResult\OperationResult.cs" />
     <Compile Include="OptResult\OperationResultExtension.cs" />
     <Compile Include="OptResult\OperationResultType.cs" />
-    <Compile Include="OrderBy\IOrderable.cs" />
-    <Compile Include="OrderBy\Orderable.cs" />
     <Compile Include="Pagination\PageArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\JsonSerializerExtension.cs" />

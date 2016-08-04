@@ -51,6 +51,9 @@ namespace MyFrame.RBAC.Configure
             builder.RegisterType<ModuleRepository>().As<IModuleRepository>().InstancePerRequest();
             builder.RegisterType<ModuleService>().As<IModuleService>().InstancePerRequest();
 
+            //操作
+            builder.RegisterType<OperationRepository>().As<IOperationRepository>().InstancePerRequest();
+            builder.RegisterType<OperationService>().As<IOperationService>().InstancePerRequest();
 
         }
 

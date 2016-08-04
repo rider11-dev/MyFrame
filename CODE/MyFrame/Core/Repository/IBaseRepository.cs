@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using MyFrame.Infrastructure.Pagination;
-using MyFrame.Infrastructure.OrderBy;
+
 using System.Data;
 
 namespace MyFrame.Core.Repository
@@ -22,8 +22,11 @@ namespace MyFrame.Core.Repository
 
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> where);
 
-        IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs);
-        IQueryable<TEntity> QueryByPage(IQueryable<TEntity> querable, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs);
+        IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs);
+        IQueryable<TEntity> QueryByPage(IQueryable<TEntity> querable, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs);
 
+        IQueryable<dynamic> FindBySelector(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector);
+
+        IQueryable<dynamic> FindBySelectorByPage(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs);
     }
 }

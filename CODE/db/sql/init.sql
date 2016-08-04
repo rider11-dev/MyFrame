@@ -50,7 +50,7 @@ CREATE TABLE Modules(
 	IsDeleted bit not null default 0
 );
 set IDENTITY_INSERT Modules on;
-INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(11,'RoleManage','用户管理','/RBAC/User/Index','fa-user',1,0,1,10,1,1);
+INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(11,'UserManage','用户管理','/RBAC/User/Index','fa-user',1,0,1,10,1,1);
 INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(12,'GroupManage','用户组管理','/RBAC/UserGroup/Index','fa-group',1,0,1,20,1,1);
 INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(13,'RoleManage','角色管理','/RBAC/Role/Index','fa-bookmark',1,0,1,30,1,1);
 INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(14,'AuthManage','权限分配','/RBAC/Auth/Index','fa-eye',1,0,1,40,1,1);
@@ -70,7 +70,18 @@ Create Table UserRoleRelation(
 	RoleID int not null
 );
 
-
+-- 操作表
+CREATE TABLE Operations(
+	Id int identity(1,1) PRIMARY KEY,
+	OptCode nvarchar(20) not null,
+	OptName nvarchar(20) not null,
+	SubmitUrl nvarchar(100),
+	Icon nvarchar(50),
+	ModuleId int not null,
+	SortOrder int,
+	Enabled bit not null default 0,
+	Remark nvarchar(255)
+);
 
 
 

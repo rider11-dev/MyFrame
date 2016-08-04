@@ -85,7 +85,7 @@ namespace MyFrame.RBAC.Service.Impl
             catch (Exception ex)
             {
                 base.UnitOfWork.Rollback();
-                base.ProcessException(result, Msg_Assign + "失败", ex);
+                base.ProcessException(ref result, Msg_Assign + "失败", ex);
             }
 
             return result;

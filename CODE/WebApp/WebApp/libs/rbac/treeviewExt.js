@@ -3,19 +3,26 @@ var treeviewExt = {
     dataId: '',
     dataUrl: '',
     dataField: '',
+    funcUrlParams: null,
+    singleSelect: false,
     getTreeData: function () {
+        var queryParams = {};
+        if (!gFunc.isNull(treeviewExt.funcUrlParams) && $.isFunction(treeviewExt.funcUrlParams)) {
+            queryParams = treeviewExt.funcUrlParams();
+        }
         var treeData;
         $.ajax({
             url: treeviewExt.dataUrl,
             type: 'get',
-            async: false,//?Í¬²½
+            async: false,//?åŒæ­¥
             dataType: 'json',
+            data: queryParams,
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert('¼ÓÔØtreeÊı¾İÔ´Ê§°Ü£¡' + textStatus + ',' + errorThrown);
+                alert('åŠ è½½treeæ•°æ®æºå¤±è´¥ï¼' + textStatus + ',' + errorThrown);
             },
             success: function (data, textStatus, jqXHR) {
                 if (data.code !== 0) {
-                    alert('¼ÓÔØÊ÷Ô´Êı¾İÊ§°Ü£¡' + data.message);
+                    alert('åŠ è½½æ ‘æºæ•°æ®å¤±è´¥ï¼' + data.message);
                     return;
                 }
                 treeData = data.rows;
@@ -27,28 +34,36 @@ var treeviewExt = {
         treeviewExt.tree = $('#' + options.treeId);
         treeviewExt.dataId = options.dataId;
         treeviewExt.dataUrl = options.dataUrl;
+        treeviewExt.funcUrlParams = options.funcUrlParams;
         treeviewExt.dataField = options.dataField;
+        treeviewExt.singleSelect = options.singleSelect;
 
         treeviewExt.tree.treeview({
             data: treeviewExt.getTreeData(),
             showIcon: false,
-            showCheckbox: true,
+            showCheckbox: !treeviewExt.singleSelect,
             onNodeChecked: function (event, node) {
+                if (treeviewExt.singleSelect) {
+                    return;
+                }
                 // console.log(node);
-                //ÉèÖÃ×Ó½Úµã
+                //è®¾ç½®å­èŠ‚ç‚¹
                 treeviewExt.checkSubNodes(node, true);
-                //ÉèÖÃ¸¸½Úµã
+                //è®¾ç½®çˆ¶èŠ‚ç‚¹
                 treeviewExt.checkParent(node);
             },
             onNodeUnchecked: function (event, node) {
-                //ÉèÖÃ×Ó½Úµã
+                if (treeviewExt.singleSelect) {
+                    return;
+                }
+                //è®¾ç½®å­èŠ‚ç‚¹
                 treeviewExt.checkSubNodes(node, false);
-                //ÉèÖÃ¸¸½Úµã
+                //è®¾ç½®çˆ¶èŠ‚ç‚¹
                 treeviewExt.checkParent(node);
             }
         });
     },
-    //Ñ¡ÖĞ×Ó½Úµã
+    //é€‰ä¸­å­èŠ‚ç‚¹
     checkSubNodes: function (node, check) {
         if (node.nodes && node.nodes.length > 0) {
             $(node.nodes).each(function (idx, subNode) {
@@ -61,7 +76,7 @@ var treeviewExt = {
             });
         }
     },
-    //Ñ¡ÖĞ¸¸½Úµã
+    //é€‰ä¸­çˆ¶èŠ‚ç‚¹
     checkParent: function (node) {
         var parent = treeviewExt.tree.treeview('getParent', node);
         // console.log(parent);
@@ -69,20 +84,20 @@ var treeviewExt = {
             return;
         }
 
-        //1¡¢µ±Ç°½Úµã±»Ñ¡ÖĞ£¬ÔòÉÏ¼¶½ÚµãÑ¡ÖĞ
+        //1ã€å½“å‰èŠ‚ç‚¹è¢«é€‰ä¸­ï¼Œåˆ™ä¸Šçº§èŠ‚ç‚¹é€‰ä¸­
         if (node.state.checked == true) {
             if (parent.state.checked == false) {
                 treeviewExt.tree.treeview('checkNode', [parent.nodeId, { silent: true }]);
-                //µİ¹éÉèÖÃÉÏ¼¶½Úµã
+                //é€’å½’è®¾ç½®ä¸Šçº§èŠ‚ç‚¹
                 treeviewExt.checkParent(parent);
             }
             return;
         }
 
         //node.state.checked == false
-        //2¡¢ËùÓĞĞÖµÜ½Úµã¶¼Î´Ñ¡ÖĞ£¬ÔòÉÏ¼¶½ÚµãÎ´Ñ¡ÖĞ
+        //2ã€æ‰€æœ‰å…„å¼ŸèŠ‚ç‚¹éƒ½æœªé€‰ä¸­ï¼Œåˆ™ä¸Šçº§èŠ‚ç‚¹æœªé€‰ä¸­
         var siblings = treeviewExt.tree.treeview('getSiblings', node);
-        var checkedSiblingsExists = false;//ÊÇ·ñ´æÔÚÑ¡ÖĞµÄĞÖµÜ½Úµã
+        var checkedSiblingsExists = false;//æ˜¯å¦å­˜åœ¨é€‰ä¸­çš„å…„å¼ŸèŠ‚ç‚¹
         if (siblings && siblings.length > 0) {
             if ($.grep(siblings, function (sib, idx) {
                 return sib.state.checked == true;
@@ -94,44 +109,68 @@ var treeviewExt = {
         if (checkedSiblingsExists == false) {
             if (parent.state.checked == true) {
                 treeviewExt.tree.treeview('uncheckNode', [parent.nodeId, { silent: true }]);
-                //µİ¹éÉèÖÃÉÏ¼¶½Úµã
+                //é€’å½’è®¾ç½®ä¸Šçº§èŠ‚ç‚¹
                 treeviewExt.checkParent(parent);
             }
         }
     },
-    //È«Ñ¡
+    //å…¨é€‰
     checkAll: function () {
+        if (treeviewExt.singleSelect) {
+            return;
+        }
         treeviewExt.tree.treeview('checkAll', { silent: true });
         var node = treeviewExt.tree.treeview('getNode', 1);
         console.log(node);
 
     },
-    //È«²»Ñ¡
+    //å…¨ä¸é€‰
     uncheckAll: function () {
+        if (treeviewExt.singleSelect) {
+            return;
+        }
         treeviewExt.tree.treeview('uncheckAll', { silent: true });
     },
-    //È«²¿Õ¹¿ª
+    //å…¨éƒ¨å±•å¼€
     expandAll: function () {
         treeviewExt.tree.treeview('expandAll', { silent: true });
     },
-    //È«²¿ÕÛµş
+    //å…¨éƒ¨æŠ˜å 
     collapseAll: function () {
         treeviewExt.tree.treeview('collapseAll', { silent: true });
     },
-    //»ñÈ¡Ñ¡ÖĞ½ÚµãÊı¾İidÊı×é
-    getCheckedDataIds: function () {
-        var sel = treeviewExt.tree.treeview('getChecked');
-        // console.log(sel.length);
-        var selIds = [];
+    //è·å–é€‰ä¸­èŠ‚ç‚¹æ•°æ®æŒ‡å®šå­—æ®µæ•°æ®ï¼Œç©ºåˆ™è·å–å…¨éƒ¨æ•°æ®
+    getSelectedData: function (fields) {
+        var func_get_data = function (node) {
+            if (gFunc.isNull(fields)) {
+                return node;//fieldsç©ºåˆ™è·å–å…¨éƒ¨æ•°æ®
+            }
+            var _data = {};
+            $(fields).each(function (_idx, _field) {
+                _data[_field] = node[_field];
+            });
+            return _data;
+        };
+
+        var sel;
+        if (treeviewExt.singleSelect) {
+            sel = treeviewExt.tree.treeview('getSelected');
+        } else {
+            sel = treeviewExt.tree.treeview('getChecked');
+        }
+        var data = [];
         if (sel && sel.length > 0) {
             $(sel).each(function (idx, item) {
-                selIds.push(item[treeviewExt.dataId]);
+                data.push(func_get_data(item));
             });
         }
-        return selIds;
+        return data;
     },
-    //ÉèÖÃÖ¸¶¨½ÚµãÑ¡ÖĞ
+    //è®¾ç½®æŒ‡å®šèŠ‚ç‚¹é€‰ä¸­
     setCheckedNodes: function (dataIds) {
+        if (treeviewExt.singleSelect) {
+            return;
+        }
         if (dataIds && dataIds.length > 0) {
             $(dataIds).each(function (idx, item) {
                 var nodes = treeviewExt.tree.treeview('searchByAttribute', [item, {
@@ -142,7 +181,7 @@ var treeviewExt = {
                 // console.log(nodes);
                 if (nodes && nodes.length > 0) {
                     $(nodes).each(function (idx, node) {
-                        //ÉèÖÃÑ¡ÖĞÊ±£¬²»´¥·¢ÈÎºÎÊÂ¼ş£¬²»×Ô¶¯Ñ¡ÖĞÉÏ¼¶ºÍÏÂ¼¶½Úµã£ºÎªÁËÕ¹Ê¾×îÕæÊµÊı¾İ
+                        //è®¾ç½®é€‰ä¸­æ—¶ï¼Œä¸è§¦å‘ä»»ä½•äº‹ä»¶ï¼Œä¸è‡ªåŠ¨é€‰ä¸­ä¸Šçº§å’Œä¸‹çº§èŠ‚ç‚¹ï¼šä¸ºäº†å±•ç¤ºæœ€çœŸå®æ•°æ®
                         treeviewExt.tree.treeview('checkNode', [node.nodeId, { silent: true }]);
                         // treeviewExt.checkParent(node);
                     });

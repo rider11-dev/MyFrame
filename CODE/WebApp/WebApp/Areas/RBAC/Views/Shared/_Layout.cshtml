@@ -66,6 +66,7 @@
         <!-- Add the sidebar's background. This div must be placed
              immediately after the control sidebar -->
         @Html.Partial("_Modal")
+        @Html.Partial("_HelpModal")
         <div class="control-sidebar-bg"></div>
 
     </div>
@@ -86,13 +87,16 @@
     <!--bootstraptable-->
     <script src="~/libs/plugins/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="~/libs/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <!--bootstrap-treeview-->
+    <script src="~/libs/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
     <!-- AdminLTE App -->
     <script src="~/libs/AdminLTE/js/app.min.js"></script>
     <script src="~/libs/rbac/base.js"></script>
     <script src="~/libs/rbac/index.js"></script>
     <script src="~/libs/rbac/modalForm.js"></script>
+    <script src="~/libs/rbac/modalFormHelp.js"></script>
     <script src="~/libs/rbac/WinMsg.js"></script>
-
+    <script src="~/libs/rbac/treeviewExt.js"></script>
     <script>
         $(function () {
             toastr.options = { positionClass: "toast-top-center", showDuration: "150", hideDuration: "1000", showMethod: "fadeIn", closeButton: 'true' };

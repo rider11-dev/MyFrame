@@ -11,11 +11,8 @@ namespace MyFrame.RBAC.Model
 {
     [Description("角色信息")]
     [Table("Roles")]
-    public class Role : IKey<int>, IDataTrack
+    public class Role : BaseEntity<int>, IKey<int>
     {
-        [Key]
-        public int Id { get; set; }
-
         [Display(Name = "角色名称")]
         public string RoleName { get; set; }
 

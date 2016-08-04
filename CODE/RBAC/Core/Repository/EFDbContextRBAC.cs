@@ -24,8 +24,8 @@ namespace MyFrame.RBAC.Repository
         public DbSet<Role> Roles { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<UserRoleRelation> UserRoleRelations { get; set; }
-
         public DbSet<RolePermission> RolePermissionRelations { get; set; }
+        public DbSet<Operation> Operations { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

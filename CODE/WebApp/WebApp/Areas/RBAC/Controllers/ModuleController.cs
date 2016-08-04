@@ -14,7 +14,7 @@ using MyFrame.Infrastructure.Pagination;
 using MyFrame.RBAC.ViewModel;
 using WebApp.Controllers;
 using WebApp.Extensions.Session;
-using MyFrame.Infrastructure.OrderBy;
+
 using MyFrame.RBAC.Service.Interface;
 
 namespace WebApp.Areas.RBAC.Controllers
@@ -96,6 +96,15 @@ namespace WebApp.Areas.RBAC.Controllers
             }
         }
 
+        /// <summary>
+        /// 树帮助
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult TreeHelp()
+        {
+            return PartialView();
+        }
+
         public ActionResult Add()
         {
             var vmModule = new ModuleViewModel();
@@ -144,10 +153,10 @@ namespace WebApp.Areas.RBAC.Controllers
                 Name = vmModule.Name,
                 LinkUrl = vmModule.LinkUrl,
                 Icon = vmModule.Icon,
-                IsMenu = vmModule.IsMenu,
+                //IsMenu = vmModule.IsMenu,
                 ParentId = vmModule.ParentId,
                 Enabled = vmModule.Enabled,
-                IsSystem = vmModule.IsSystem,
+                //IsSystem = vmModule.IsSystem,
                 SortOrder = vmModule.SortOrder,
                 Remark = vmModule.Remark,
                 LastModifier = HttpContext.Session.GetUserId(),

@@ -1,0 +1,32 @@
+﻿<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-body">
+                <div id="toolbar" class="container">
+                    <div class="row">
+                        <div class="col-sm-2" style="padding:0px;">
+                            <input type="text" id="txtHelpModuleName" name="ModuleName" class="form-control" placeholder="模块名" />
+                        </div>
+                        <div class="col-sm-1" style="padding-left:2px;">
+                            <button id="btnModuleHelpSearch" type="button" class="btn btn-success">
+                                <span class="glyphicon glyphicon-search">查询</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="treeModuleHelp"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/libs/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
+<script src="~/libs/rbac/treeviewExt.js"></script>
+<script src="~/libs/rbac/module/tree_help.js"></script>
+<script type="text/javascript">
+    $(function () {
+        moduleTreeHelp.init({
+            urlSearchModules: "@Html.Raw(Url.Action("GetModulesSimpleInfoByPage", "Module", new { pageNumber = 1, pageSize = 1000 }))",
+            singleSelect:true,
+        });
+    });
+</script>

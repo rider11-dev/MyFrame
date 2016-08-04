@@ -127,16 +127,21 @@
             gMessager.warning("请选择角色");
             return;
         }
-        var moduleIds = treeviewExt.getCheckedDataIds();
+        var idField = 'id';
+        var moduleIds = treeviewExt.getSelectedData([idField]);
+        //console.log(moduleIds);
         if (moduleIds.length < 1) {
             gMessager.warning("请选择模块");
             return;
         }
+
         var data = { roleId: roleRows[0].Id, perType: 0 };
         var idx = 0;
         for (var idx = 0; idx < moduleIds.length; idx++) {
-            data["perIds[" + idx + "]"] = moduleIds[idx];
+            data["perIds[" + idx + "]"] = moduleIds[idx][idField];
         }
+        //console.log(data);
+
         $.ajax({
             type: 'post',
             url: authmanage.urlSavePermission,

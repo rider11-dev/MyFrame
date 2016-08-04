@@ -2,7 +2,7 @@
 @model RoleViewModel
 <link href="~/libs/plugins/iCheck/square/blue.css" rel="stylesheet" />
 @Html.HiddenFor(m => m.Id)
-<div class="form-area">
+<div id="form-add-role">
     <div class="form-group">
         <div class="col-sm-3">
             @Html.LabelFor(m => m.RoleName, new { @class = "control-label pull-right" })

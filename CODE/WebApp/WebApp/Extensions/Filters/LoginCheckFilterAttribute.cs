@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApp.Extensions.Session;
+using MyFrame.Infrastructure.Extension;
 
 namespace WebApp.Extensions.Filters
 {
@@ -22,9 +23,8 @@ namespace WebApp.Extensions.Filters
         {
             get
             {
-                bool check = false;
-                Boolean.TryParse(AppSettingHelper.Get(KEY_LOGIN_CHECK), out check);
-                return check;
+                var val = AppSettingHelper.Get(KEY_LOGIN_CHECK);
+                return val.ConvertTo<Boolean>(false);
             }
         }
         public override void OnActionExecuting(ActionExecutingContext filterContext)

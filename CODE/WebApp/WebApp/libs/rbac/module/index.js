@@ -1,4 +1,5 @@
 ﻿var modulemanage = {
+    form: $('#form-add-module'),
     grid: $('#grid'),
     btnAdd: $('#btnAdd'),
     btnEdit: $('#btnEdit'),
@@ -6,15 +7,18 @@
     btnSearch: $('#btnSearch'),
     txtSearchCode: $('#txtSearchCode'),
     txtSearchName: $('#txtSearchName'),
+    btnHelpParentModule: $('#btnHelpParentModule'),
     urlAdd: "",
     urlEdit: "",
     urlDelete: "",
     urlSearch: "",
+    urlModuleTreeHelp: "",
     init: function (options) {
         modulemanage.urlAdd = options.urlAdd;
         modulemanage.urlEdit = options.urlEdit;
         modulemanage.urlDelete = options.urlDelete;
         modulemanage.urlSearch = options.urlSearch;
+        modulemanage.urlModuleTreeHelp = options.urlModuleTreeHelp;
 
         modulemanage.initgrid();
         modulemanage.bindingEventArgs();
@@ -24,6 +28,22 @@
         modulemanage.btnEdit.click(modulemanage.funcBtnEdit);
         modulemanage.btnDelete.click(modulemanage.funcBtnDelete);
         modulemanage.btnSearch.click(modulemanage.funcBtnSearch);
+
+        modulemanage.btnHelpParentModule.click(function () {
+            console.log('modulemanage.btnHelpParentModule.click enter');
+            modalForm.show({
+                title: '模块帮助',
+                contentUrl: modulemanage.urlModuleTreeHelp,
+                contentUrlParams: {},
+                submitUrl: "",
+                submitSucceedCallback: function () {
+
+                },
+                onLoadCallback: function () {
+
+                }
+            });
+        });
     },
     initgrid: function () {
         var options = {
@@ -144,16 +164,24 @@
             contentUrlParams: {},
             submitUrl: modulemanage.urlEdit,
             onLoadCallback: function () {
+                //console.log(data);
                 $('#Id').val(data.Id);
                 $('#Code').val(data.Code);
-                $('#UserName').attr({ 'readonly': 'readonly' });//模块编号不能修改
-                //$('#Email').val(data.Email);
-                //$('#Phone').val(data.Phone);
-                //$('#Address').val(data.Address);
+                $('#Code').attr({ 'readonly': 'readonly' });//模块编号不能修改
+                $('#Name').val(data.Name);
+                $('#LinkUrl').val(data.LinkUrl);
+                $('#Icon').val(data.Icon);
+                $('#SortOrder').val(data.SortOrder);
+                $('#ParentId').val(data.ParentId);
+                $('#ParentName').val(data.ParentName);
                 if (data.Enabled) {
                     $('#Enabled').iCheck('check');
                 }
+                if (data.IsSystem) {
+                    $('#IsSystem').iCheck('check');
+                }
                 $('#Remark').val(data.Remark);
+                //console.log('LinkUrl:' + $('#Id').val());
             },
             submitSucceedCallback: function () {
                 modulemanage.grid.bootstrapTable('refresh');

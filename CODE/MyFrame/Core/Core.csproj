@@ -67,9 +67,8 @@
     <Compile Include="Configure\BaseConfigure.cs" />
     <Compile Include="Configure\IMapper.cs" />
     <Compile Include="Configure\IRegister.cs" />
-    <Compile Include="Model\IDataTrack.cs" />
+    <Compile Include="Model\BaseEntity.cs" />
     <Compile Include="Model\IKey.cs" />
-    <Compile Include="Model\ILogicalDelete.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\BaseRepository.cs" />

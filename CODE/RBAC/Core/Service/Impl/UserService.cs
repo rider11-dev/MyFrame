@@ -1,6 +1,6 @@
 ﻿using MyFrame.Infrastructure.Extension;
 using MyFrame.Infrastructure.OptResult;
-using MyFrame.Infrastructure.OrderBy;
+
 using MyFrame.Infrastructure.Pagination;
 using MyFrame.RBAC.Model;
 using MyFrame.Core.Model;
@@ -53,7 +53,7 @@ namespace MyFrame.RBAC.Service.Impl
             }
             catch (Exception ex)
             {
-                base.ProcessException(result, string.Format("根据用户名获取{0}数据实体出错", base.EntityType), ex);
+                base.ProcessException(ref result, string.Format("根据用户名获取{0}数据实体出错", base.EntityType), ex);
             }
             return result;
         }
@@ -91,7 +91,7 @@ namespace MyFrame.RBAC.Service.Impl
             catch (Exception ex)
             {
                 base.UnitOfWork.Rollback();
-                base.ProcessException(result, Msg_DeleteWithRelations + "失败", ex);
+                base.ProcessException(ref result, Msg_DeleteWithRelations + "失败", ex);
             }
             return result;
         }
@@ -118,7 +118,7 @@ namespace MyFrame.RBAC.Service.Impl
                   });
         }
 
-        public OperationResult FindByPageWithFullInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs)
+        public OperationResult FindByPageWithFullInfo(Expression<Func<User, bool>> where, Func<IQueryable<User>, IOrderedQueryable<User>> orderBy, PageArgs pageArgs)
         {
             OperationResult result = new OperationResult();
             try
@@ -170,7 +170,7 @@ namespace MyFrame.RBAC.Service.Impl
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("分页获取{0}用户详细信息失败", EntityType), ex);
+                base.ProcessException(ref result, string.Format("分页获取{0}用户详细信息失败", EntityType), ex);
             }
             return result;
         }

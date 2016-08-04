@@ -1,5 +1,5 @@
 ﻿using MyFrame.Infrastructure.OptResult;
-using MyFrame.Infrastructure.OrderBy;
+
 using MyFrame.Infrastructure.Pagination;
 using MyFrame.Core.Service;
 using MyFrame.RBAC.Model;
@@ -22,7 +22,7 @@ namespace MyFrame.RBAC.Service.Interface
         /// <returns></returns>
         OperationResult UpdateDetail(User usr);
 
-        OperationResult FindByPageWithFullInfo(Expression<Func<User, bool>> where, Action<IOrderable<User>> orderBy, PageArgs pageArgs);
+        OperationResult FindByPageWithFullInfo(Expression<Func<User, bool>> where, Func<IQueryable<User>, IOrderedQueryable<User>> orderBy, PageArgs pageArgs);
 
         OperationResult DeleteWithRelations(int[] usrIds);
     }

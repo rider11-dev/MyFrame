@@ -1,0 +1,62 @@
+﻿<div class="row" style="margin-top:10px;">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">操作管理</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <input type="text" id="txtSearchModuleName" name="ModuleName" class="form-control" placeholder="模块名称" />
+                                <button id="btnSearchModules" type="button" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-search">查询</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="treeModule"></div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div id="toolbar" class="container" style="margin:4px 0px;">
+                            <div class="row">
+                                <div class="col-sm-5 btn-group">
+                                    <button id="btnAddOpt" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-plus">新增</span>
+                                    </button>
+                                    <button id="btnEditOpt" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-edit">修改</span>
+                                    </button>
+                                    <button id="btnDeleteOpt" type="button" class="btn btn-danger">
+                                        <span class="glyphicon glyphicon-remove">删除</span>
+                                    </button>
+                                </div>
+                                <div class="col-sm-2" style="padding:0px;">
+                                    <input type="text" id="txtSearchOptName" name="OptName" class="form-control" placeholder="操作名称" />
+                                </div>
+                                <div class="col-sm-1" style="padding-left:2px;">
+                                    <button id="btnSearchOpt" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-search">查询</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="gridOpt" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/libs/rbac/operation/index.js"></script>
+<script type="text/javascript">
+    $(function () {
+        optmanage.init({
+            urlAddOpt: "@Url.Action("Add")",
+            urlEditOpt: "@Url.Action("Edit")",
+            urlDelete: "@Url.Action("Delete")",
+            urlSearchOpt: "@Url.Action("GetOperationFullInfoByPage")",
+            urlSearchModule: "@Html.Raw(Url.Action("GetModulesSimpleInfoByPage", "Module", new { pageNumber = 1, pageSize = 1000 }))",
+        });
+    });
+</script>

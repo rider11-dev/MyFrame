@@ -14,16 +14,12 @@ namespace MyFrame.RBAC.Model
 {
     [Description("用户信息")]
     [Table("Users")]
-    public class User : IKey<int>, IDataTrack
+    public class User : BaseEntity<int>, IKey<int>
     {
         public User()
         {
 
         }
-
-        [Key]
-        [Description("主键")]
-        public int Id { get; set; }
 
         [Display(Name = "用户名")]
         public string UserName { get; set; }

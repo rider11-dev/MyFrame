@@ -1,5 +1,5 @@
 ﻿using MyFrame.Infrastructure.OptResult;
-using MyFrame.Infrastructure.OrderBy;
+
 using MyFrame.Infrastructure.Pagination;
 using MyFrame.RBAC.Repository.Interface;
 using MyFrame.Core.UnitOfWork;
@@ -57,7 +57,7 @@ namespace MyFrame.RBAC.Service.Impl
             }
             catch (Exception ex)
             {
-                base.ProcessException(rst, Msg_SearchByName + "失败,角色名称：" + roleName, ex);
+                base.ProcessException(ref rst, Msg_SearchByName + "失败,角色名称：" + roleName, ex);
             }
             return rst;
         }
@@ -124,7 +124,7 @@ namespace MyFrame.RBAC.Service.Impl
                 });
         }
 
-        public OperationResult FindByPageWithFullInfo(Expression<Func<Role, bool>> where, Action<IOrderable<Role>> orderBy, PageArgs pageArgs)
+        public OperationResult FindByPageWithFullInfo(Expression<Func<Role, bool>> where, Func<IQueryable<Role>, IOrderedQueryable<Role>> orderBy, PageArgs pageArgs)
         {
             OperationResult result = new OperationResult();
             try
@@ -156,7 +156,7 @@ namespace MyFrame.RBAC.Service.Impl
             }
             catch (Exception ex)
             {
-                base.ProcessException(result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
+                base.ProcessException(ref result, string.Format(Msg_SearchSimpleInfoByPage + ",失败"), ex);
             }
             return result;
         }
@@ -194,7 +194,7 @@ namespace MyFrame.RBAC.Service.Impl
             catch (Exception ex)
             {
                 base.UnitOfWork.Rollback();
-                base.ProcessException(result, Msg_DeleteWithRelations + "失败", ex);
+                base.ProcessException(ref result, Msg_DeleteWithRelations + "失败", ex);
             }
             return result;
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Configuration;
+using MyFrame.Infrastructure.Extension;
 
 namespace MyFrame.Infrastructure.Common
 {
@@ -17,9 +18,7 @@ namespace MyFrame.Infrastructure.Common
             get
             {
                 var val = Get(KEY_LOG);
-                bool result = false;
-                Boolean.TryParse(val, out result);
-                return result;
+                return val.ConvertTo<Boolean>(false);
             }
         }
 

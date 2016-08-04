@@ -16,14 +16,11 @@ namespace MyFrame.RBAC.Model
     /// </summary>
     [Description("模块")]
     [Table("Modules")]
-    public class Module : IKey<int>, IDataTrack
+    public class Module : BaseEntity<int>, IKey<int>
     {
         public Module()
         {
         }
-        [Key]
-        [Description("主键")]
-        public int Id { get; set; }
 
         [Description("模块编号")]
         public string Code { get; set; }

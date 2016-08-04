@@ -1,8 +1,8 @@
 ﻿@using MyFrame.RBAC.ViewModel
 @model ModuleViewModel
 <link href="~/libs/plugins/iCheck/square/blue.css" rel="stylesheet" />
-@Html.HiddenFor(m => m.Id)
-<div id="form-area">
+<div id="form-add-module">
+    @Html.HiddenFor(m => m.Id)
     <div class="form-group">
         <div class="col-sm-3">
             @Html.LabelFor(m => m.Code, new { @class = "control-label pull-right" })
@@ -50,27 +50,14 @@
     </div>
     <div class="form-group">
         <div class="col-sm-3">
-            @Html.LabelFor(m => m.IsMenu, new { @class = "control-label pull-right" })
-        </div>
-        <div class="checkbox icheck col-sm-8">
-            @Html.CheckBoxFor(m => m.IsMenu, new { @class = "myCheck" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-3">
             @Html.LabelFor(m => m.ParentName, new { @class = "control-label pull-right" })
         </div>
-        <div class="checkbox icheck col-sm-8">
+        <div class="col-sm-8">
             @Html.HiddenFor(m => m.ParentId)
-            @Html.TextBoxFor(m => m.ParentName, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-3">
-            @Html.LabelFor(m => m.HasChild, new { @class = "control-label pull-right" })
-        </div>
-        <div class="checkbox icheck col-sm-8">
-            @Html.CheckBoxFor(m => m.HasChild, new { @class = "myCheck" })
+            <div class="input-group">
+                @Html.TextBoxFor(m => m.ParentName, new { @class = "form-control", @readonly = "readonly" })
+                <div id="btnHelpParentModule" class="btn btn-primary input-group-addon">选择...</div>
+            </div>
         </div>
     </div>
     <div class="form-group">
@@ -91,7 +78,41 @@
     </div>
 </div>
 <script>
+    var moduleAdd = {
+        urlModuleTreeHelp: "@Url.Action("TreeHelp")",
+        btnHelpParentModule: $('#btnHelpParentModule'),
+        init: function () {
+            moduleAdd.btnHelpParentModule.click(function () {
+                //console.log('modulemanage.btnHelpParentModule.click enter');
+                modalFormHelp.show({
+                    title: '模块帮助',
+                    urlHelp: moduleAdd.urlModuleTreeHelp,
+                    urlParams: {},
+                    onSubmitCallback: function () {
+                        //1、获取选择的节点
+                        var moduleData = treeviewExt.getSelectedData(['id', 'text']);
+                        //console.log('treeviewExt.getSelectedData:');
+                        //console.log(moduleData);
+                        if (gFunc.isNull(moduleData) || moduleData.length < 1) {
+                            return false;
+                        }
+                        //2、给界面赋值
+                        $('#ParentId').val(moduleData[0]['id']);
+                        $('#ParentName').val(moduleData[0]['text']);
+                        console.log('#ParentName:' + $('#ParentName').val());
+                        return true;
+                    },
+                    onLoadCallback: function () {
+                        console.log('onLoadCallback called');
+
+                    }
+                });
+            });
+        }
+    };
+
     $(function () {
         gFunc.setCheckBoxStyle('input.myCheck');
+        moduleAdd.init();
     });
 </script>

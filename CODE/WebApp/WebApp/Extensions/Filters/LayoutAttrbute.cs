@@ -13,6 +13,7 @@ using MyFrame.Infrastructure.Common;
 using MyFrame.Infrastructure.Pagination;
 using WebApp.Areas.RBAC.Controllers;
 using MyFrame.RBAC.Service.Interface;
+using MyFrame.Infrastructure.Extension;
 
 namespace WebApp.Extensions.Filters
 {
@@ -31,9 +32,8 @@ namespace WebApp.Extensions.Filters
         {
             get
             {
-                bool rbac = false;
-                Boolean.TryParse(AppSettingHelper.Get(KEY_RBAC), out rbac);
-                return rbac;
+                var val = AppSettingHelper.Get(KEY_RBAC);
+                return val.ConvertTo<Boolean>(false);
             }
         }
         public override void OnResultExecuting(ResultExecutingContext filterContext)

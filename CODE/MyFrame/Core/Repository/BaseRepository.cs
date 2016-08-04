@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using EntityFramework.Extensions;
 using MyFrame.Infrastructure.Logger;
-using MyFrame.Infrastructure.OrderBy;
+
 using MyFrame.Core.Model;
 using MyFrame.Core.UnitOfWork;
 using System.Data;
@@ -154,15 +154,13 @@ namespace MyFrame.Core.Repository
             return sbErrors.ToString();
         }
 
-        public IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs)
+        public IQueryable<TEntity> FindByPage(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs)
         {
-            var querable = Find(where);
-            var dd = from item in querable
-                     select new { };
-            return QueryByPage(querable, orderBy, pageArgs);
+            var query = Find(where);
+            return QueryByPage(query, orderBy, pageArgs);
         }
 
-        public IQueryable<TEntity> QueryByPage(IQueryable<TEntity> querable, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs)
+        public IQueryable<TEntity> QueryByPage(IQueryable<TEntity> querable, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs)
         {
             pageArgs.RecordsCount = querable.Count();
             pageArgs.PageCount = Convert.ToInt32(Math.Ceiling(pageArgs.RecordsCount * 1.0 / pageArgs.PageSize));
@@ -177,12 +175,26 @@ namespace MyFrame.Core.Repository
                 pageArgs.PageIndex = 1;
             }
             //2、处理排序
-            var linq = new Orderable<TEntity>(querable);
-            orderBy(linq);
+            var query = orderBy(querable);
             //3、分页获取
-            var _list = linq.Queryable.Skip((pageArgs.PageIndex - 1) * pageArgs.PageSize).Take(pageArgs.PageSize);
+            var _list = query
+                .Skip((pageArgs.PageIndex - 1) * pageArgs.PageSize)
+                .Take(pageArgs.PageSize);
             return _list;
         }
 
+
+        public IQueryable<dynamic> FindBySelector(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector)
+        {
+            return Entities
+                .Where(where)
+                .Select(selector);
+        }
+
+        public IQueryable<dynamic> FindBySelectorByPage(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs)
+        {
+            return FindByPage(where, orderBy, pageArgs)
+                .Select(selector);
+        }
     }
 }

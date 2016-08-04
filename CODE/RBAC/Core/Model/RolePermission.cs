@@ -11,12 +11,9 @@ namespace MyFrame.RBAC.Model
 {
     [Description("角色——权限关系")]
     [Table("RolePermission")]
-    public class RolePermission : IKey<int>
+    public class RolePermission : BaseEntity<int>, IKey<int>
     {
         public RolePermission() { }
-
-        [Description("主键")]
-        public int Id { get; set; }
 
         [Description("角色id")]
         public int RoleId { get; set; }

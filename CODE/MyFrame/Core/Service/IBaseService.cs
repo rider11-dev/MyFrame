@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using MyFrame.Infrastructure.Pagination;
-using MyFrame.Infrastructure.OrderBy;
+
 
 namespace MyFrame.Core.Service
 {
@@ -20,8 +20,8 @@ namespace MyFrame.Core.Service
 
         OperationResult Find(Expression<Func<TEntity, bool>> where);
 
-        OperationResult FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs);
+        OperationResult FindByPage(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs);
         OperationResult FindBySelector(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector);
-        OperationResult FindBySelectorByPage(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs);
+        OperationResult FindBySelectorByPage(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs);
     }
 }

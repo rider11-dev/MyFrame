@@ -22,7 +22,7 @@ namespace MyFrame.Core.UnitOfWork
         {
             AutoCommit = true;
             _logHelper = LogHelperFactory.GetLogHelper<EFUnitOfWork>();
-            _logHelper.LogInfo("EFUnitOfWork");
+            //_logHelper.LogInfo("EFUnitOfWork");
         }
 
         public EFUnitOfWork(IsolationLevel isolationLevel)
@@ -91,7 +91,7 @@ namespace MyFrame.Core.UnitOfWork
         }
         ~EFUnitOfWork()
         {
-            _logHelper.LogInfo("~EFUnitOfWork");
+            //_logHelper.LogInfo("~EFUnitOfWork");
             Dispose(false);
         }
 

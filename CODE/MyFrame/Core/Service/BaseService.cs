@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using MyFrame.Infrastructure.Extension;
 using MyFrame.Infrastructure.Logger;
-using MyFrame.Infrastructure.OrderBy;
+
 using MyFrame.Core.Model;
 using MyFrame.Core.Repository;
 using MyFrame.Core.UnitOfWork;
@@ -16,16 +16,16 @@ namespace MyFrame.Core.Service
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
     {
-        IBaseRepository<TEntity> _repository;
+        IBaseRepository<TEntity> _currentRepository;
         protected IBaseRepository<TEntity> CurrentRepository
         {
             get
             {
-                if (_repository == null)
+                if (_currentRepository == null)
                 {
-                    _repository = UnitOfWork == null ? new BaseRepository<TEntity>() : new BaseRepository<TEntity>(UnitOfWork);
+                    _currentRepository = UnitOfWork == null ? new BaseRepository<TEntity>() : new BaseRepository<TEntity>(UnitOfWork);
                 }
-                return _repository;
+                return _currentRepository;
             }
         }
         protected IUnitOfWork UnitOfWork;
@@ -65,7 +65,7 @@ namespace MyFrame.Core.Service
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("新增{0}数据实体集出错", EntityType), ex);
+                ProcessException(ref result, string.Format("新增{0}数据实体集出错", EntityType), ex);
             }
             return result;
         }
@@ -81,7 +81,7 @@ namespace MyFrame.Core.Service
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("获取{0}数据实体总数失败", EntityType), ex);
+                ProcessException(ref result, string.Format("获取{0}数据实体总数失败", EntityType), ex);
             }
             return result;
         }
@@ -108,7 +108,7 @@ namespace MyFrame.Core.Service
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("删除{0}数据实体失败", EntityType), ex);
+                ProcessException(ref result, string.Format("删除{0}数据实体失败", EntityType), ex);
             }
             return result;
         }
@@ -125,12 +125,13 @@ namespace MyFrame.Core.Service
             try
             {
                 var data = CurrentRepository.Update(where, update);
+
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data;
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("更新{0}数据实体失败", EntityType), ex);
+                ProcessException(ref result, string.Format("更新{0}数据实体失败", EntityType), ex);
             }
             return result;
         }
@@ -145,7 +146,7 @@ namespace MyFrame.Core.Service
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("检查{0}数据实体是否存在时出错", EntityType), ex);
+                ProcessException(ref result, string.Format("检查{0}数据实体是否存在时出错", EntityType), ex);
             }
             return result;
         }
@@ -161,7 +162,7 @@ namespace MyFrame.Core.Service
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("获取{0}数据实体集出错", EntityType), ex);
+                ProcessException(ref result, string.Format("获取{0}数据实体集出错", EntityType), ex);
             }
             return result;
         }
@@ -170,20 +171,18 @@ namespace MyFrame.Core.Service
             OperationResult result = new OperationResult();
             try
             {
-                var data = CurrentRepository
-                    .Find(where)
-                    .Select(selector);
+                var data = CurrentRepository.FindBySelector(where, selector);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data.ToList();
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("获取{0}数据实体集出错", EntityType), ex);
+                ProcessException(ref result, string.Format("获取{0}数据实体集出错", EntityType), ex);
             }
             return result;
 
         }
-        public OperationResult FindByPage(Expression<Func<TEntity, bool>> where, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs)
+        public OperationResult FindByPage(Expression<Func<TEntity, bool>> where, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs)
         {
             OperationResult result = new OperationResult();
             if (pageArgs == null)
@@ -200,11 +199,11 @@ namespace MyFrame.Core.Service
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("分页获取{0}实体集失败", EntityType), ex);
+                ProcessException(ref result, string.Format("分页获取{0}实体集失败", EntityType), ex);
             }
             return result;
         }
-        public OperationResult FindBySelectorByPage(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector, Action<IOrderable<TEntity>> orderBy, PageArgs pageArgs)
+        public OperationResult FindBySelectorByPage(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, dynamic>> selector, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, PageArgs pageArgs)
         {
             OperationResult result = new OperationResult();
             if (pageArgs == null)
@@ -215,19 +214,17 @@ namespace MyFrame.Core.Service
             }
             try
             {
-                var data = CurrentRepository
-                    .FindByPage(where, orderBy, pageArgs)
-                    .Select(selector);
+                var data = CurrentRepository.FindBySelectorByPage(where, selector, orderBy, pageArgs);
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = data.ToList();
             }
             catch (Exception ex)
             {
-                ProcessException(result, string.Format("分页获取{0}实体集失败", EntityType), ex);
+                ProcessException(ref result, string.Format("分页获取{0}实体集失败", EntityType), ex);
             }
             return result;
         }
-        protected void ProcessException(OperationResult result, string msg, Exception ex)
+        protected void ProcessException(ref OperationResult result, string msg, Exception ex)
         {
             if (result == null)
             {
@@ -235,7 +232,7 @@ namespace MyFrame.Core.Service
             }
             result.ResultType = OperationResultType.Error;
             result.Exception = ex.GetDeepestException();
-            result.Message = msg;
+            result.Message = msg + "。" + ex.Message;
             //记录日志
             if (LogHelperFactory.Log)
             {

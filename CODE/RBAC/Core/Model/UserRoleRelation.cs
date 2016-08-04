@@ -14,12 +14,9 @@ namespace MyFrame.RBAC.Model
     /// </summary>
     [Description("用户——角色关系")]
     [Table("UserRoleRelation")]
-    public class UserRoleRelation : IKey<int>
+    public class UserRoleRelation : BaseEntity<int>, IKey<int>
     {
         public UserRoleRelation() { }
-
-        [Description("主键")]
-        public int Id { get; set; }
 
         [Description("用户id")]
         public int UserId { get; set; }

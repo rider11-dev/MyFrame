@@ -146,7 +146,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\RBAC\Models\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -155,6 +154,7 @@
     <Compile Include="Areas\RBAC\Controllers\HomeController.cs" />
     <Compile Include="Areas\RBAC\Controllers\AccountController.cs" />
     <Compile Include="Areas\RBAC\Controllers\ModuleController.cs" />
+    <Compile Include="Areas\RBAC\Controllers\OperationController.cs" />
     <Compile Include="Areas\RBAC\Controllers\RoleController.cs" />
     <Compile Include="Areas\RBAC\Controllers\AuthManageController.cs" />
     <Compile Include="Areas\RBAC\Controllers\UserController.cs" />
@@ -162,8 +162,10 @@
     <Compile Include="Areas\RBAC\RBACAreaRegistration.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Extensions\ActionResult\JsonNetResult.cs" />
+    <Compile Include="Extensions\AppContext.cs" />
     <Compile Include="Extensions\Filters\LayoutAttrbute.cs" />
     <Compile Include="Extensions\Filters\LoginCheckFilterAttribute.cs" />
+    <Compile Include="Extensions\HttpModule\ErrorHandlerModule.cs" />
     <Compile Include="Extensions\Ioc\AutofacHelper.cs" />
     <Compile Include="Extensions\Ioc\AutofacRegister.cs" />
     <Compile Include="Extensions\Ioc\IAutofacHelper.cs" />
@@ -175,11 +177,14 @@
     </Compile>
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.css" />
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.js" />
+    <Content Include="libs\rbac\module\tree_help.js" />
+    <Content Include="libs\rbac\operation\index.js" />
     <Content Include="libs\rbac\treeviewExt.js" />
     <Content Include="libs\plugins\form\jquery.form.js" />
     <Content Include="libs\rbac\account\changepwd.js" />
     <Content Include="libs\rbac\authmanage\index.js" />
     <Content Include="libs\rbac\role\grid_help.js" />
+    <Content Include="libs\rbac\modalFormHelp.js" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\RBAC\ChangePwdViewModel.cs" />
     <Compile Include="ViewModels\RBAC\LoginViewModel.cs" />
@@ -2154,6 +2159,9 @@
     <Content Include="Areas\RBAC\Views\User\GridHelp.cshtml" />
     <Content Include="Areas\RBAC\Views\AuthManage\Index.cshtml" />
     <Content Include="Areas\RBAC\Views\Account\ChangePwd.cshtml" />
+    <Content Include="Areas\RBAC\Views\Operation\Index.cshtml" />
+    <Content Include="Areas\RBAC\Views\Module\TreeHelp.cshtml" />
+    <Content Include="Areas\RBAC\Views\Shared\_HelpModal.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -2164,6 +2172,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Shared\FileNotFound.html" />
+    <Content Include="Views\Shared\generic_error.html" />
+    <Content Include="Views\Shared\NoAccess.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
