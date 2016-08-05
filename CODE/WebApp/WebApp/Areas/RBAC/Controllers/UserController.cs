@@ -122,6 +122,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
+        [LoginCheckFilter]
+        [ValidateAntiForgeryToken]
         public JsonResult Add(UserViewModel usrVM)
         {
             if (!ModelState.IsValid)

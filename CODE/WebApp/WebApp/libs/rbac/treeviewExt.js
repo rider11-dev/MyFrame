@@ -189,4 +189,11 @@ var treeviewExt = {
             });
         }
     },
+    search: function (txt) {
+        var nodes = treeviewExt.tree.treeview('search', [txt, {
+            ignoreCase: true,     // case insensitive
+            exactMatch: false,    // like or equals
+            revealResults: true,  // reveal matching nodes
+        }]);
+    }
 };

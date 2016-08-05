@@ -2,6 +2,7 @@
 @model ModuleViewModel
 <link href="~/libs/plugins/iCheck/square/blue.css" rel="stylesheet" />
 <div id="form-add-module">
+    @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id)
     <div class="form-group">
         <div class="col-sm-3">

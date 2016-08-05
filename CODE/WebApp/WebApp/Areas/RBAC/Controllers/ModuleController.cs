@@ -16,6 +16,8 @@ using WebApp.Controllers;
 using WebApp.Extensions.Session;
 
 using MyFrame.RBAC.Service.Interface;
+using WebApp.ViewModels.RBAC;
+using AutoMapper;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -112,27 +114,20 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
+        [LoginCheckFilter]
+        [ValidateAntiForgeryToken]
         public JsonResult Add(ModuleViewModel vmModule)
         {
             if (!ModelState.IsValid)
             {
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
-            OperationResult result = _moduleSrv.Add(new Module
-            {
-                Code = vmModule.Code,
-                Name = vmModule.Name,
-                LinkUrl = vmModule.LinkUrl,
-                Icon = vmModule.Icon,
-                IsMenu = vmModule.IsMenu,
-                ParentId = vmModule.ParentId,
-                Enabled = vmModule.Enabled,
-                IsSystem = vmModule.IsSystem,
-                SortOrder = vmModule.SortOrder,
-                Remark = vmModule.Remark,
-                Creator = HttpContext.Session.GetUserId(),
-                CreateTime = DateTime.Now
-            });
+            var module = Mapper.Map<ModuleViewModel, Module>(vmModule);
+            module.Creator = HttpContext.Session.GetUserId();
+            module.CreateTime = DateTime.Now;
+
+            OperationResult result = _moduleSrv.Add(module);
+
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });
@@ -141,34 +136,29 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
+        [LoginCheckFilter]
+        [ValidateAntiForgeryToken]
         public JsonResult Edit(ModuleViewModel vmModule)
         {
             if (!ModelState.IsValid)
             {
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
-            OperationResult result = _moduleSrv.UpdateDetail(new Module
-            {
-                Id = vmModule.Id,
-                Name = vmModule.Name,
-                LinkUrl = vmModule.LinkUrl,
-                Icon = vmModule.Icon,
-                //IsMenu = vmModule.IsMenu,
-                ParentId = vmModule.ParentId,
-                Enabled = vmModule.Enabled,
-                //IsSystem = vmModule.IsSystem,
-                SortOrder = vmModule.SortOrder,
-                Remark = vmModule.Remark,
-                LastModifier = HttpContext.Session.GetUserId(),
-                LastModifyTime = DateTime.Now
-            });
+            var module = Mapper.Map<ModuleViewModel, Module>(vmModule);
+            module.LastModifier = HttpContext.Session.GetUserId();
+            module.LastModifyTime = DateTime.Now;
+
+            OperationResult result = _moduleSrv.UpdateDetail(module);
+
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });
             }
             return Json(new { code = OperationResultType.Success, message = "修改成功" });
         }
+
         [HttpPost]
+        [LoginCheckFilter]
         public JsonResult Delete()
         {
             int[] moduleIds = null;
@@ -215,28 +205,29 @@ namespace WebApp.Areas.RBAC.Controllers
             return listVM;
         }
 
-        public IEnumerable<dynamic> FormatDataForTreeView(IEnumerable<ModuleSimpleViewModel> modules)
+        public List<ModuleTreeNode> FormatDataForTreeView(IEnumerable<ModuleSimpleViewModel> modules)
         {
             if (modules == null || modules.Count() < 1)
             {
-                return new List<dynamic>();
+                return new List<ModuleTreeNode>();
             }
-            List<dynamic> nodeTree = new List<dynamic>();
+            List<ModuleTreeNode> treeNodes = new List<ModuleTreeNode>();
             foreach (var module in modules)
             {
-                var node = new { id = module.Id.ToString(), text = module.Name, sort = module.SortOrder, nodes = new List<dynamic> { } };
+                var node = new ModuleTreeNode { id = module.Id.ToString(), text = module.Name, sort = module.SortOrder };
                 if (module.SubModules != null && module.SubModules.Count() > 0)
                 {
+                    node.nodes = new List<ModuleTreeNode>();
                     node.nodes.AddRange(FormatDataForTreeView(module.SubModules));
                 }
-                nodeTree.Add(node);
+                treeNodes.Add(node);
             }
-            return nodeTree;
+            return treeNodes;
         }
 
         private static void SetSubModules(ModuleSimpleViewModel parent, List<ModuleSimpleViewModel> srcList)
         {
-            if (parent == null || srcList == null || srcList.Count < 1 || !parent.HasChild)
+            if (parent == null || srcList == null || srcList.Count < 1)
             {
                 return;
             }
@@ -244,7 +235,7 @@ namespace WebApp.Areas.RBAC.Controllers
             //设置parent
             parent.SubModules = subList.ToList();
             //递归处理subList
-            foreach (var vm in subList)
+            foreach (var vm in parent.SubModules)
             {
                 SetSubModules(vm, srcList);
             }

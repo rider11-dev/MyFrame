@@ -64,7 +64,7 @@ namespace MyFrame.RBAC.Configure
                 .ForMember(m => m.Password, opt => opt.Ignore());
             cfg.CreateMap<ModuleViewModel, MyFrame.RBAC.Model.Module>();
 
-
+            cfg.CreateMap<OperationViewModel, Operation>();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using MyFrame.Infrastructure.OptResult;
-
+using MyFrame.Infrastructure.Extension;
 using MyFrame.Infrastructure.Pagination;
 using MyFrame.RBAC.Model;
 using MyFrame.Core.Model;
@@ -24,6 +24,9 @@ namespace MyFrame.RBAC.Service.Impl
         private IRolePermissionRepository _rolePermissionRep;
         private IRoleRepository _roleRep;
         const string Msg_BeforeAdd = "保存前校验";
+        const string Msg_AfterAdd = "保存后操作";
+        const string Msg_BeforeDelete = "删除前校验";
+        const string Msg_AfterDelete = "删除后操作";
         const string Msg_SearchSimpleInfoByPage = "分页获取模块精简信息";
         const string Msg_SearchSimpleInfoByRoles = "根据角色获取模块精简信息";
         const string Msg_UpdateDetail = "更新模块详细信息";
@@ -71,57 +74,37 @@ namespace MyFrame.RBAC.Service.Impl
                 result.Message = Msg_UpdateDetail + ",参数错误，模块实体不能为空";
                 return result;
             }
-            base.UnitOfWork.AutoCommit = false;
-            base.UnitOfWork.BeginTransaction();
-            try
-            {
-                //1、模块旧父级是否仍然包含下级模块
-                var oldModule = _moduleRepository.Find(m => m.Id == module.Id).FirstOrDefault();
-                var oldParentStillHasChidren = _moduleRepository.Find(m => m.ParentId == oldModule.ParentId).Count() > 1;//必须大于1
-                //2、更新模块信息
-                result = base.Update(m => m.Id == module.Id, m => new Module
-                {
-                    Name = module.Name,
-                    LinkUrl = module.LinkUrl,
-                    Icon = module.Icon,
-                    ParentId = module.ParentId,
-                    Enabled = module.Enabled,
-                    SortOrder = module.SortOrder,
-                    Remark = module.Remark,
-                    LastModifier = module.LastModifier,
-                    LastModifyTime = module.LastModifyTime
-                });
-                if (result.ResultType != OperationResultType.Success)
-                {
-                    base.UnitOfWork.Rollback();
-                    return result;
-                }
-                //3、更新模块新父级
-                if (module.ParentId != null)
-                {
-                    result = base.Update(m => m.Id == (int)module.ParentId, m => new Module { HasChild = true });
-                    if (result.ResultType != OperationResultType.Success)
-                    {
-                        base.UnitOfWork.Rollback();
-                        return result;
-                    }
-                }
-                //4、更新模块旧父级
-                result = base.Update(m => m.Id == (int)oldModule.ParentId, m => new Module { HasChild = oldParentStillHasChidren });
-                if (result.ResultType != OperationResultType.Success)
-                {
-                    base.UnitOfWork.Rollback();
-                    return result;
-                }
 
-                base.UnitOfWork.Commit();
-            }
-            catch (Exception ex)
+            if (module.Id == module.ParentId)
             {
-                base.UnitOfWork.Rollback();
-                base.ProcessException(ref result, Msg_UpdateDetail, ex);
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = Msg_UpdateDetail + ",参数错误，上级模块不能选择自身";
+                return result;
             }
 
+            result = base.Exists(m => m.Id == module.Id);
+            if (result.ResultType != OperationResultType.Success)
+            {
+                return result;
+            }
+            if (Convert.ToBoolean(result.AppendData) == false)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = Msg_UpdateDetail + "失败，指定模块不存在";
+                return result;
+            }
+            result = base.Update(m => m.Id == module.Id, m => new Module
+            {
+                Name = module.Name,
+                LinkUrl = module.LinkUrl,
+                Icon = module.Icon,
+                ParentId = module.ParentId,
+                Enabled = module.Enabled,
+                SortOrder = module.SortOrder,
+                Remark = module.Remark,
+                LastModifier = module.LastModifier,
+                LastModifyTime = module.LastModifyTime
+            });
             return result;
         }
 
@@ -147,10 +130,8 @@ namespace MyFrame.RBAC.Service.Impl
                                 LinkUrl = module.LinkUrl,
                                 Icon = module.Icon,
                                 SortOrder = module.SortOrder,
-                                IsMenu = module.IsMenu,
                                 ParentId = module.ParentId,
                                 ParentName = (p == null) ? "" : (p.Code + "|" + p.Name),
-                                HasChild = module.HasChild,
                                 Enabled = module.Enabled,
                                 IsSystem = module.IsSystem,
                                 Remark = module.Remark,
@@ -189,9 +170,7 @@ namespace MyFrame.RBAC.Service.Impl
                                 LinkUrl = module.LinkUrl,
                                 Icon = module.Icon,
                                 SortOrder = module.SortOrder,
-                                IsMenu = module.IsMenu,
                                 ParentId = module.ParentId,
-                                HasChild = module.HasChild
                             };
                 result.ResultType = OperationResultType.Success;
                 result.AppendData = query.ToList();
@@ -226,9 +205,7 @@ namespace MyFrame.RBAC.Service.Impl
                             LinkUrl = module.LinkUrl,
                             Icon = module.Icon,
                             SortOrder = module.SortOrder,
-                            IsMenu = module.IsMenu,
                             ParentId = module.ParentId,
-                            HasChild = module.HasChild
                         };
             try
             {
@@ -262,5 +239,31 @@ namespace MyFrame.RBAC.Service.Impl
             result.ResultType = OperationResultType.Success;
             return result;
         }
+        protected override OperationResult OnBeforeDelete(Expression<Func<Module, bool>> where)
+        {
+            OperationResult result = new OperationResult { ResultType = OperationResultType.Success };
+            var modulesToDel = _moduleRepository.Find(where);
+            //1、模块是否包含子模块
+            var query = from module in _moduleRepository.Entities
+                        join mToDel in modulesToDel on module.ParentId equals mToDel.Id
+                        select 1;
+            if (query.Count() > 0)
+            {
+                result.ResultType = OperationResultType.CheckFailedBeforeProcess;
+                result.Message = Msg_BeforeDelete + "失败，要删除的模块包含下级";
+                return result;
+            }
+            //2、检查模块是否被引用
+            query = from per in _rolePermissionRep.Entities
+                    join module in modulesToDel on per.PermissionId equals module.Id
+                    select 1;
+            if (query.Count() > 0)
+            {
+                result.ResultType = OperationResultType.CheckFailedBeforeProcess;
+                result.Message = Msg_BeforeDelete + "失败，模块已被分配到角色";
+            }
+            return result;
+        }
+
     }
 }

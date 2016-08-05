@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppSettingHelper.cs" />
+    <Compile Include="Common\AttributeExtension.cs" />
     <Compile Include="Common\EncryptionHelper.cs" />
     <Compile Include="Common\EnumExtensions.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />

@@ -34,17 +34,11 @@ namespace MyFrame.RBAC.ViewModel
         [Display(Name = "排序号")]
         public int SortOrder { get; set; }
 
-        [Display(Name = "是否菜单")]
-        public bool IsMenu { get; set; }
-
         [Display(Name = "父模块id")]
         public int? ParentId { get; set; }
 
         [Display(Name = "父模块")]
         public string ParentName { get; set; }
-
-        [Display(Name = "是否包含子模块")]
-        public bool HasChild { get; set; }
 
         [Display(Name = "是否启用")]
         public bool Enabled { get; set; }

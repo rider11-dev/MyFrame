@@ -1,6 +1,7 @@
 ﻿@using MyFrame.RBAC.ViewModel
 @model RoleViewModel
 <link href="~/libs/plugins/iCheck/square/blue.css" rel="stylesheet" />
+@Html.AntiForgeryToken()
 @Html.HiddenFor(m => m.Id)
 <div id="form-add-role">
     <div class="form-group">

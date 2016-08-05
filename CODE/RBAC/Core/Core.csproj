@@ -108,6 +108,7 @@
     <Compile Include="Service\Impl\UserService.cs" />
     <Compile Include="ViewModel\ModuleSimpleViewModel.cs" />
     <Compile Include="ViewModel\ModuleViewModel.cs" />
+    <Compile Include="ViewModel\OperationSimpleViewModel.cs" />
     <Compile Include="ViewModel\OperationViewModel.cs" />
     <Compile Include="ViewModel\RoleViewModel.cs" />
     <Compile Include="ViewModel\UserDetailViewModel.cs" />

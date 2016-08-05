@@ -1,8 +1,10 @@
 ﻿var authmanage = {
     gridRoles: $('#gridRoles'),
     gridModules: $('#gridModules'),
+    gridOpts: $('#gridOpts'),
     urlSearchRoles: "",
     urlSearchModules: "",
+    urlSearchOpts: "",
     urlSavePermission: "",
     urlGetPermission: "",
     currentPermissions: null,
@@ -10,19 +12,22 @@
     btnSearchRoles: $('#btnSearchRoles'),
     txtSearchModuleName: $('#txtSearchModuleName'),
     btnSearchModules: $('#btnSearchModules'),
+    txtSearchOptName: $('#txtSearchOptName'),
+    btnSearchOpts: $('#btnSearchOpts'),
     btnSaveModulePer: $('#btnSaveModulePer'),
     init: function (options) {
         authmanage.urlSearchRoles = options.urlSearchRoles;
         authmanage.urlSearchModules = options.urlSearchModules;
+        authmanage.urlSearchOpts = options.urlSearchOpts;
+
         authmanage.urlSavePermission = options.urlSavePermission;
         authmanage.urlGetPermission = options.urlGetPermission;
 
         authmanage.initRolesGrid();
         authmanage.initModulesTree();
+        authmanage.initOptsGrid();
 
-        authmanage.btnSearchRoles.click(authmanage.searchRoles);
-        authmanage.btnSearchModules.click(authmanage.searchModules);
-        authmanage.btnSaveModulePer.click(authmanage.saveModulePer);
+        authmanage.bindEvents();
     },
     initRolesGrid: function () {
         var options = {
@@ -46,16 +51,20 @@
                        },
                        width: 40
                    },
-                   { field: 'check', radio: true, width: 40 },
-                   { field: 'RoleName', title: '角色名', align: 'center', valign: 'center', width: 80 },
                    {
-                       field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140,
-                       cellStyle: function (value, row, index, field) {
-                           return {
-                               css: { "min-width": "200px" }
-                           };
-                       }
-                   }
+                       field: 'check', radio: true, width: 40
+                   },
+                   {
+                       field: 'RoleName', title: '角色名', align: 'center', valign: 'center', width: 100
+                   },
+                   //{
+                   //    field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140,
+                   //    cellStyle: function (value, row, index, field) {
+                   //        return {
+                   //            css: { "min-width": "200px" }
+                   //        };
+                   //    }
+                   //}
             ]
         };
         //调用公共函数，初始化表格
@@ -106,6 +115,59 @@
             dataField: 'rows',
             dataUrl: authmanage.urlSearchModules
         });
+        treeviewExt.tree.on('nodeSelected', function (event, data) {
+            //console.log(data);
+            if (gFunc.isNull(data)) {
+                return;
+            }
+            authmanage.searchOpts();
+        });
+    },
+    initOptsGrid: function () {
+        var options = {
+            url: authmanage.urlSearchOpts,
+            method: 'get',
+            dataField: 'rows',
+            height: 500,
+            uniqueId: 'Id',
+            queryParams: function (params) {
+                //添加额外参数
+                //1、moduleId
+                var optIds = treeviewExt.getSelectedData(['id']);
+                //console.log(moduleId);
+                if (!gFunc.isNull(optIds) && optIds.length > 0) {
+                    params.moduleId = optIds[0].id;
+                }
+                //2、
+                if (!gFunc.isNull(authmanage.txtSearchOptName.val())) {
+                    params.OptName = authmanage.txtSearchOptName.val();
+                }
+                return params;//必须返回params
+            },
+            columns: [
+                   { field: 'Id', visible: false },
+                   {
+                       field: 'rownumber', formatter: function (value, row, index) {
+                           return index + 1;
+                       },
+                       width: 40
+                   },
+                   {
+                       field: 'check', radio: true, width: 40
+                   },
+                   { field: 'OptCode', title: '操作编号', align: 'center', valign: 'center', width: 100 },
+                   { field: 'OptName', title: '操作名称', align: 'center', valign: 'center', width: 100 },
+            ]
+        };
+        //调用公共函数，初始化表格
+        gFunc.initgrid(authmanage.gridOpts, options);
+    },
+    bindEvents: function () {
+        authmanage.btnSearchRoles.click(authmanage.searchRoles);
+        authmanage.btnSearchModules.click(authmanage.searchModules);
+        authmanage.btnSearchOpts.click(authmanage.searchOpts);
+
+        authmanage.btnSaveModulePer.click(authmanage.saveModulePer);
     },
     searchRoles: function () {
         authmanage.gridRoles.bootstrapTable('refresh');
@@ -113,12 +175,11 @@
     searchModules: function () {
         //查询文本
         var name = authmanage.txtSearchModuleName.val();
-
-        var nodes = treeviewExt.tree.treeview('search', [name, {
-            ignoreCase: true,     // case insensitive
-            exactMatch: false,    // like or equals
-            revealResults: true,  // reveal matching nodes
-        }]);
+        treeviewExt.search(name);
+    },
+    searchOpts: function () {
+        //alert(authmanage.urlSearchOpts);
+        authmanage.gridOpts.bootstrapTable('refresh', { url: authmanage.urlSearchOpts });
     },
     saveModulePer: function () {
         //保存角色功能权限

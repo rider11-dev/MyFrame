@@ -32,12 +32,8 @@ namespace MyFrame.RBAC.Model
         [Description("图标")]
         public string Icon { get; set; }
 
-        [Description("是否菜单")]
-        public bool IsMenu { get; set; }
         [Description("父模块Id")]
         public int? ParentId { get; set; }
-        [Description("是否包含子模块")]
-        public bool HasChild { get; set; }
 
         [Description("备注")]
         public string Remark { get; set; }

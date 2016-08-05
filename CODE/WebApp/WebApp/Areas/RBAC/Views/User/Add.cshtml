@@ -3,6 +3,7 @@
 <link href="~/libs/plugins/iCheck/square/blue.css" rel="stylesheet" />
 @Html.HiddenFor(m => m.Id)
 <div id="form-add-user">
+    @Html.AntiForgeryToken()
     <div class="form-group">
         <div class="col-sm-3">
             @Html.LabelFor(m => m.UserName, new { @class = "control-label pull-right" })

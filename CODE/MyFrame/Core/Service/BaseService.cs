@@ -50,13 +50,13 @@ namespace MyFrame.Core.Service
                 result.Message = string.Format("新增{0}实体失败，实体不能为null", EntityType);
                 return result;
             }
-            //新增前处理
+            //1、新增前处理
             result = OnBeforeAdd(entity);
             if (result.ResultType != OperationResultType.Success)
             {
                 return result;
             }
-            //新增
+            //2、新增
             try
             {
                 var data = CurrentRepository.Add(entity);
@@ -67,6 +67,8 @@ namespace MyFrame.Core.Service
             {
                 ProcessException(ref result, string.Format("新增{0}数据实体集出错", EntityType), ex);
             }
+            //3、新增后处理
+            result = OnAfterAdd(entity);
             return result;
         }
 
@@ -94,12 +96,13 @@ namespace MyFrame.Core.Service
                 result.Message = string.Format("删除{0}实体失败，删除条件不能为空", EntityType);
                 return result;
             }
-            //删除前校验
+            //1、删除前校验
             result = OnBeforeDelete(where);
             if (result.ResultType != OperationResultType.Success)
             {
                 return result;
             }
+            //2、删除
             try
             {
                 var data = CurrentRepository.Delete(where);
@@ -110,6 +113,8 @@ namespace MyFrame.Core.Service
             {
                 ProcessException(ref result, string.Format("删除{0}数据实体失败", EntityType), ex);
             }
+            //3、删除后操作
+            result = OnAfterDelete();
             return result;
         }
 
@@ -245,7 +250,17 @@ namespace MyFrame.Core.Service
             return new OperationResult { ResultType = OperationResultType.Success };
         }
 
+        protected virtual OperationResult OnAfterAdd(TEntity entity)
+        {
+            return new OperationResult { ResultType = OperationResultType.Success };
+        }
+
         protected virtual OperationResult OnBeforeDelete(Expression<Func<TEntity, bool>> where)
+        {
+            return new OperationResult { ResultType = OperationResultType.Success };
+        }
+
+        protected virtual OperationResult OnAfterDelete()
         {
             return new OperationResult { ResultType = OperationResultType.Success };
         }

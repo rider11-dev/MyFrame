@@ -31,10 +31,15 @@ namespace MyFrame.RBAC.Model
         [Description("图标")]
         public string Icon { get; set; }
 
+        [Description("Css类")]
+        public string CssClass { get; set; }
+
+        [Description("Css样式")]
+        public string CssStyle { get; set; }
+
         [Description("所属模块")]
         public int ModuleId { get; set; }
-
-
+        
         [Description("排序号")]
         public int SortOrder { get; set; }
 

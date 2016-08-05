@@ -1,12 +1,12 @@
 var moduleTreeHelp = {
     urlSearchModules: "",
-    txtSearchModuleName: $('#txtSearchModuleName'),
-    btnSearchModules: $('#btnSearchModules'),
+    txtHelpModuleName: $('#txtHelpModuleName'),
+    btnModuleHelpSearch: $('#btnModuleHelpSearch'),
     init: function (options) {
         moduleTreeHelp.urlSearchModules = options.urlSearchModules;
         moduleTreeHelp.initModuleTree(options.singleSelect);
 
-        moduleTreeHelp.btnSearchModules.click(moduleTreeHelp.searchModules);
+        moduleTreeHelp.btnModuleHelpSearch.click(moduleTreeHelp.searchModules);
     },
     initModuleTree: function (singleSelect) {
         treeviewExt.initTree({
@@ -19,11 +19,8 @@ var moduleTreeHelp = {
     },
     searchModules: function () {
         //查询文本
-        var name = moduleTreeHelp.txtSearchModuleName.val();
-        var nodes = treeviewExt.tree.treeview('search', [name, {
-            ignoreCase: true,     // case insensitive
-            exactMatch: false,    // like or equals
-            revealResults: true,  // reveal matching nodes
-        }]);
+        var name = moduleTreeHelp.txtHelpModuleName.val();
+        //alert(name);
+        treeviewExt.search(name);
     }
 };

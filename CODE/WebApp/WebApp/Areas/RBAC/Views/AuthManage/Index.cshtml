@@ -5,16 +5,9 @@
                 <h3 class="box-title">权限分配</h3>
             </div>
             <div class="box-body">
-                <div class="container">
-                    <div class="row">
-                        <button id="btnSaveModulePer" type="button" class="btn btn-success">
-                            <span class="glyphicon glyphicon-th-large">功能权限</span>
-                        </button>
-                    </div>
-                </div>
-                <hr style="margin:4px 0px;" />
+                @*<hr style="margin:4px 0px;" />*@
                 <div class="row" style="min-height:480px;">
-                    <div class="col-xs-4">
+                    <div class="col-xs-3">
                         <div class="form-inline">
                             <div class="form-group">
                                 <input type="text" id="txtSearchRoleName" name="RoleName" class="form-control" placeholder="角色名" />
@@ -25,27 +18,33 @@
                         </div>
                         <table id="gridRoles" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
                     </div>
-                    @*<div class="col-xs-7">
-                            <div class="form-inline">
-                                <div class="form-group">
-                                    <input type="text" id="txtSearchModuleName" name="ModuleName" class="form-control" placeholder="模块名称" />
-                                    <button id="btnSearchModules" type="button" class="btn btn-success">
-                                        <span class="glyphicon glyphicon-search">查询</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <table id="gridModules" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
-                        </div>*@
-                    <div class="col-xs-7">
+                    <div class="col-xs-4">
                         <div class="form-inline">
                             <div class="form-group">
                                 <input type="text" id="txtSearchModuleName" name="ModuleName" class="form-control" placeholder="模块名称" />
                                 <button id="btnSearchModules" type="button" class="btn btn-success">
                                     <span class="glyphicon glyphicon-search">查询</span>
                                 </button>
+                                <button id="btnSaveModulePer" type="button" class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-th-large">模块分配</span>
+                                </button>
                             </div>
                         </div>
                         <div id="treeModule"></div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <input type="text" id="txtSearchOptName" name="OptName" class="form-control" placeholder="操作名称" />
+                                <button id="btnSearchOpts" type="button" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-search">查询</span>
+                                </button>
+                                <button id="btnSaveOptPer" type="button" class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-wrench">操作分配</span>
+                                </button>
+                            </div>
+                        </div>
+                        <table id="gridOpts" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
                     </div>
                 </div>
             </div>
@@ -58,6 +57,8 @@
         authmanage.init({
             urlSearchRoles: "@Html.Raw(Url.Action("GetRolesSimpleInfoByPage","Role", new { pageNumber = 1, pageSize = 20 }))",
             urlSearchModules: "@Html.Raw(Url.Action("GetModulesSimpleInfoByPage", "Module", new { pageNumber = 1, pageSize = 1000 }))",
+            urlSearchOpts: "@Html.Raw(Url.Action("GetOptsSimpleInfoByPage", "Operation", new { pageNumber = 1, pageSize = 1000 }))",
+
             urlSavePermission: "@Url.Action("SavePermission", "AuthManage")",
             urlGetPermission: "@Url.Action("GetPermission", "AuthManage")",
         });

@@ -11,8 +11,7 @@ CREATE TABLE Users(
 	LastModifier int NULL,
 	LastModifyTime datetime NULL,
 	Enabled bit NOT NULL default 0,
-	Remark nvarchar(255) NULL,
-	IsDeleted bit NOT NULL default 0
+	Remark nvarchar(255) NULL
 );
 INSERT into Users(UserName,Password,Email,Phone,Address,Enabled) values('admin','0b4e7a0e5fe84ad35fb5f95b9ceeac79','751682472@163.com','88888888','中国山东',1); --aaaaaa
 -- 角色表
@@ -25,8 +24,7 @@ create table Roles(
 	Creator int NULL,
 	CreateTime datetime NULL,
 	LastModifier int NULL,
-	LastModifyTime datetime NULL,
-	IsDeleted bit NOT NULL default 0
+	LastModifyTime datetime NULL
 );
 
 -- 功能模块表
@@ -36,18 +34,15 @@ CREATE TABLE Modules(
 	Name nvarchar(20) not null,
 	LinkUrl nvarchar(100),
 	Icon nvarchar(50),
-	IsMenu bit not null default 0,
 	ParentId int ,
-	HasChild bit not null default 0,
-	Enabled bit not null default 0,
+	[Enabled] bit not null default 0,
 	IsSystem bit not null default 0,
 	SortOrder int,
 	Remark nvarchar(255),
 	Creator int,
 	CreateTime date,
 	LastModifier int,
-	LastModifyTime date,
-	IsDeleted bit not null default 0
+	LastModifyTime date
 );
 set IDENTITY_INSERT Modules on;
 INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(11,'UserManage','用户管理','/RBAC/User/Index','fa-user',1,0,1,10,1,1);
@@ -79,7 +74,7 @@ CREATE TABLE Operations(
 	Icon nvarchar(50),
 	ModuleId int not null,
 	SortOrder int,
-	Enabled bit not null default 0,
+	[Enabled] bit not null default 0,
 	Remark nvarchar(255)
 );
 

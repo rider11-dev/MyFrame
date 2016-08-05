@@ -24,11 +24,7 @@ namespace MyFrame.RBAC.ViewModel
 
         public int SortOrder { get; set; }
 
-        public bool IsMenu { get; set; }
-
         public int? ParentId { get; set; }
-
-        public bool HasChild { get; set; }
 
         /// <summary>
         /// 子模块列表

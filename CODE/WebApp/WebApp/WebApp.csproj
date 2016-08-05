@@ -175,6 +175,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\RBAC\ModuleTreeNode.cs" />
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.css" />
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.js" />
     <Content Include="libs\rbac\module\tree_help.js" />
@@ -2162,6 +2163,7 @@
     <Content Include="Areas\RBAC\Views\Operation\Index.cshtml" />
     <Content Include="Areas\RBAC\Views\Module\TreeHelp.cshtml" />
     <Content Include="Areas\RBAC\Views\Shared\_HelpModal.cshtml" />
+    <Content Include="Areas\RBAC\Views\Operation\Add.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

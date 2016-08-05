@@ -12,3 +12,8 @@
 7、findbyselector
 8、httpmodule理解
 9、全局异常处理
+10、删除模块前，校验是否挂了操作
+11、新增、修改时，automapper
+12、权限分配，
+treeviewExt getSelectedData
+tree多选（check），但是需要用到的是selected事件

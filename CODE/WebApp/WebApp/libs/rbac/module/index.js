@@ -83,14 +83,6 @@
                     },
                     { field: 'Icon', title: '图标', align: 'center', valign: 'center', width: 80 },
                     {
-                        field: 'IsMenu', title: '是否菜单', align: 'center', valign: 'center', width: 80,
-                        formatter: gFormatter.trueOrFalse.formatter
-                    },
-                    {
-                        field: 'HasChild', title: '包含子模块', align: 'center', valign: 'center', width: 80,
-                        formatter: gFormatter.trueOrFalse.formatter
-                    },
-                    {
                         field: 'IsSystem', title: '系统模块', align: 'center', valign: 'center', width: 80,
                         formatter: gFormatter.trueOrFalse.formatter
                     },
@@ -218,7 +210,7 @@
                     success: function (result, status, XHR) {
                         if (result.code == 0) {
                             modulemanage.grid.bootstrapTable('refresh');
-                            gMessager.info('删除成功');
+                            gMessager.success('删除成功');
                         } else {
                             gMessager.warning(result.message);
                         }

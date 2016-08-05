@@ -132,6 +132,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
+        [LoginCheckFilter]
+        [ValidateAntiForgeryToken]
         public JsonResult Add(RoleViewModel roleVM)
         {
             if (!ModelState.IsValid)
