@@ -11,6 +11,9 @@ namespace MyFrame.RBAC.Service.Interface
 {
     public interface IRolePermissionService : IBaseService<RolePermission>
     {
-        OperationResult AssignPermissions(int roleId, int[] permissionIds, int type);
+        OperationResult AssignModulePermissions(int roleId, int[] moduleIds);
+        OperationResult AssignAllModulePermissions(int roleId);
+        OperationResult AssignOptPermissions(int roleId, int moduleId, int[] optIds);
+        OperationResult AssignAllOptPermissions(int roleId);
     }
 }

@@ -27,5 +27,14 @@ namespace MyFrame.RBAC.Repository.Impl
             }
         }
 
+
+        public void AddBatch(Func<IEnumerable<RolePermission>> entityBuilder)
+        {
+            if (entityBuilder != null)
+            {
+                var entities = entityBuilder();
+                this.AddBatch(entities);
+            }
+        }
     }
 }

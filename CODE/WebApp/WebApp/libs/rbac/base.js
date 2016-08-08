@@ -66,7 +66,7 @@ var gFunc = {
             dataType: 'json',
             pagination: true,                   //是否显示分页（*）
             queryParamsType: 'pageSize',//设置为非'limit',查询时，传递pageNumber，pageSize
-            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            sidePagination: gFunc.isNull(options.sidePagination) ? 'server' : options.sidePagination,//分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                       //初始化加载第一页，默认第一页
             pageSize: 10,                       //每页的记录行数（*）
             pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
@@ -84,6 +84,7 @@ var gFunc = {
             //showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                   //是否显示父子表
+            maintainSelected: false,
             queryParams: options.queryParams,
             onLoadSuccess: function (data) {
                 //console.log(data);

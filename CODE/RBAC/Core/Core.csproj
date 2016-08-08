@@ -75,6 +75,7 @@
     <Compile Include="Configure\RbacConfigure.cs" />
     <Compile Include="Model\Module.cs" />
     <Compile Include="Model\Operation.cs" />
+    <Compile Include="Model\PermissionType.cs" />
     <Compile Include="Model\Role.cs" />
     <Compile Include="Model\RolePermission.cs" />
     <Compile Include="Model\User.cs" />

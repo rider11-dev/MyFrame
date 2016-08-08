@@ -105,7 +105,7 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 Id = r.Id,
                 RoleName = r.RoleName,
-                HH = r.SortOrder,
+                SortOrder = r.SortOrder,
                 Remark = r.Remark
             }, query => query.OrderBy(r => r.SortOrder), new PageArgs { PageSize = 10, PageIndex = 1 });
             return new JsonNetResult

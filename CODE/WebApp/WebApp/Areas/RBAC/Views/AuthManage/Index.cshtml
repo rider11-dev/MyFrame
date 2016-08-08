@@ -21,12 +21,11 @@
                     <div class="col-xs-4">
                         <div class="form-inline">
                             <div class="form-group">
-                                <input type="text" id="txtSearchModuleName" name="ModuleName" class="form-control" placeholder="模块名称" />
-                                <button id="btnSearchModules" type="button" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-search">查询</span>
-                                </button>
                                 <button id="btnSaveModulePer" type="button" class="btn btn-warning">
                                     <span class="glyphicon glyphicon-th-large">模块分配</span>
+                                </button>
+                                <button id="btnSaveAllModulePer" type="button" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-ok">全部模块</span>
                                 </button>
                             </div>
                         </div>
@@ -35,12 +34,11 @@
                     <div class="col-xs-4">
                         <div class="form-inline">
                             <div class="form-group">
-                                <input type="text" id="txtSearchOptName" name="OptName" class="form-control" placeholder="操作名称" />
-                                <button id="btnSearchOpts" type="button" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-search">查询</span>
-                                </button>
                                 <button id="btnSaveOptPer" type="button" class="btn btn-warning">
                                     <span class="glyphicon glyphicon-wrench">操作分配</span>
+                                </button>
+                                <button id="btnSaveAllOptPer" type="button" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-ok">全部操作</span>
                                 </button>
                             </div>
                         </div>
@@ -60,6 +58,7 @@
             urlSearchOpts: "@Html.Raw(Url.Action("GetOptsSimpleInfoByPage", "Operation", new { pageNumber = 1, pageSize = 1000 }))",
 
             urlSavePermission: "@Url.Action("SavePermission", "AuthManage")",
+            urlSaveAllPermission: "@Url.Action("SaveAllPermission", "AuthManage")",
             urlGetPermission: "@Url.Action("GetPermission", "AuthManage")",
         });
     });

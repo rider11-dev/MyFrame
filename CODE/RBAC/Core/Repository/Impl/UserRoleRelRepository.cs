@@ -23,5 +23,14 @@ namespace MyFrame.RBAC.Repository.Impl
                 entities.ToList().ForEach(ur => base.Add(ur));
             }
         }
+
+        public void AddBatch(Func<IEnumerable<UserRoleRelation>> entityBuilder)
+        {
+            if (entityBuilder != null)
+            {
+                var entities = entityBuilder();
+                this.AddBatch(entities);
+            }
+        }
     }
 }

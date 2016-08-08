@@ -32,16 +32,61 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        public JsonResult SavePermission(int roleId, int[] perIds, int perType)
+        [LoginCheckFilter]
+        public JsonResult SavePermission(int roleId, int[] perIds, int perType, int? moduleId = null)
         {
-            if (perIds == null || perIds.Length < 1)
+            var permissionType = perType.ConvertTo<PermissionType>();
+            if (permissionType == PermissionType.Module)
             {
-                return Json(new { code = OperationResultType.ParamError, message = "权限不能为空" });
+                //模块权限
+                OperationResult rst = _rolePermissionSrv.AssignModulePermissions(roleId, perIds);
+                if (rst.ResultType != OperationResultType.Success)
+                {
+                    return Json(new { code = rst.ResultType, message = rst.Message });
+                }
+                return Json(new { code = OperationResultType.Success, message = "模块权限分配成功" });
             }
-            OperationResult rst = _rolePermissionSrv.AssignPermissions(roleId, perIds, perType);
-            if (rst.ResultType != OperationResultType.Success)
+            else if (permissionType == PermissionType.Operation)
             {
-                return Json(new { code = rst.ResultType, message = rst.Message });
+                if (moduleId == null)
+                {
+                    return Json(new { code = OperationResultType.ParamError, message = "模块id不能为空" });
+                }
+                OperationResult rst = _rolePermissionSrv.AssignOptPermissions(roleId, (int)moduleId, perIds);
+                if (rst.ResultType != OperationResultType.Success)
+                {
+                    return Json(new { code = rst.ResultType, message = rst.Message });
+                }
+                return Json(new { code = OperationResultType.Success, message = "操作权限分配成功" });
+            }
+            return Json(new { code = OperationResultType.ParamError, message = "未识别的权限类型" });
+        }
+
+        [HttpPost]
+        [LoginCheckFilter]
+        public JsonResult SaveAllPermission(int roleId, int perType)
+        {
+            OperationResult rst = new OperationResult();
+            var permissionType = perType.ConvertTo<PermissionType>();
+            if (permissionType == PermissionType.Module)
+            {
+                rst = _rolePermissionSrv.AssignAllModulePermissions(roleId);
+                if (rst.ResultType != OperationResultType.Success)
+                {
+                    return Json(new { code = rst.ResultType, message = rst.Message });
+                }
+            }
+            else if (permissionType == PermissionType.Operation)
+            {
+                rst = _rolePermissionSrv.AssignAllOptPermissions(roleId);
+                if (rst.ResultType != OperationResultType.Success)
+                {
+                    return Json(new { code = rst.ResultType, message = rst.Message });
+                }
+            }
+            else
+            {
+                return Json(new { code = OperationResultType.ParamError, message = "未识别的权限类型" });
             }
             return Json(new { code = OperationResultType.Success, message = "权限分配成功" });
         }

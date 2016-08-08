@@ -139,9 +139,20 @@ var treeviewExt = {
     collapseAll: function () {
         treeviewExt.tree.treeview('collapseAll', { silent: true });
     },
-    //获取选中节点数据指定字段数据，空则获取全部数据
+    //获取选中节点指定字段数据
     getSelectedData: function (fields) {
-        var func_get_data = function (node) {
+        return treeviewExt._getNodesData(treeviewExt.tree.treeview('getSelected'), fields);
+    },
+    //获取Checked状态节点指定字段数据
+    getCheckedData: function (fields) {
+        return treeviewExt._getNodesData(treeviewExt.tree.treeview('getChecked'), fields);
+    },
+    //获取指定节点指定字段数据，空则获取指定节点全部字段数据
+    _getNodesData: function (nodes, fields) {
+        if (gFunc.isNull(nodes) || nodes.length < 1) {
+            return null;
+        }
+        var func_get_node_data = function (node) {
             if (gFunc.isNull(fields)) {
                 return node;//fields空则获取全部数据
             }
@@ -152,16 +163,10 @@ var treeviewExt = {
             return _data;
         };
 
-        var sel;
-        if (treeviewExt.singleSelect) {
-            sel = treeviewExt.tree.treeview('getSelected');
-        } else {
-            sel = treeviewExt.tree.treeview('getChecked');
-        }
         var data = [];
-        if (sel && sel.length > 0) {
-            $(sel).each(function (idx, item) {
-                data.push(func_get_data(item));
+        if (nodes && nodes.length > 0) {
+            $(nodes).each(function (idx, item) {
+                data.push(func_get_node_data(item));
             });
         }
         return data;
@@ -171,8 +176,10 @@ var treeviewExt = {
         if (treeviewExt.singleSelect) {
             return;
         }
+        treeviewExt.uncheckAll();
         if (dataIds && dataIds.length > 0) {
             $(dataIds).each(function (idx, item) {
+                //调用自定义扩展方法searchByAttribute获取指定节点
                 var nodes = treeviewExt.tree.treeview('searchByAttribute', [item, {
                     attribute: treeviewExt.dataId,
                     ignoreCase: true,     // case insensitive

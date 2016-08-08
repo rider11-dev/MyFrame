@@ -166,7 +166,8 @@ namespace WebApp.Areas.RBAC.Controllers
                     Id = o.Id,
                     OptCode = o.OptCode,
                     OptName = o.OptName,
-                    SortOrder = o.SortOrder
+                    SortOrder = o.SortOrder,
+                    ModuleId = o.ModuleId
                 },
                 query => query.OrderBy(o => o.SortOrder),
                 pageArgs);
