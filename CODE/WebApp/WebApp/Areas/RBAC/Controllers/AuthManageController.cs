@@ -96,13 +96,24 @@ namespace WebApp.Areas.RBAC.Controllers
             OperationResult rst = _rolePermissionSrv.Find(r => r.RoleId == roleId);
             if (rst.ResultType != OperationResultType.Success)
             {
-                return Json(new { code = rst.ResultType, message = rst.Message });
+                return Json(new { code = rst.ResultType, message = rst.Message }, JsonRequestBehavior.AllowGet);
             }
             return new JsonNetResult
                 {
                     Data = new { code = rst.ResultType, message = "角色权限获取成功", rows = rst.AppendData },
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
+        }
+
+        //当前用户权限校验测试
+        public JsonResult CheckOptPermission(int optId)
+        {
+            OperationResult rst = _rolePermissionSrv.CheckOptPermission(optId);
+            if (rst.ResultType != OperationResultType.Success)
+            {
+                return Json(new { code = rst.ResultType, message = rst.Message }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { code = OperationResultType.Success, message = "操作权限校验通过" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -21,23 +21,30 @@ namespace MyFrame.RBAC.Service.Impl
         IRoleRepository _roleRep;
         IModuleRepository _moduleRep;
         IOperationRepository _optRep;
+        IUserRepository _usrRep;
+        IUserRoleRelRepository _usrRoleRelRep;
 
         const string Msg_AssignModule = "分配模块权限";
         const string Msg_AssignOpt = "分配操作权限";
         const string Msg_AssignAllModule = "分配所有模块权限";
         const string Msg_AssignAllOpt = "分配所有操作权限";
+        const string Msg_CeckOptPermission = "检查当前用户操作权限";
 
         public RolePermissionService(IUnitOfWork unitOfWork,
             IRolePermissionRepository rolePermissionRep,
             IRoleRepository roleRep,
             IModuleRepository moduleRep,
-            IOperationRepository optRep)
+            IOperationRepository optRep,
+            IUserRepository usrRep,
+            IUserRoleRelRepository usrRoleRelRep)
             : base(unitOfWork)
         {
             _roleRep = roleRep;
             _rolePermissionRep = rolePermissionRep;
             _moduleRep = moduleRep;
             _optRep = optRep;
+            _usrRep = usrRep;
+            _usrRoleRelRep = usrRoleRelRep;
         }
 
         /// <summary>
@@ -247,6 +254,39 @@ namespace MyFrame.RBAC.Service.Impl
                 base.ProcessException(ref rst, Msg_AssignAllOpt + "失败", ex);
             }
 
+            return rst;
+        }
+
+        /// <summary>
+        /// 检查当前用户的操作权限
+        /// </summary>
+        /// <param name="optId"></param>
+        /// <returns></returns>
+        public OperationResult CheckOptPermission(int optId)
+        {
+            OperationResult rst = new OperationResult();
+            try
+            {
+                var query = from usr in _usrRep.Entities
+                            join usrRoles in _usrRoleRelRep.Entities on usr.Id equals usrRoles.UserId
+                            join rolePer in _rolePermissionRep.Entities on usrRoles.RoleId equals rolePer.RoleId
+                            where usr.Id == RBACContext.CurrentUser.Id && rolePer.PermissionId == optId
+                            select rolePer.PermissionId;
+                var result = query.Count() > 0;
+                if (result)
+                {
+                    rst.ResultType = OperationResultType.Success;
+                }
+                else
+                {
+                    rst.ResultType = OperationResultType.PermissionDenied;
+                    rst.Message = "权限不足";
+                }
+            }
+            catch (Exception ex)
+            {
+                base.ProcessException(ref rst, Msg_CeckOptPermission + "失败", ex);
+            }
             return rst;
         }
     }

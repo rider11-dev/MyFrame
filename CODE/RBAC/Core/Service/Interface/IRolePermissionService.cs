@@ -15,5 +15,6 @@ namespace MyFrame.RBAC.Service.Interface
         OperationResult AssignAllModulePermissions(int roleId);
         OperationResult AssignOptPermissions(int roleId, int moduleId, int[] optIds);
         OperationResult AssignAllOptPermissions(int roleId);
+        OperationResult CheckOptPermission(int optId);
     }
 }
