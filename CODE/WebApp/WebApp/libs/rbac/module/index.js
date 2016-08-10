@@ -1,9 +1,6 @@
 ﻿var modulemanage = {
     form: $('#form-add-module'),
     grid: $('#grid'),
-    btnAdd: $('#btnAdd'),
-    btnEdit: $('#btnEdit'),
-    btnDelete: $('#btnDelete'),
     btnSearch: $('#btnSearch'),
     txtSearchCode: $('#txtSearchCode'),
     txtSearchName: $('#txtSearchName'),
@@ -15,8 +12,6 @@
     urlModuleTreeHelp: "",
     init: function (options) {
         modulemanage.urlAdd = options.urlAdd;
-        modulemanage.urlEdit = options.urlEdit;
-        modulemanage.urlDelete = options.urlDelete;
         modulemanage.urlSearch = options.urlSearch;
         modulemanage.urlModuleTreeHelp = options.urlModuleTreeHelp;
 
@@ -24,9 +19,8 @@
         modulemanage.bindingEventArgs();
     },
     bindingEventArgs: function () {
-        modulemanage.btnAdd.click(modulemanage.funcBtnAdd);
-        modulemanage.btnEdit.click(modulemanage.funcBtnEdit);
-        modulemanage.btnDelete.click(modulemanage.funcBtnDelete);
+        gFuncBusiness.bindEventForRbacButton();
+
         modulemanage.btnSearch.click(modulemanage.funcBtnSearch);
 
         modulemanage.btnHelpParentModule.click(function () {
@@ -123,13 +117,13 @@
         //调用公共函数，初始化表格
         gFunc.initgrid(modulemanage.grid, options);
     },
-    funcBtnAdd: function () {
+    funcBtnAdd: function (options) {
         //alert('hahahx');
         modalForm.show({
-            title: '添加模块',
+            title: options.tag,
             contentUrl: modulemanage.urlAdd,
             contentUrlParams: {},
-            submitUrl: modulemanage.urlAdd,
+            submitUrl: options.submitUrl,
             submitSucceedCallback: function () {
                 modulemanage.grid.bootstrapTable('refresh');
             },
@@ -138,7 +132,7 @@
             }
         });
     },
-    funcBtnEdit: function () {
+    funcBtnEdit: function (options) {
         var checkedRows = modulemanage.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
         if (checkedRows.length < 1) {
@@ -151,10 +145,10 @@
         }
         var data = checkedRows[0];
         modalForm.show({
-            title: '修改模块信息',
+            title: options.tag,
             contentUrl: modulemanage.urlAdd,
             contentUrlParams: {},
-            submitUrl: modulemanage.urlEdit,
+            submitUrl: options.submitUrl,
             onLoadCallback: function () {
                 //console.log(data);
                 $('#Id').val(data.Id);
@@ -180,7 +174,7 @@
             }
         });
     },
-    funcBtnDelete: function () {
+    funcBtnDelete: function (options) {
         var checkedRows = modulemanage.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
         if (checkedRows.length < 1) {
@@ -205,7 +199,7 @@
                 //
                 $.ajax({
                     type: 'post',
-                    url: modulemanage.urlDelete,
+                    url: options.submitUrl,
                     data: JSON.stringify(moduleIds),
                     success: function (result, status, XHR) {
                         if (result.code == 0) {

@@ -123,7 +123,9 @@ namespace MyFrame.RBAC.Service.Impl
             try
             {
                 //删除指定角色、指定模块下所有操作权限
+                var perType = PermissionType.Operation.ToInt();
                 var perIdsByModule = from per in _rolePermissionRep.Entities
+                                     where per.PerType == perType
                                      join opt in _optRep.Entities on per.PermissionId equals opt.Id
                                      join module in _moduleRep.Entities on opt.ModuleId equals module.Id
                                      where per.RoleId == roleId && module.Id == moduleId
@@ -258,30 +260,48 @@ namespace MyFrame.RBAC.Service.Impl
         }
 
         /// <summary>
-        /// 检查当前用户的操作权限
+        /// 检查当前用户权限
         /// </summary>
-        /// <param name="optId"></param>
+        /// <param name="moduleId"></param>
+        /// <param name="optId">optId为null则只校验模块权限</param>
         /// <returns></returns>
-        public OperationResult CheckOptPermission(int optId)
+        public OperationResult CheckPermission(int? moduleId, int? optId = null)
         {
             OperationResult rst = new OperationResult();
+            if (moduleId == null)
+            {
+                rst.ResultType = OperationResultType.PermissionDenied;
+                rst.Message = "权限不足";
+                return rst;
+            }
+
             try
             {
-                var query = from usr in _usrRep.Entities
-                            join usrRoles in _usrRoleRelRep.Entities on usr.Id equals usrRoles.UserId
-                            join rolePer in _rolePermissionRep.Entities on usrRoles.RoleId equals rolePer.RoleId
-                            where usr.Id == RBACContext.CurrentUser.Id && rolePer.PermissionId == optId
-                            select rolePer.PermissionId;
-                var result = query.Count() > 0;
-                if (result)
-                {
-                    rst.ResultType = OperationResultType.Success;
-                }
-                else
+                //1、模块权限
+                //用户所有权限
+                var queryPer = _usrRep.Entities.Where(ur => ur.Id == RBACContext.CurrentUser.Id)
+                            .Join(_usrRoleRelRep.Entities, u => u.Id, r => r.UserId, (u, ur) => new { ur.UserId, ur.RoleId })
+                            .Join(_rolePermissionRep.Entities, r => r.RoleId, p => p.RoleId, (r, p) => new { p.PermissionId, p.PerType });
+
+                var perType = PermissionType.Module.ToInt();
+                if (queryPer.Where(p => p.PermissionId == moduleId && p.PerType == perType).Count() < 1)
                 {
                     rst.ResultType = OperationResultType.PermissionDenied;
-                    rst.Message = "权限不足";
+                    rst.Message = "模块权限不足";
+                    return rst;
                 }
+                //2、操作权限
+                if (optId.HasValue)
+                {
+                    perType = PermissionType.Operation.ToInt();
+                    if (queryPer.Where(p => p.PermissionId == optId && p.PerType == perType).Count() < 1)
+                    {
+                        rst.ResultType = OperationResultType.PermissionDenied;
+                        rst.Message = "操作权限不足";
+                        return rst;
+                    }
+                }
+                rst.ResultType = OperationResultType.Success;
             }
             catch (Exception ex)
             {

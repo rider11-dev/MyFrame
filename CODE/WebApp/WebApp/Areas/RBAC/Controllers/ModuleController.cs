@@ -25,14 +25,16 @@ namespace WebApp.Areas.RBAC.Controllers
     {
         IModuleService _moduleSrv;
 
-        public ModuleController(IModuleService moduleSrv)
+        public ModuleController(IModuleService moduleSrv, IOperationService optSrv)
+            : base(optSrv)
         {
             _moduleSrv = moduleSrv;
         }
 
-        [LoginCheckFilter]
+        [LoginCheck]
         public ActionResult Index()
         {
+            base.SetOptPermissions();
             return View();
         }
 
@@ -114,8 +116,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        [LoginCheckFilter]
         [ValidateAntiForgeryToken]
+        [AuthCheck]
         public JsonResult Add(ModuleViewModel vmModule)
         {
             if (!ModelState.IsValid)
@@ -136,8 +138,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        [LoginCheckFilter]
         [ValidateAntiForgeryToken]
+        [AuthCheck]
         public JsonResult Edit(ModuleViewModel vmModule)
         {
             if (!ModelState.IsValid)
@@ -158,7 +160,7 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        [LoginCheckFilter]
+        [AuthCheck]
         public JsonResult Delete()
         {
             int[] moduleIds = null;

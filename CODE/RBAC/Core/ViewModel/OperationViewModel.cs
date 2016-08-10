@@ -23,6 +23,15 @@ namespace MyFrame.RBAC.ViewModel
         [MaxLength(20, ErrorMessage = "操作名称不能超过{1}个字符")]
         public string OptName { get; set; }
 
+        [Display(Name = "操作描述")]
+        [MaxLength(100, ErrorMessage = "操作描述不能超过{1}个字符")]
+        public string Tag { get; set; }
+
+        [Required(ErrorMessage = "操作函数不能为空")]
+        [Display(Name = "操作函数")]
+        [MaxLength(100, ErrorMessage = "操作函数不能超过{1}个字符")]
+        public string ClickFunc { get; set; }
+
         [Required(ErrorMessage = "操作链接不能为空")]
         [Display(Name = "操作链接")]
         [MaxLength(100, ErrorMessage = "操作链接不能超过{1}个字符")]
@@ -44,6 +53,10 @@ namespace MyFrame.RBAC.ViewModel
 
         [Display(Name = "所属模块")]
         public string ModuleName { get; set; }
+
+        [Required(ErrorMessage = "控制器不能为空")]
+        [Display(Name = "控制器")]
+        public string Controller { get; set; }
 
         [Display(Name = "排序号")]
         public int SortOrder { get; set; }

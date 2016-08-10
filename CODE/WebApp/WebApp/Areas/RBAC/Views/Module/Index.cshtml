@@ -1,4 +1,8 @@
-﻿
+﻿@using WebApp.Extensions.Html
+@using MyFrame.RBAC.Model
+@{
+    var opts = ViewData["Opts"] as List<Operation>;
+}
 <div class="row" style="margin-top:10px;">
     <div class="col-xs-12">
         <div class="box">
@@ -9,15 +13,15 @@
                 <div id="toolbar" class="container" style="margin:4px 0px;">
                     <div class="row">
                         <div class="col-sm-3 btn-group">
-                            <button id="btnAdd" type="button" class="btn btn-success">
-                                <span class="glyphicon glyphicon-plus">新增</span>
-                            </button>
-                            <button id="btnEdit" type="button" class="btn btn-success">
-                                <span class="glyphicon glyphicon-edit">修改</span>
-                            </button>
-                            <button id="btnDelete" type="button" class="btn btn-danger">
-                                <span class="glyphicon glyphicon-remove">删除</span>
-                            </button>
+                            @{
+                                if (opts != null && opts.Count > 0)
+                                {
+                                    foreach (var opt in opts)
+                                    {
+                                        @Html.OptButton(opt);
+                                    }
+                                }
+                            }
                         </div>
                         <div class="col-sm-2" style="padding:0px;">
                             <input type="text" id="txtSearchCode" name="Code" class="form-control" placeholder="模块编号" />
@@ -42,9 +46,7 @@
     $(function () {
         modulemanage.init({
             urlAdd: "@Url.Action("Add")",
-            urlEdit: "@Url.Action("Edit")",
             urlSearch: "@Url.Action("GetModulesFullInfoByPage")",
-            urlDelete: "@Url.Action("Delete")",
             urlModuleTreeHelp: "@Url.Action("TreeHelp")"
         });
     });

@@ -13,6 +13,8 @@ CREATE TABLE Users(
 	Enabled bit NOT NULL default 0,
 	Remark nvarchar(255) NULL
 );
+ALTER TABLE [Users] ADD  CONSTRAINT [UK_Users_UserName] UNIQUE NONCLUSTERED ( [UserName] ASC );
+
 INSERT into Users(UserName,Password,Email,Phone,Address,Enabled) values('admin','0b4e7a0e5fe84ad35fb5f95b9ceeac79','751682472@163.com','88888888','中国山东',1); --aaaaaa
 -- 角色表
 create table Roles(
@@ -26,6 +28,7 @@ create table Roles(
 	LastModifier int NULL,
 	LastModifyTime datetime NULL
 );
+ALTER TABLE [Roles] ADD  CONSTRAINT [UK_Roles_RoleName] UNIQUE NONCLUSTERED ( [RoleName] ASC );
 
 -- 功能模块表
 CREATE TABLE Modules(
@@ -44,6 +47,8 @@ CREATE TABLE Modules(
 	LastModifier int,
 	LastModifyTime date
 );
+ALTER TABLE [Modules] ADD  CONSTRAINT [UK_Module_Code] UNIQUE NONCLUSTERED ( [Code] ASC );
+
 set IDENTITY_INSERT Modules on;
 INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(11,'UserManage','用户管理','/RBAC/User/Index','fa-user',1,0,1,10,1,1);
 INSERT into Modules(Id,Code,Name,LinkUrl,Icon,IsMenu,HasChild,Enabled,SortOrder,IsSystem,ParentId)values(12,'GroupManage','用户组管理','/RBAC/UserGroup/Index','fa-group',1,0,1,20,1,1);
@@ -64,6 +69,7 @@ Create Table UserRoleRelation(
 	UserID int not null,
 	RoleID int not null
 );
+ALTER TABLE [UserRoleRelation] ADD  CONSTRAINT [UK_UserRoleRelation_Rel] UNIQUE NONCLUSTERED ( [UserID] ASC,[RoleID] ASC );
 
 -- 操作表
 CREATE TABLE Operations(
@@ -73,11 +79,27 @@ CREATE TABLE Operations(
 	SubmitUrl nvarchar(100),
 	Icon nvarchar(50),
 	ModuleId int not null,
+	Controller nvarchar(100) not null,
 	SortOrder int,
 	[Enabled] bit not null default 0,
+	Tag nvarchar(100),
 	Remark nvarchar(255)
 );
+ALTER TABLE [Operations] ADD  CONSTRAINT [UK_Operations_ModuleOptCode] UNIQUE NONCLUSTERED ( [ModuleId] ASC ,[OptCode] ASC);
 
+--角色权限表
+CREATE TABLE [RolePermission](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[RoleId] [int] NOT NULL,
+	[PermissionId] [int] NOT NULL,
+	[PerType] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY];
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'权限类型：0 功能权限，1 操作权限' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'RolePermission', @level2type=N'COLUMN',@level2name=N'PerType';
 
 
 

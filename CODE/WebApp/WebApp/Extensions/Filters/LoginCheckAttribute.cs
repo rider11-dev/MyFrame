@@ -13,7 +13,7 @@ namespace WebApp.Extensions.Filters
     /// 登录校验过滤器
     /// 需要在FilterConfig中注册
     /// </summary>
-    public class LoginCheckFilterAttribute : ActionFilterAttribute
+    public class LoginCheckAttribute : ActionFilterAttribute
     {
         const string KEY_LOGIN_CHECK = "logincheck";
         /// <summary>
@@ -31,13 +31,21 @@ namespace WebApp.Extensions.Filters
         {
             base.OnActionExecuting(filterContext);
 
+            LoginCheck(filterContext.HttpContext);
+        }
+
+        public bool LoginCheck(HttpContextBase httpContext)
+        {
+            bool pass = true;
             if (EnableCheck)
             {
-                if (filterContext.HttpContext.Session.GetUserId() == null)
+                if (httpContext.Session.GetUserId() == null)
                 {
-                    filterContext.HttpContext.Response.Redirect("~/RBAC/Account/Login");
+                    pass = false;
+                    httpContext.Response.Redirect("~/RBAC/Account/Login?returnUrl=" + httpContext.Request.RawUrl, true);
                 }
             }
+            return pass;
         }
     }
 }

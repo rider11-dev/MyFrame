@@ -188,3 +188,25 @@ var gFormFunc = {
         return o;
     },
 };
+
+/*——————————————————业务全局函数——————————————————*/
+var gFuncBusiness = {
+    //为权限控制的按钮绑定事件函数
+    bindEventForRbacButton: function () {
+        //id前缀是btn_rbac的元素，是操作按钮
+        $("button[id^='btn_rbac']").each(function (idx, btn) {
+            var clickFunc = $(btn).attr('data-clickFunc');
+            var submitUrl = $(btn).attr('data-submitUrl');
+            var tag = $(btn).attr('data-tag');
+            var moduleId = $(btn).attr('data-moduleId');
+            var optId = $(btn).attr('data-optId');
+            $(btn).click(function () {
+                //console.log('click:' + clickFunc + ',submit:' + submitUrl);
+                eval(clickFunc)({
+                    submitUrl: gFunc.getRootPath() + submitUrl + "?module=" + moduleId + "&opt=" + optId,
+                    tag: tag
+                });
+            });
+        });
+    }
+}

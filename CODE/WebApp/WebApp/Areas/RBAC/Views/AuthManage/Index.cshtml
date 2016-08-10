@@ -1,11 +1,20 @@
-﻿<div class="row" style="margin-top:10px;">
+﻿@using WebApp.Extensions.Html
+@using MyFrame.RBAC.Model
+@{
+    var opts = ViewData["Opts"] as List<Operation>;
+}
+<style type="text/css">
+    .div-col {
+        padding: 2px;
+    }
+</style>
+<div class="row" style="margin-top:10px;">
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title">权限分配</h3>
             </div>
             <div class="box-body">
-                @*<hr style="margin:4px 0px;" />*@
                 <div class="row" style="min-height:480px;">
                     <div class="col-xs-3">
                         <div class="form-inline">
@@ -18,31 +27,28 @@
                         </div>
                         <table id="gridRoles" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
                     </div>
-                    <div class="col-xs-4">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <button id="btnSaveModulePer" type="button" class="btn btn-warning">
-                                    <span class="glyphicon glyphicon-th-large">模块分配</span>
-                                </button>
-                                <button id="btnSaveAllModulePer" type="button" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-ok">全部模块</span>
-                                </button>
+                    <div class="col-xs-8">
+                        <div id="toolbar" class="row" style="margin:4px 0px;padding:0px;">
+                            <div class="btn-group">
+                                @{
+                                    if (opts != null && opts.Count > 0)
+                                    {
+                                        foreach (var opt in opts)
+                                        {
+                                            @Html.OptButton(opt);
+                                        }
+                                    }
+                                }
                             </div>
                         </div>
-                        <div id="treeModule"></div>
-                    </div>
-                    <div class="col-xs-4">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <button id="btnSaveOptPer" type="button" class="btn btn-warning">
-                                    <span class="glyphicon glyphicon-wrench">操作分配</span>
-                                </button>
-                                <button id="btnSaveAllOptPer" type="button" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-ok">全部操作</span>
-                                </button>
+                        <div class="row">
+                            <div class="col-sm-5 div-col">
+                                <div id="treeModule"></div>
+                            </div>
+                            <div class="col-sm-7 div-col">
+                                <table id="gridOpts" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
                             </div>
                         </div>
-                        <table id="gridOpts" class="table table-bordered table-striped table-hover" cellspacing="0"></table>
                     </div>
                 </div>
             </div>
@@ -56,9 +62,6 @@
             urlSearchRoles: "@Html.Raw(Url.Action("GetRolesSimpleInfoByPage","Role", new { pageNumber = 1, pageSize = 20 }))",
             urlSearchModules: "@Html.Raw(Url.Action("GetModulesSimpleInfoByPage", "Module", new { pageNumber = 1, pageSize = 1000 }))",
             urlSearchOpts: "@Html.Raw(Url.Action("GetOptsSimpleInfoByPage", "Operation", new { pageNumber = 1, pageSize = 1000 }))",
-
-            urlSavePermission: "@Url.Action("SavePermission", "AuthManage")",
-            urlSaveAllPermission: "@Url.Action("SaveAllPermission", "AuthManage")",
             urlGetPermission: "@Url.Action("GetPermission", "AuthManage")",
         });
     });

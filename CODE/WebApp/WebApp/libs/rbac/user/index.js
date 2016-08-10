@@ -1,38 +1,23 @@
 ﻿var usermanage = {
     grid: $('#grid'),
-    btnAdd: $('#btnAdd'),
-    btnEdit: $('#btnEdit'),
-    btnDelete: $('#btnDelete'),
     btnSearch: $('#btnSearch'),
     btnSetRoles: $('#btnSetRoles'),
     btnClearRoles: $('#btnClearRoles'),
     txtSearchUserName: $('#txtSearchUserName'),
     urlAdd: "",
-    urlEdit: "",
-    urlDelete: "",
     urlSearch: "",
     urlHelpRoles: "",
-    urlSetRoles: "",
-    urlClearRoles: "",
     init: function (options) {
         usermanage.urlAdd = options.urlAdd;
-        usermanage.urlEdit = options.urlEdit;
-        usermanage.urlDelete = options.urlDelete;
         usermanage.urlSearch = options.urlSearch;
         usermanage.urlHelpRoles = options.urlHelpRoles;
-        usermanage.urlSetRoles = options.urlSetRoles;
-        usermanage.urlClearRoles = options.urlClearRoles;
 
         usermanage.initgrid();
         usermanage.bindingEventArgs();
     },
     bindingEventArgs: function () {
-        usermanage.btnAdd.click(usermanage.funcBtnAdd);
-        usermanage.btnEdit.click(usermanage.funcBtnEdit);
-        usermanage.btnDelete.click(usermanage.funcBtnDelete);
+        gFuncBusiness.bindEventForRbacButton();
         usermanage.btnSearch.click(usermanage.funcBtnSearch);
-        usermanage.btnSetRoles.click(usermanage.funcBtnSetRoles);
-        usermanage.btnClearRoles.click(usermanage.funcBtnClearRoles);
     },
     initgrid: function () {
         var options = {
@@ -110,13 +95,12 @@
         //调用公共函数，初始化表格
         gFunc.initgrid(usermanage.grid, options);
     },
-    funcBtnAdd: function () {
-        //alert('hahahx');
+    funcBtnAdd: function (options) {
         modalForm.show({
-            title: '添加用户',
+            title: options.tag,
             contentUrl: usermanage.urlAdd,
             contentUrlParams: {},
-            submitUrl: usermanage.urlAdd,
+            submitUrl: options.submitUrl,
             submitSucceedCallback: function () {
                 usermanage.grid.bootstrapTable('refresh');
             },
@@ -125,9 +109,9 @@
             }
         });
     },
-    funcBtnEdit: function () {
+    funcBtnEdit: function (options) {
+        //console.log('funcBtnEdit:' + options.submitUrl);
         var checkedRows = usermanage.grid.bootstrapTable('getSelections');
-        //console.log(checkedRows.length);
         if (checkedRows.length < 1) {
             gMessager.warning('请选择要修改的数据');
             return;
@@ -138,10 +122,10 @@
         }
         var data = checkedRows[0];
         modalForm.show({
-            title: '修改用户信息',
+            title: options.tag,
             contentUrl: usermanage.urlAdd,
             contentUrlParams: {},
-            submitUrl: usermanage.urlEdit,
+            submitUrl: options.submitUrl,
             onLoadCallback: function () {
                 $('#Id').val(data.Id);
                 $('#UserName').val(data.UserName);
@@ -160,7 +144,7 @@
             }
         });
     },
-    funcBtnDelete: function () {
+    funcBtnDelete: function (options) {
         var checkedRows = usermanage.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
         if (checkedRows.length < 1) {
@@ -185,12 +169,12 @@
                 //
                 $.ajax({
                     type: 'post',
-                    url: usermanage.urlDelete,
+                    url: options.submitUrl,
                     data: JSON.stringify(usrIds),
                     success: function (result, status, XHR) {
                         if (result.code == 0) {
                             usermanage.grid.bootstrapTable('refresh');
-                            gMessager.info('删除成功');
+                            gMessager.success('删除成功');
                         } else {
                             gMessager.warning(result.message);
                         }
@@ -208,7 +192,7 @@
     funcBtnSearch: function () {
         usermanage.grid.bootstrapTable('refresh');
     },
-    funcBtnSetRoles: function () {
+    funcBtnSetRoles: function (options) {
         //
         var checkedRows = usermanage.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
@@ -221,9 +205,9 @@
             usrIds.push(item.Id);
         });
         modalForm.show({
-            title: '角色帮助',
+            title: options.tag,
             contentUrl: usermanage.urlHelpRoles,
-            submitUrl: usermanage.urlSetRoles,
+            submitUrl: options.submitUrl,
             submitSucceedCallback: function () {
                 usermanage.grid.bootstrapTable('refresh');
             },
@@ -252,7 +236,7 @@
             }
         });
     },
-    funcBtnClearRoles: function () {
+    funcBtnClearRoles: function (options) {
         var checkedRows = usermanage.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
         if (checkedRows.length <= 0) {
@@ -270,7 +254,7 @@
             //
             $.ajax({
                 type: 'post',
-                url: usermanage.urlClearRoles,
+                url: options.submitUrl,
                 data: JSON.stringify(usrIds),
                 success: function (result, status, XHR) {
                     if (result.code == 0) {

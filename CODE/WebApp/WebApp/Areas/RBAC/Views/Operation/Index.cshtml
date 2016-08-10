@@ -1,4 +1,9 @@
-﻿<div class="row" style="margin-top:10px;">
+﻿@using WebApp.Extensions.Html
+@using MyFrame.RBAC.Model
+@{
+    var opts = ViewData["Opts"] as List<Operation>;
+}
+<div class="row" style="margin-top:10px;">
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
@@ -24,15 +29,15 @@
                         <div id="toolbar" class="container" style="margin:4px 0px;">
                             <div class="row">
                                 <div class="col-sm-3 btn-group">
-                                    <button id="btnAddOpt" type="button" class="btn btn-success">
-                                        <span class="glyphicon glyphicon-plus">新增</span>
-                                    </button>
-                                    <button id="btnEditOpt" type="button" class="btn btn-warning">
-                                        <span class="glyphicon glyphicon-edit">修改</span>
-                                    </button>
-                                    <button id="btnDeleteOpt" type="button" class="btn btn-danger">
-                                        <span class="glyphicon glyphicon-remove">删除</span>
-                                    </button>
+                                    @{
+                                        if (opts != null && opts.Count > 0)
+                                        {
+                                            foreach (var opt in opts)
+                                            {
+                                                @Html.OptButton(opt)
+                                            }
+                                        }
+                                    }
                                 </div>
                                 <div class="col-sm-2" style="padding:0px;">
                                     <input type="text" id="txtSearchOptName" name="OptName" class="form-control" placeholder="操作名称" />
@@ -56,8 +61,6 @@
     $(function () {
         optmanage.init({
             urlAddOpt: "@Url.Action("Add")",
-            urlEditOpt: "@Url.Action("Edit")",
-            urlDeleteOpt: "@Url.Action("Delete")",
             urlSearchOpt: "@Url.Action("GetOperationFullInfoByPage")",
             urlSearchModule: "@Html.Raw(Url.Action("GetModulesSimpleInfoByPage", "Module", new { pageNumber = 1, pageSize = 1000 }))",
         });

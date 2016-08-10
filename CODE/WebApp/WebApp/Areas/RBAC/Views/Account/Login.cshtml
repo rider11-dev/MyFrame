@@ -21,6 +21,7 @@
         @using (Html.BeginForm("Login", "Account", new { Area = "RBAC" }, FormMethod.Post, new { @class = "form-signin" }))
         {
             @Html.AntiForgeryToken();
+            @Html.HiddenFor(u => u.ReturnUrl)
             <h2 class="form-signin-heading">用户登录</h2>
             <div style="color:red;">
                 @Html.ValidationSummary()

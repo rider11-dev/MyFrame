@@ -8,18 +8,21 @@ using System.Web.Mvc;
 using WebApp.Controllers;
 using MyFrame.Infrastructure.Extension;
 using MyFrame.RBAC.Service.Interface;
+using WebApp.Extensions.Filters;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
     public class UserRoleRelationController : BaseController
     {
         IUserRoleRelService _userRoleRelSrv;
-        public UserRoleRelationController(IUserRoleRelService userRoleRelSrv)
+        public UserRoleRelationController(IUserRoleRelService userRoleRelSrv, IOperationService optSrv)
+            : base(optSrv)
         {
             _userRoleRelSrv = userRoleRelSrv;
         }
 
         [HttpPost]
+        [AuthCheck]
         public JsonResult ClearRoles()
         {
             int[] usrIds = null;
@@ -48,6 +51,7 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
+        [AuthCheck]
         public JsonResult Assign(int[] roleIds, int[] usrIds)
         {
             if (usrIds == null || usrIds.Length < 1)
@@ -67,6 +71,7 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
+        [AuthCheck]
         public JsonResult SetRoles(int[] usrIds, int[] roleIds)
         {
             if (usrIds == null || usrIds.Length < 1)

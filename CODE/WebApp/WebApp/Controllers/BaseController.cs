@@ -1,5 +1,6 @@
 ﻿using MyFrame.Infrastructure.Dynamic;
 using MyFrame.Infrastructure.OptResult;
+using MyFrame.RBAC.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,21 @@ namespace WebApp.Controllers
 {
     public class BaseController : Controller
     {
+        protected readonly IOperationService OptSrv;
+        public BaseController(IOperationService optSrv)
+        {
+            OptSrv = optSrv;
+        }
+
+        protected void SetOptPermissions()
+        {
+            var rst = OptSrv.GetOptInfoByController(RouteData.Values["controller"].ToString());
+            if (rst.ResultType == OperationResultType.Success)
+            {
+                ViewData.Add("Opts", rst.AppendData);
+            }
+        }
+
         protected ActionResult RedirectToHome()
         {
             return RedirectToAction("Index", "Home", new { Area = "RBAC" });

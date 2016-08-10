@@ -23,6 +23,7 @@ namespace MyFrame.RBAC.Service.Impl
         private IUserRepository _usrRepository;
         private IRolePermissionRepository _rolePermissionRep;
         private IRoleRepository _roleRep;
+        IOperationRepository _optRep;
         const string Msg_BeforeAdd = "保存前校验";
         const string Msg_AfterAdd = "保存后操作";
         const string Msg_BeforeDelete = "删除前校验";
@@ -33,13 +34,15 @@ namespace MyFrame.RBAC.Service.Impl
         public ModuleService(IUnitOfWork unitOfWork, IModuleRepository moduleRep,
             IUserRepository usrRep,
             IRolePermissionRepository rolePermissionRep,
-            IRoleRepository roleRep)
+            IRoleRepository roleRep,
+            IOperationRepository optRep)
             : base(unitOfWork)
         {
             _moduleRepository = moduleRep;
             _usrRepository = usrRep;
             _rolePermissionRep = rolePermissionRep;
             _roleRep = roleRep;
+            _optRep = optRep;
         }
 
         public OperationResult FindByModuleCode(string moduleCode)
@@ -253,9 +256,22 @@ namespace MyFrame.RBAC.Service.Impl
                 result.Message = Msg_BeforeDelete + "失败，要删除的模块包含下级";
                 return result;
             }
-            //2、检查模块是否被引用
+            //2、模块是否包含操作
+            query = from module in modulesToDel
+                    join opt in _optRep.Entities on module.Id equals opt.ModuleId
+                    select 1;
+            if (query.Count() > 0)
+            {
+                result.ResultType = OperationResultType.CheckFailedBeforeProcess;
+                result.Message = Msg_BeforeDelete + "失败，要删除的模块包含操作";
+                return result;
+            }
+
+            //3、检查模块是否被引用
+            var perType = PermissionType.Module.ToInt();
             query = from per in _rolePermissionRep.Entities
                     join module in modulesToDel on per.PermissionId equals module.Id
+                    where per.PerType == perType
                     select 1;
             if (query.Count() > 0)
             {

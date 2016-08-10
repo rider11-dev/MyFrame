@@ -19,19 +19,19 @@ namespace WebApp.Areas.RBAC.Controllers
 {
     public class OperationController : BaseController
     {
-        IOperationService _optSrv;
         public OperationController(IOperationService optSrv)
+            : base(optSrv)
         {
-            _optSrv = optSrv;
         }
 
         /// <summary>
         /// 列表界面
         /// </summary>
         /// <returns></returns>
-        [LoginCheckFilter]
+        [LoginCheck]
         public ActionResult Index()
         {
+            base.SetOptPermissions();
             return View();
         }
 
@@ -41,8 +41,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        [LoginCheckFilter]
         [ValidateAntiForgeryToken]
+        [AuthCheck]
         public JsonResult Add(OperationViewModel optVM)
         {
             if (!ModelState.IsValid)
@@ -50,7 +50,7 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
             Operation opt = Mapper.Map<OperationViewModel, Operation>(optVM);
-            OperationResult result = _optSrv.Add(opt);
+            OperationResult result = OptSrv.Add(opt);
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });
@@ -59,8 +59,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        [LoginCheckFilter]
         [ValidateAntiForgeryToken]
+        [AuthCheck]
         public JsonResult Edit(OperationViewModel optVM)
         {
             if (!ModelState.IsValid)
@@ -68,7 +68,7 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
             Operation opt = Mapper.Map<OperationViewModel, Operation>(optVM);
-            OperationResult result = _optSrv.UpdateDetail(opt);
+            OperationResult result = OptSrv.UpdateDetail(opt);
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });
@@ -77,7 +77,7 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        [LoginCheckFilter]
+        [AuthCheck]
         public JsonResult Delete()
         {
             int[] optIds = null;
@@ -97,7 +97,7 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = OperationResultType.ParamError, message = "操作id列表不能为空" });
             }
-            OperationResult result = _optSrv.Delete(m => optIds.Contains(m.Id));
+            OperationResult result = OptSrv.Delete(m => optIds.Contains(m.Id));
             if (result.ResultType != OperationResultType.Success)
             {
                 return Json(new { code = result.ResultType, message = result.Message });
@@ -127,7 +127,7 @@ namespace WebApp.Areas.RBAC.Controllers
             }
             var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
 
-            var result = _optSrv.FindByPageWithFullInfo(where, query => query.OrderBy(o => o.SortOrder), pageArgs);
+            var result = OptSrv.FindByPageWithFullInfo(where, query => query.OrderBy(o => o.SortOrder), pageArgs);
 
             if (result.ResultType == OperationResultType.Success)
             {
@@ -160,7 +160,7 @@ namespace WebApp.Areas.RBAC.Controllers
                 where = where.And(o => o.OptName.Contains(optName));
             }
             var pageArgs = new PageArgs { PageSize = pageSize, PageIndex = pageNumber };
-            var result = _optSrv.FindBySelectorByPage(where,
+            var result = OptSrv.FindBySelectorByPage(where,
                 o => new
                 {
                     Id = o.Id,

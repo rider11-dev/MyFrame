@@ -75,7 +75,7 @@ var modalForm = {
             //console.log('return');
             return;
         }
-        //console.log(data);
+        console.log(modalForm.submitUrl);
         $.ajax({
             type: 'post',
             url: modalForm.submitUrl,

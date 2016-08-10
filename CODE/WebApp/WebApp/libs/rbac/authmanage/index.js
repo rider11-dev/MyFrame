@@ -5,15 +5,10 @@
     urlSearchRoles: "",
     urlSearchModules: "",
     urlSearchOpts: "",
-    urlSavePermission: "",
-    urlSaveAllPermission: "",
     urlGetPermission: "",
+
     txtSearchRoleName: $('#txtSearchRoleName'),
     btnSearchRoles: $('#btnSearchRoles'),
-    btnSaveModulePer: $('#btnSaveModulePer'),
-    btnSaveAllModulePer: $('#btnSaveAllModulePer'),
-    btnSaveOptPer: $('#btnSaveOptPer'),
-    btnSaveAllOptPer: $('#btnSaveAllOptPer'),
 
     cacheOpts: [],
     cacheRolePers: {//结构：roleId的值作为属性名称，其对应的模块权限+操作权限数组作为属性值([Object { RoleId=4,  PermissionId=12,  PerType=0,Id=12}, Object { RoleId=4,  PermissionId=23,  PerType=0,Id=13})
@@ -156,15 +151,8 @@
         gFunc.initgrid(authmanage.gridOpts, options);
     },
     bindEvents: function () {
+        gFuncBusiness.bindEventForRbacButton();
         authmanage.btnSearchRoles.click(authmanage.searchRoles);
-        authmanage.btnSaveModulePer.click(authmanage.saveModulePer);
-        authmanage.btnSaveOptPer.click(authmanage.saveOptPer);
-        authmanage.btnSaveAllModulePer.click(function () {
-            authmanage.saveAllPer(0);
-        });
-        authmanage.btnSaveAllOptPer.click(function () {
-            authmanage.saveAllPer(1);
-        });
     },
     searchRoles: function () {
         authmanage.gridRoles.bootstrapTable('refresh');
@@ -263,7 +251,7 @@
         });
         authmanage.gridOpts.bootstrapTable("checkBy", { field: "Id", values: matchedIds })
     },
-    saveModulePer: function () {
+    saveModulePer: function (options) {
         //保存角色功能权限
         var roleRows = authmanage.gridRoles.bootstrapTable('getSelections');
         if (roleRows.length < 1) {
@@ -284,7 +272,7 @@
 
         $.ajax({
             type: 'post',
-            url: authmanage.urlSavePermission,
+            url: options.submitUrl,
             data: data,
             success: function (result, status, XHR) {
                 if (result.code == 0) {
@@ -305,7 +293,7 @@
         });
 
     },
-    saveOptPer: function () {
+    saveOptPer: function (options) {
         //保存角色操作权限
         var roleRows = authmanage.gridRoles.bootstrapTable('getSelections');
         if (roleRows.length < 1) {
@@ -332,7 +320,7 @@
 
         $.ajax({
             type: 'post',
-            url: authmanage.urlSavePermission,
+            url: options.submitUrl,
             data: data,
             success: function (result, status, XHR) {
                 if (result.code == 0) {
@@ -353,8 +341,16 @@
             }
         });
     },
-    saveAllPer: function (perType) {
-        //保存角色所有模块权限
+    svaeModuleAllPer: function (options) {
+        options.perType = 0;
+        authmanage.saveAllPer(options);
+    },
+    svaeOptAllPer: function (options) {
+        options.perType = 1;
+        authmanage.saveAllPer(options);
+    },
+    saveAllPer: function (options) {
+        //保存角色所有模块/操作权限
         var roleRows = authmanage.gridRoles.bootstrapTable('getSelections');
         if (roleRows.length < 1) {
             gMessager.warning("请选择角色");
@@ -363,8 +359,8 @@
 
         $.ajax({
             type: 'post',
-            url: authmanage.urlSaveAllPermission,
-            data: { roleId: roleRows[0].Id, perType: perType },
+            url: options.submitUrl,
+            data: { roleId: roleRows[0].Id, perType: options.perType },
             success: function (result, status, XHR) {
                 if (result.code == 0) {
                     //authmanage.gridRoles.bootstrapTable('refresh');

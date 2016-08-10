@@ -24,6 +24,7 @@ namespace MyFrame.RBAC.Service.Impl
         IUserRoleRelRepository _usrRoleRelRep;
         const string Msg_SearchByName = "根据角色名称查询";
         const string Msg_BeforeAdd = "保存角色前校验";
+        const string Msg_BeforeDelete = "删除角色前校验";
         const string Msg_UpdateDetail = "更新角色信息";
         const string Msg_SearchFullInfoByPage = "分页获取角色详细信息";
         const string Msg_SearchSimpleInfoByPage = "分页获取角色精简信息";
@@ -174,10 +175,9 @@ namespace MyFrame.RBAC.Service.Impl
                 result.Message = string.Format("{0}失败，{1}", Msg_DeleteWithRelations, "角色id不能为空");
                 return result;
             }
-            if (_usrRoleRelRep.Exists(r => roleIds.Contains(r.RoleId)))
+            result = OnBeforeDelete(role => roleIds.Contains(role.Id));
+            if (result.ResultType != OperationResultType.Success)
             {
-                result.ResultType = OperationResultType.ParamError;
-                result.Message = string.Format("{0}失败，{1}", Msg_DeleteWithRelations, "要删除的角色已分配到用户");
                 return result;
             }
             base.UnitOfWork.AutoCommit = false;
@@ -195,6 +195,23 @@ namespace MyFrame.RBAC.Service.Impl
             {
                 base.UnitOfWork.Rollback();
                 base.ProcessException(ref result, Msg_DeleteWithRelations + "失败", ex);
+            }
+            return result;
+        }
+
+        protected override OperationResult OnBeforeDelete(Expression<Func<Role, bool>> where)
+        {
+            OperationResult result = new OperationResult { ResultType = OperationResultType.Success };
+            var count = _usrRoleRelRep.Entities
+                .Join(_roleRepository.Find(where),
+                        rel => rel.RoleId,
+                        r => r.Id,
+                        (rel, r) => new { r.Id })
+                .Count();
+            if (count > 0)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = string.Format("{0}失败，{1}", Msg_BeforeDelete, "要删除的角色已分配到用户");
             }
             return result;
         }

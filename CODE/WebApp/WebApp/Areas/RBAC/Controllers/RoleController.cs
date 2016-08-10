@@ -22,7 +22,8 @@ namespace WebApp.Areas.RBAC.Controllers
     public class RoleController : BaseController
     {
         private readonly IRoleService _roleSrv;
-        public RoleController(IRoleService roleSrv)
+        public RoleController(IRoleService roleSrv, IOperationService optSrv)
+            : base(optSrv)
         {
             _roleSrv = roleSrv;
         }
@@ -31,9 +32,10 @@ namespace WebApp.Areas.RBAC.Controllers
         /// 列表界面
         /// </summary>
         /// <returns></returns>
-        [LoginCheckFilter]
+        [LoginCheck]
         public ActionResult Index()
         {
+            base.SetOptPermissions();
             return View();
         }
 
@@ -132,8 +134,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        [LoginCheckFilter]
         [ValidateAntiForgeryToken]
+        [AuthCheck]
         public JsonResult Add(RoleViewModel roleVM)
         {
             if (!ModelState.IsValid)
@@ -155,6 +157,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AuthCheck]
         public JsonResult Edit(RoleViewModel roleVM)
         {
             if (!ModelState.IsValid)
@@ -174,7 +178,9 @@ namespace WebApp.Areas.RBAC.Controllers
             }
             return Json(new { code = OperationResultType.Success, message = "修改成功" });
         }
+
         [HttpPost]
+        [AuthCheck]
         public JsonResult Delete()
         {
             int[] roleIds = null;

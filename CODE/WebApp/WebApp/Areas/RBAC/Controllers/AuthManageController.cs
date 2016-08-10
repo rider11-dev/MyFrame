@@ -20,19 +20,21 @@ namespace WebApp.Areas.RBAC.Controllers
     public class AuthManageController : BaseController
     {
         IRolePermissionService _rolePermissionSrv;
-        public AuthManageController(IRolePermissionService rolePermissionSrv)
+        public AuthManageController(IRolePermissionService rolePermissionSrv, IOperationService optSrv)
+            : base(optSrv)
         {
             _rolePermissionSrv = rolePermissionSrv;
         }
 
-        [LoginCheckFilter]
+        [LoginCheck]
         public ActionResult Index()
         {
+            base.SetOptPermissions();
             return View();
         }
 
         [HttpPost]
-        [LoginCheckFilter]
+        [AuthCheck]
         public JsonResult SavePermission(int roleId, int[] perIds, int perType, int? moduleId = null)
         {
             var permissionType = perType.ConvertTo<PermissionType>();
@@ -63,7 +65,7 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        [LoginCheckFilter]
+        [AuthCheck]
         public JsonResult SaveAllPermission(int roleId, int perType)
         {
             OperationResult rst = new OperationResult();
@@ -103,17 +105,6 @@ namespace WebApp.Areas.RBAC.Controllers
                     Data = new { code = rst.ResultType, message = "角色权限获取成功", rows = rst.AppendData },
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
-        }
-
-        //当前用户权限校验测试
-        public JsonResult CheckOptPermission(int optId)
-        {
-            OperationResult rst = _rolePermissionSrv.CheckOptPermission(optId);
-            if (rst.ResultType != OperationResultType.Success)
-            {
-                return Json(new { code = rst.ResultType, message = rst.Message }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { code = OperationResultType.Success, message = "操作权限校验通过" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -8,7 +8,8 @@ namespace WebApp
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            //filters.Add(new HandleErrorAttribute());//Application_Error将不再触发
+            filters.Add(new CustomHandleErrorAttribute { View = "~/Views/Common/Error.cshtml" });
         }
     }
 }

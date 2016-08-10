@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebApp.Extensions.Filters;
 
-namespace WebApp.Areas.RBAC.Controllers
+namespace WebApp.Controllers
 {
-    public class HomeController : Controller
+    public class ErrorController : Controller
     {
         //
-        // GET: /RBAC/Home/
-        [LoginCheck]
-        [LayoutAttrbute]
+        // GET: /Index/
         public ActionResult Index()
         {
             return View();
         }
-    }
+	}
 }

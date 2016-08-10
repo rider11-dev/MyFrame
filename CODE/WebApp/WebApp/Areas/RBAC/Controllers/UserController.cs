@@ -25,7 +25,8 @@ namespace WebApp.Areas.RBAC.Controllers
     {
         private readonly IUserService _userSrv;
 
-        public UserController(IUserService userSrv)
+        public UserController(IUserService userSrv, IOperationService optSrv)
+            : base(optSrv)
         {
             _userSrv = userSrv;
         }
@@ -34,9 +35,10 @@ namespace WebApp.Areas.RBAC.Controllers
         /// 列表界面
         /// </summary>
         /// <returns></returns>
-        [LoginCheckFilter]
+        [LoginCheck]
         public ActionResult Index()
         {
+            base.SetOptPermissions();
             return View();
         }
 
@@ -122,8 +124,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
-        [LoginCheckFilter]
         [ValidateAntiForgeryToken]
+        [AuthCheckAttribute]
         public JsonResult Add(UserViewModel usrVM)
         {
             if (!ModelState.IsValid)
@@ -146,6 +148,8 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AuthCheckAttribute]
         public JsonResult Edit(UserViewModel usrVM)
         {
             if (!ModelState.IsValid)
@@ -166,6 +170,7 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         [HttpPost]
+        [AuthCheckAttribute]
         public JsonResult Delete()
         {
             int[] usrIds = null;
@@ -192,6 +197,5 @@ namespace WebApp.Areas.RBAC.Controllers
             }
             return Json(new { code = OperationResultType.Success, message = "删除成功" });
         }
-
     }
 }

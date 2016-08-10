@@ -1,34 +1,23 @@
 ﻿var roles = {
     grid: $('#grid'),
-    btnAdd: $('#btnAdd'),
-    btnEdit: $('#btnEdit'),
-    btnDelete: $('#btnDelete'),
     btnSearch: $('#btnSearch'),
     btnAssign: $('#btnAssign'),
     txtSearchRoleName: $('#txtSearchRoleName'),
     urlAdd: "",
-    urlEdit: "",
-    urlDelete: "",
     urlSearch: "",
     urlHelpUsers: "",
-    urlAssign: "",
     init: function (options) {
         roles.urlAdd = options.urlAdd;
-        roles.urlEdit = options.urlEdit;
-        roles.urlDelete = options.urlDelete;
         roles.urlSearch = options.urlSearch;
         roles.urlHelpUsers = options.urlHelpUsers;
-        roles.urlAssign = options.urlAssign;
 
         roles.initgrid();
         roles.bindingEventArgs();
     },
     bindingEventArgs: function () {
-        roles.btnAdd.click(roles.funcBtnAdd);
-        roles.btnEdit.click(roles.funcBtnEdit);
-        roles.btnDelete.click(roles.funcBtnDelete);
+        gFuncBusiness.bindEventForRbacButton();
+
         roles.btnSearch.click(roles.funcBtnSearch);
-        roles.btnAssign.click(roles.funcBtnAssign);
     },
     initgrid: function () {
         var options = {
@@ -90,13 +79,13 @@
         //调用公共函数，初始化表格
         gFunc.initgrid(roles.grid, options);
     },
-    funcBtnAdd: function () {
+    funcBtnAdd: function (options) {
         //alert('hahahx');
         modalForm.show({
-            title: '添加角色',
+            title: options.tag,
             contentUrl: roles.urlAdd,
             contentUrlParams: {},
-            submitUrl: roles.urlAdd,
+            submitUrl: options.submitUrl,
             submitSucceedCallback: function () {
                 roles.grid.bootstrapTable('refresh');
             },
@@ -105,7 +94,7 @@
             }
         });
     },
-    funcBtnEdit: function () {
+    funcBtnEdit: function (options) {
         var checkedRows = roles.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
         if (checkedRows.length < 1) {
@@ -118,10 +107,10 @@
         }
         var data = checkedRows[0];
         modalForm.show({
-            title: '修改角色信息',
+            title: options.tag,
             contentUrl: roles.urlAdd,
             contentUrlParams: {},
-            submitUrl: roles.urlEdit,
+            submitUrl: options.submitUrl,
             onLoadCallback: function () {
                 $('#Id').val(data.Id);
                 $('#RoleName').val(data.RoleName);
@@ -137,7 +126,7 @@
             }
         });
     },
-    funcBtnDelete: function () {
+    funcBtnDelete: function (options) {
         var checkedRows = roles.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
         if (checkedRows.length < 1) {
@@ -162,12 +151,12 @@
                 //
                 $.ajax({
                     type: 'post',
-                    url: roles.urlDelete,
+                    url: options.submitUrl,
                     data: JSON.stringify(roleIds),
                     success: function (result, status, XHR) {
                         if (result.code == 0) {
                             roles.grid.bootstrapTable('refresh');
-                            gMessager.info('删除成功');
+                            gMessager.success('删除成功');
                         } else {
                             gMessager.warning(result.message);
                         }
@@ -185,7 +174,7 @@
     funcBtnSearch: function () {
         roles.grid.bootstrapTable('refresh');
     },
-    funcBtnAssign: function () {
+    funcBtnAssign: function (options) {
         //
         var checkedRows = roles.grid.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
@@ -198,9 +187,9 @@
             roleIds.push(item.Id);
         });
         modalForm.show({
-            title: '用户帮助',
+            title: options.tag,
             contentUrl: roles.urlHelpUsers,
-            submitUrl: roles.urlAssign,
+            submitUrl: options.submitUrl,
             submitSucceedCallback: function () {
                 roles.grid.bootstrapTable('refresh');
             },

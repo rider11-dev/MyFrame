@@ -18,7 +18,8 @@ namespace MyFrame.RBAC.Service.Interface
         OperationResult FindByPageWithFullInfo(Expression<Func<Operation, bool>> where, Func<IQueryable<Operation>, IOrderedQueryable<Operation>> orderBy, PageArgs pageArgs);
         OperationResult FindByPageWithSimpleInfo(Expression<Func<Operation, bool>> where, Func<IQueryable<Operation>, IOrderedQueryable<Operation>> orderBy, PageArgs pageArgs);
         OperationResult FindByRolesWithSimpleInfo(int[] roleIds);
-
         OperationResult UpdateDetail(Operation opt);
+        OperationResult GetOptInfoByController(string controller);
+
     }
 }

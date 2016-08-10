@@ -25,6 +25,12 @@ namespace MyFrame.RBAC.Model
         [Description("操作名称")]
         public string OptName { get; set; }
 
+        [Description("描述")]
+        public string Tag { get; set; }
+
+        [Description("操作函数")]
+        public string ClickFunc { get; set; }
+
         [Description("操作链接")]
         public string SubmitUrl { get; set; }
 
@@ -39,7 +45,10 @@ namespace MyFrame.RBAC.Model
 
         [Description("所属模块")]
         public int ModuleId { get; set; }
-        
+
+        [Description("控制器")]
+        public string Controller { get; set; }
+
         [Description("排序号")]
         public int SortOrder { get; set; }
 

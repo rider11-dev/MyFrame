@@ -12,6 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using MyFrame.Infrastructure.Extension;
 
 namespace MyFrame.RBAC.Service.Impl
 {
@@ -24,18 +25,24 @@ namespace MyFrame.RBAC.Service.Impl
         const string Msg_FindByRolesWithSimpleInfo = "根据角色获取操作精简信息";
         const string Msg_UpdateDetail = "更新操作详细信息";
         const string Msg_SearchSimpleInfoByPage = "分页获取操作精简信息";
+        const string Msg_GetOptInfoByController = "根据控制器获取操作信息";
 
         IOperationRepository _optRepository;
         IRoleRepository _roleRepository;
         IModuleRepository _moduleRepository;
         IRolePermissionRepository _rolePerRepository;
-        public OperationService(IUnitOfWork unitOfWork, IOperationRepository optRepository, IRoleRepository roleRepository, IModuleRepository moduleRepository, IRolePermissionRepository rolePerRepository)
+        IUserRoleRelRepository _usrRoleRelRepository;
+        public OperationService(IUnitOfWork unitOfWork,
+            IOperationRepository optRepository, IRoleRepository roleRepository,
+            IModuleRepository moduleRepository, IRolePermissionRepository rolePerRepository,
+            IUserRoleRelRepository usrRoleRelRepository)
             : base(unitOfWork)
         {
             _optRepository = optRepository;
             _roleRepository = roleRepository;
             _moduleRepository = moduleRepository;
             _rolePerRepository = rolePerRepository;
+            _usrRoleRelRepository = usrRoleRelRepository;
         }
 
         public OperationResult FindByOptCode(int moduleId, string optCode)
@@ -75,12 +82,15 @@ namespace MyFrame.RBAC.Service.Impl
                                 Id = opt.Id,
                                 OptCode = opt.OptCode,
                                 OptName = opt.OptName,
+                                Tag = opt.Tag,
+                                ClickFunc = opt.ClickFunc,
                                 SubmitUrl = opt.SubmitUrl,
                                 Icon = opt.Icon,
                                 CssClass = opt.CssClass,
                                 CssStyle = opt.CssStyle,
                                 ModuleId = opt.ModuleId,
                                 ModuleName = m.Name,
+                                Controller = opt.Controller,
                                 SortOrder = opt.SortOrder,
                                 Enabled = opt.Enabled,
                                 Remark = opt.Remark
@@ -167,11 +177,14 @@ namespace MyFrame.RBAC.Service.Impl
             return base.Update(o => o.Id == opt.Id, o => new Operation
             {
                 OptName = opt.OptName,
+                Tag = opt.Tag,
+                ClickFunc = opt.ClickFunc,
                 SubmitUrl = opt.SubmitUrl,
                 Icon = opt.Icon,
                 CssClass = opt.CssClass,
                 CssStyle = opt.CssStyle,
                 SortOrder = opt.SortOrder,
+                Controller = opt.Controller,
                 Enabled = opt.Enabled,
                 Remark = opt.Remark
             });
@@ -208,9 +221,11 @@ namespace MyFrame.RBAC.Service.Impl
         {
             OperationResult result = new OperationResult { ResultType = OperationResultType.Success };
             var optsToDel = _optRepository.Find(where);
-            //1、检查模块是否被引用
+            //1、检查操作是否被引用
+            var perType = PermissionType.Operation.ToInt();
             var query = from per in _rolePerRepository.Entities
                         join opt in optsToDel on per.PermissionId equals opt.Id
+                        where per.PerType == perType
                         select 1;
             if (query.Count() > 0)
             {
@@ -218,6 +233,34 @@ namespace MyFrame.RBAC.Service.Impl
                 result.Message = Msg_CheckBeforeDelete + "失败，操作已被分配到角色";
             }
             return result;
+        }
+
+        public OperationResult GetOptInfoByController(string controller)
+        {
+            OperationResult rst = new OperationResult();
+            if (string.IsNullOrEmpty(controller))
+            {
+                rst.Message = Msg_GetOptInfoByController + "失败，控制器不能为空";
+                rst.ResultType = OperationResultType.ParamError;
+                return rst;
+            }
+            var perType = PermissionType.Operation.ToInt();
+
+            try
+            {
+                var query = (from usrRole in _usrRoleRelRepository.Entities.Where(u => u.UserId == RBACContext.CurrentUser.Id)
+                             join rolePer in _rolePerRepository.Entities.Where(per => per.PerType == perType) on usrRole.RoleId equals rolePer.RoleId
+                             join opt in _optRepository.Entities.Where(opt => opt.Controller == controller) on rolePer.PermissionId equals opt.Id
+                             select opt)
+                             .OrderBy(opt => opt.SortOrder);
+                rst.ResultType = OperationResultType.Success;
+                rst.AppendData = query.ToList();
+            }
+            catch (Exception ex)
+            {
+                base.ProcessException(ref rst, Msg_GetOptInfoByController + "错误", ex);
+            }
+            return rst;
         }
     }
 }

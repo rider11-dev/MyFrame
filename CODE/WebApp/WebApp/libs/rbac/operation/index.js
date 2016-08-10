@@ -1,8 +1,5 @@
 ﻿var optmanage = {
     gridOpt: $('#gridOpt'),
-    btnAddOpt: $('#btnAddOpt'),
-    btnEditOpt: $('#btnEditOpt'),
-    btnDeleteOpt: $('#btnDeleteOpt'),
     btnSearchOpt: $('#btnSearchOpt'),
     txtSearchOptName: $('#txtSearchOptName'),
     btnExpandModules: $('#btnExpandModules'),
@@ -14,14 +11,10 @@
     strCardModuleName: '#ModuleName',
 
     urlAddOpt: "",
-    urlEditOpt: "",
-    urlDeleteOpt: "",
     urlSearchOpt: "",
     urlSearchModule: "",
     init: function (options) {
         optmanage.urlAddOpt = options.urlAddOpt;
-        optmanage.urlEditOpt = options.urlEditOpt;
-        optmanage.urlDeleteOpt = options.urlDeleteOpt;
         optmanage.urlSearchOpt = options.urlSearchOpt;
         optmanage.urlSearchModule = options.urlSearchModule;
 
@@ -74,10 +67,13 @@
                 { field: 'check', checkbox: true },
                 { field: 'OptCode', title: '操作编号', align: 'center', valign: 'center', width: 80 },
                 { field: 'OptName', title: '操作名称', align: 'center', valign: 'center', width: 80 },
+                { field: 'Tag', title: '操作描述', align: 'center', valign: 'center', width: 80 },
                 { field: 'ModuleName', title: '所属模块', align: 'center', valign: 'center', width: 80 },
+                { field: 'Controller', title: '控制器', align: 'center', valign: 'center', width: 80 },
                 { field: 'Icon', title: '图标', align: 'center', valign: 'center', width: 80 },
                 { field: 'CssClass', title: 'Css类', align: 'center', valign: 'center', width: 100 },
                 { field: 'CssStyle', title: 'Css样式', align: 'center', valign: 'center', width: 100 },
+                { field: 'ClickFunc', title: '操作函数', align: 'center', valign: 'center', width: 100 },
                 {
                     field: 'SubmitUrl', title: '操作链接', align: 'center', valign: 'center', width: 120,
                     cellStyle: function (value, row, index, field) {
@@ -105,9 +101,8 @@
         gFunc.initgrid(optmanage.gridOpt, options);
     },
     bindEvent: function () {
-        optmanage.btnAddOpt.click(optmanage.funcAddOpt);
-        optmanage.btnEditOpt.click(optmanage.funcEditOpt);
-        optmanage.btnDeleteOpt.click(optmanage.funcDeleteOpt);
+        gFuncBusiness.bindEventForRbacButton();
+
         optmanage.btnSearchOpt.click(optmanage.funcSearchOpt);
         optmanage.btnSearchModules.click(optmanage.funcSearchModules);
         optmanage.btnExpandModules.click(optmanage.funcExpandModules);
@@ -120,17 +115,17 @@
             optmanage.funcSearchOpt();
         });
     },
-    funcAddOpt: function () {
+    funcBtnAdd: function (options) {
         var node = treeviewExt.getSelectedData(['id', 'text']);
         if (gFunc.isNull(node) || node.length < 1) {
             gMessager.warning('请选择模块');
             return;
         }
         modalForm.show({
-            title: '添加操作',
+            title: options.tag,
             contentUrl: optmanage.urlAddOpt,
             contentUrlParams: {},
-            submitUrl: optmanage.urlAddOpt,
+            submitUrl: options.submitUrl,
             submitSucceedCallback: function () {
                 optmanage.funcSearchOpt();
             },
@@ -140,7 +135,7 @@
             }
         });
     },
-    funcEditOpt: function () {
+    funcBtnEdit: function (options) {
         var checkedRows = optmanage.gridOpt.bootstrapTable('getSelections');
         if (checkedRows.length < 1) {
             gMessager.warning('请选择要修改的数据');
@@ -152,22 +147,25 @@
         }
         var data = checkedRows[0];
         modalForm.show({
-            title: '修改操作信息',
+            title: options.tag,
             contentUrl: optmanage.urlAddOpt,
             contentUrlParams: {},
-            submitUrl: optmanage.urlEditOpt,
+            submitUrl: options.submitUrl,
             onLoadCallback: function () {
                 console.log(data);
                 $('#Id').val(data.Id);
                 $('#OptCode', optmanage.strFormAddOpt).val(data.OptCode);
                 $('#OptCode', optmanage.strFormAddOpt).attr({ 'readonly': 'readonly' });//操作编号不能修改
                 $('#OptName', optmanage.strFormAddOpt).val(data.OptName);
+                $('#Tag', optmanage.strFormAddOpt).val(data.Tag);
+                $('#ClickFunc', optmanage.strFormAddOpt).val(data.ClickFunc);
                 $('#SubmitUrl', optmanage.strFormAddOpt).val(data.SubmitUrl);
                 $('#Icon', optmanage.strFormAddOpt).val(data.Icon);
                 $('#CssClass', optmanage.strFormAddOpt).val(data.CssClass);
                 $('#CssStyle', optmanage.strFormAddOpt).val(data.CssStyle);
                 $(optmanage.strCardModuleId, optmanage.strFormAddOpt).val(data.ModuleId);
                 $(optmanage.strCardModuleName, optmanage.strFormAddOpt).val(data.ModuleName);
+                $('#Controller', optmanage.strFormAddOpt).val(data.Controller);
                 $('#SortOrder', optmanage.strFormAddOpt).val(data.SortOrder);
                 if (data.Enabled) {
                     $('#Enabled', optmanage.strFormAddOpt).iCheck('check');
@@ -179,7 +177,7 @@
             }
         });
     },
-    funcDeleteOpt: function () {
+    funcBtnDelete: function (options) {
         var checkedRows = optmanage.gridOpt.bootstrapTable('getSelections');
         //console.log(checkedRows.length);
         if (checkedRows.length < 1) {
@@ -204,7 +202,7 @@
                 //
                 $.ajax({
                     type: 'post',
-                    url: optmanage.urlDeleteOpt,
+                    url: options.submitUrl,
                     data: JSON.stringify(optIds),
                     success: function (result, status, XHR) {
                         if (result.code == 0) {

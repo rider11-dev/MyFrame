@@ -21,7 +21,8 @@ namespace WebApp.Areas.RBAC.Controllers
         readonly IUserService _usrSrv;
         IUserRoleRelService _usrRoleSrv;
         IRoleService _roleSrv;
-        public AccountController(IUserService usrSrv, IUserRoleRelService usrRoleSrv, IRoleService roleSrv)
+        public AccountController(IUserService usrSrv, IUserRoleRelService usrRoleSrv, IRoleService roleSrv, IOperationService optSrv)
+            : base(optSrv)
         {
             _usrSrv = usrSrv;
             _usrRoleSrv = usrRoleSrv;
@@ -29,9 +30,9 @@ namespace WebApp.Areas.RBAC.Controllers
         }
         //
         // GET: /RBAC/User/
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
-            return View(new LoginViewModel());
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
 
         [HttpPost]
@@ -93,7 +94,14 @@ namespace WebApp.Areas.RBAC.Controllers
                 HttpContext.Session.SetRoleText((roles != null && roles.Count > 0) ? string.Join(",", roles.Select(r => r.RoleName).ToArray()) : "");
 
                 //重定向
-                return RedirectToHome();
+                if (string.IsNullOrEmpty(loginVM.ReturnUrl))
+                {
+                    return RedirectToHome();
+                }
+                else
+                {
+                    return base.Redirect(loginVM.ReturnUrl);
+                }
             }
             catch (Exception ex)
             {
@@ -109,14 +117,14 @@ namespace WebApp.Areas.RBAC.Controllers
             return base.RedirectToHome();
         }
 
-        [LoginCheckFilter]
+        [LoginCheck]
         public ActionResult ChangePwd()
         {
             return PartialView(new ChangePwdViewModel());
         }
 
         [HttpPost]
-        [LoginCheckFilter]
+        [LoginCheck]
         [ValidateAntiForgeryToken]
         public JsonResult ChangePwd(ChangePwdViewModel changePwdVM)
         {
