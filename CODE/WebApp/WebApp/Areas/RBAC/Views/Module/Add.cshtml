@@ -91,7 +91,7 @@
                     urlParams: {},
                     onSubmitCallback: function () {
                         //1、获取选择的节点
-                        var moduleData = treeviewExt.getSelectedData(['id', 'text']);
+                        var moduleData = moduleTreeHelp.treeModule.getSelectedData(['id', 'text']);
                         //console.log(moduleData);
                         if (gFunc.isNull(moduleData) || moduleData.length < 1) {
                             return false;

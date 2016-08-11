@@ -11,6 +11,8 @@ namespace WebApp.Extensions
     {
         const string KEY_EFProfiler = "EFProfiler";
 
+        const string KEY_RBAC = "rbac";
+
         /// <summary>
         /// 是否开启MiniProfiler
         /// </summary>
@@ -19,6 +21,18 @@ namespace WebApp.Extensions
             get
             {
                 var val = AppSettingHelper.Get(KEY_EFProfiler);
+                return val.ConvertTo<Boolean>(false);
+            }
+        }
+
+        /// <summary>
+        /// 是否开启RBAC
+        /// </summary>
+        public static bool EnableRBAC
+        {
+            get
+            {
+                var val = AppSettingHelper.Get(KEY_RBAC);
                 return val.ConvertTo<Boolean>(false);
             }
         }

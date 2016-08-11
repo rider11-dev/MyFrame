@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using WebApp.Extensions;
 
 namespace WebApp.Controllers
 {
@@ -20,7 +21,7 @@ namespace WebApp.Controllers
 
         protected void SetOptPermissions()
         {
-            var rst = OptSrv.GetOptInfoByController(RouteData.Values["controller"].ToString());
+            var rst = OptSrv.GetOptInfoByController(RouteData.Values["controller"].ToString(), AppContext.EnableRBAC);
             if (rst.ResultType == OperationResultType.Success)
             {
                 ViewData.Add("Opts", rst.AppendData);

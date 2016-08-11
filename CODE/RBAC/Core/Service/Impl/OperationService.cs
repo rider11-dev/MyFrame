@@ -235,7 +235,13 @@ namespace MyFrame.RBAC.Service.Impl
             return result;
         }
 
-        public OperationResult GetOptInfoByController(string controller)
+        /// <summary>
+        /// 根据控制器获取所有操作
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="ignoreUser">是否启用权限控制</param>
+        /// <returns></returns>
+        public OperationResult GetOptInfoByController(string controller, bool enableRbac = false)
         {
             OperationResult rst = new OperationResult();
             if (string.IsNullOrEmpty(controller))
@@ -248,13 +254,17 @@ namespace MyFrame.RBAC.Service.Impl
 
             try
             {
-                var query = (from usrRole in _usrRoleRelRepository.Entities.Where(u => u.UserId == RBACContext.CurrentUser.Id)
-                             join rolePer in _rolePerRepository.Entities.Where(per => per.PerType == perType) on usrRole.RoleId equals rolePer.RoleId
-                             join opt in _optRepository.Entities.Where(opt => opt.Controller == controller) on rolePer.PermissionId equals opt.Id
-                             select opt)
-                             .OrderBy(opt => opt.SortOrder);
+                var queryWithRbac = (from usrRole in _usrRoleRelRepository.Entities.Where(u => u.UserId == RBACContext.CurrentUser.Id)
+                                     join rolePer in _rolePerRepository.Entities.Where(per => per.PerType == perType) on usrRole.RoleId equals rolePer.RoleId
+                                     join opt in _optRepository.Entities.Where(opt => opt.Controller == controller) on rolePer.PermissionId equals opt.Id
+                                     select opt)
+                                     .Distinct();
+                var queryWithoutRbac = _optRepository.Find(opt => opt.Controller == controller);
+
                 rst.ResultType = OperationResultType.Success;
-                rst.AppendData = query.ToList();
+                rst.AppendData = (enableRbac ? queryWithRbac : queryWithoutRbac)
+                                .OrderBy(opt => opt.SortOrder)
+                                .ToList();
             }
             catch (Exception ex)
             {

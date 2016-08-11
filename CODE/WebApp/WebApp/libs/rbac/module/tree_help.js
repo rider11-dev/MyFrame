@@ -1,7 +1,8 @@
 var moduleTreeHelp = {
     urlSearchModules: "",
-    txtHelpModuleName: $('#txtHelpModuleName'),
-    btnModuleHelpSearch: $('#btnModuleHelpSearch'),
+    txtHelpModuleName: $('#txtModuleName_Help'),
+    btnModuleHelpSearch: $('#btnModuleSearch_Help'),
+    treeModule: undefined,
     init: function (options) {
         moduleTreeHelp.urlSearchModules = options.urlSearchModules;
         moduleTreeHelp.initModuleTree(options.singleSelect);
@@ -9,18 +10,20 @@ var moduleTreeHelp = {
         moduleTreeHelp.btnModuleHelpSearch.click(moduleTreeHelp.searchModules);
     },
     initModuleTree: function (singleSelect) {
-        treeviewExt.initTree({
-            treeId: 'treeModuleHelp',
+        moduleTreeHelp.treeModule = treeHelper.create('#treeModule_Help', {
             dataId: 'id',
             dataField: 'rows',
-            singleSelect: singleSelect,
-            dataUrl: moduleTreeHelp.urlSearchModules
+            dataUrl: moduleTreeHelp.urlSearchModules,
+            singleSelect: true,
+            funcUrlParams: function () {
+                return {};
+            }
         });
     },
     searchModules: function () {
         //查询文本
         var name = moduleTreeHelp.txtHelpModuleName.val();
         //alert(name);
-        treeviewExt.search(name);
+        moduleTreeHelp.treeModule.search(name);
     }
 };

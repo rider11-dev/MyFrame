@@ -30,7 +30,23 @@
     <script src="~/libs/misc/respond.min.js"></script>
     <script src="~/libs/misc/html5shiv.min.js"></script>
     <![endif]-->
+    <style>
+        .tab_page_content {
+            min-height: 500px;
+        }
 
+        .close-tab {
+            color: #94a6b0;
+            cursor: pointer;
+            display: none;
+            font-size: 10px;
+            padding-left: 25px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            z-index: 100;
+        }
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
@@ -40,20 +56,31 @@
         @Html.Partial("_MenuSideBar")
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                @*<h1>
-                        控制面板
-                    </h1>*@
-                <!--位置导航-->
-                <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li class="active">Dashboard</li>
-                </ol>
-            </section>
             <!-- Main content -->
             <section id="main-content" class="content">
                 @RenderBody()
+                <div class="nav-tabs-custom" id="nav-main-content">
+                    <ul class="nav nav-tabs" id="tab_header_container_main">
+                        <li class="active" id="tab_page_header_home" data-closeable="false">
+                            <a href="#tab_page_home" data-toggle="tab">主页</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tab_content_container_main">
+                        <div class="tab-pane active tab_page_content" id="tab_page_home">
+                            主页
+                        </div>
+                    </div>
+                    <div id="context-menu-tab-home">
+                        <ul class="dropdown-menu" role="menu">
+                            <li data-tag="close-this"><a tabindex="-1">关闭当前选项卡</a></li>
+                            <li data-tag="close-prev"><a tabindex="-1">关闭左侧选项卡</a></li>
+                            <li data-tag="close-next"><a tabindex="-1">关闭右侧选项卡</a></li>
+                            <li class="divider"></li>
+                            <li data-tag="close-other"><a tabindex="-1">关闭其他选项卡</a></li>
+                            <li data-tag="close-all"><a tabindex="-1">关闭所有选项卡</a></li>
+                        </ul>
+                    </div>
+                </div>
             </section>
             <!-- /.content -->
         </div>
@@ -68,7 +95,6 @@
         @Html.Partial("_Modal")
         @Html.Partial("_HelpModal")
         <div class="control-sidebar-bg"></div>
-
     </div>
     <!-- ./wrapper -->
     <!-- jQuery 2.2.0 -->
@@ -88,6 +114,10 @@
     <!--bootstraptable-->
     <script src="~/libs/plugins/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="~/libs/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+
+    <!--bootstrap-contextmenu-->
+    <script src="~/libs/plugins/bootstrap-contextmenu/bootstrap-contextmenu.js"></script>
+
     <!--bootstrap-treeview-->
     <script src="~/libs/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
     <!-- AdminLTE App -->
@@ -98,8 +128,8 @@
     <script src="~/libs/rbac/modalForm.js"></script>
     <script src="~/libs/rbac/modalFormHelp.js"></script>
     <script src="~/libs/rbac/WinMsg.js"></script>
-    <script src="~/libs/rbac/treeviewExt.js"></script>
-
+    <script src="~/libs/rbac/treeHelper.js"></script>
+    <script src="~/libs/rbac/tabHelper.js"></script>
     <script>
         $(function () {
             toastr.options = { positionClass: "toast-top-center", showDuration: "150", hideDuration: "1000", showMethod: "fadeIn", closeButton: 'true' };

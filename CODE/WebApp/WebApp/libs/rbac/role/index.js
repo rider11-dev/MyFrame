@@ -1,8 +1,7 @@
 ﻿var roles = {
-    grid: $('#grid'),
-    btnSearch: $('#btnSearch'),
-    btnAssign: $('#btnAssign'),
-    txtSearchRoleName: $('#txtSearchRoleName'),
+    grid: $('#grid_RoleManage'),
+    btnSearch: $('#btnSearch_RoleManage'),
+    txtSearchRoleName: $('#txtSearch_RoleManage'),
     urlAdd: "",
     urlSearch: "",
     urlHelpUsers: "",

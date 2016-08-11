@@ -70,7 +70,8 @@ namespace MyFrame.RBAC.Service.Impl
             base.UnitOfWork.BeginTransaction();
             try
             {
-                _rolePermissionRep.Delete(r => r.RoleId == roleId);
+                var perType = PermissionType.Module.ToInt();
+                _rolePermissionRep.Delete(r => r.RoleId == roleId && r.PerType == perType);
 
                 if (moduleIds != null && moduleIds.Length > 0)
                 {
@@ -79,7 +80,7 @@ namespace MyFrame.RBAC.Service.Impl
                                    {
                                        RoleId = roleId,
                                        PermissionId = mId,
-                                       PerType = PermissionType.Module.ConvertTo<int>()
+                                       PerType = perType
                                    };
                     _rolePermissionRep.AddBatch(queryAdd.ToList());
                 }
@@ -264,14 +265,21 @@ namespace MyFrame.RBAC.Service.Impl
         /// </summary>
         /// <param name="moduleId"></param>
         /// <param name="optId">optId为null则只校验模块权限</param>
+        /// <param name="enableRbac">是否启用rbac</param>
         /// <returns></returns>
-        public OperationResult CheckPermission(int? moduleId, int? optId = null)
+        public OperationResult CheckPermission(int? moduleId, int? optId = null, bool enableRbac = false)
         {
             OperationResult rst = new OperationResult();
             if (moduleId == null)
             {
                 rst.ResultType = OperationResultType.PermissionDenied;
                 rst.Message = "权限不足";
+                return rst;
+            }
+
+            if (!enableRbac)
+            {
+                rst.ResultType = OperationResultType.Success;
                 return rst;
             }
 

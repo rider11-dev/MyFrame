@@ -1,9 +1,7 @@
 ﻿var usermanage = {
-    grid: $('#grid'),
-    btnSearch: $('#btnSearch'),
-    btnSetRoles: $('#btnSetRoles'),
-    btnClearRoles: $('#btnClearRoles'),
-    txtSearchUserName: $('#txtSearchUserName'),
+    grid: $('#grid_UsrManage'),
+    btnSearch: $('#btnSearch_UsrManage'),
+    txtSearchUserName: $('#txtSearch_UsrManage'),
     urlAdd: "",
     urlSearch: "",
     urlHelpRoles: "",

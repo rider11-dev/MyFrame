@@ -24,18 +24,6 @@ namespace WebApp.Extensions.Filters
         /// </summary>
         public IModuleService ModuleSrv { get; set; }
 
-        const string KEY_RBAC = "rbac";
-        /// <summary>
-        /// 是否开启RBAC
-        /// </summary>
-        bool EnableRBAC
-        {
-            get
-            {
-                var val = AppSettingHelper.Get(KEY_RBAC);
-                return val.ConvertTo<Boolean>(false);
-            }
-        }
         public override void OnResultExecuting(ResultExecutingContext filterContext)
         {
             base.OnResultExecuting(filterContext);
@@ -51,7 +39,7 @@ namespace WebApp.Extensions.Filters
         {
             List<ModuleSimpleViewModel> listVM = new List<ModuleSimpleViewModel>();
             var roles = session.GetRoleIds();
-            var result = EnableRBAC ?
+            var result = AppContext.EnableRBAC ?
                 ModuleSrv.FindByRolesWithSimpleInfo(roles) :
                 ModuleSrv.FindByPageWithSimpleInfo(m => m.Enabled,
                                                     query => query.OrderBy(m => m.Code),

@@ -1,7 +1,7 @@
 ﻿var authmanage = {
-    gridRoles: $('#gridRoles'),
-    gridModules: $('#gridModules'),
-    gridOpts: $('#gridOpts'),
+    gridRoles: $('#gridRoles_AuthManage'),
+    treeModules: undefined,
+    gridOpts: $('#gridOpts_AuthManage'),
     urlSearchRoles: "",
     urlSearchModules: "",
     urlSearchOpts: "",
@@ -33,7 +33,7 @@
         authmanage.getAllOpts();
         //初始化列表、树
         authmanage.initRolesGrid();
-        authmanage.initModulesTree();
+        authmanage.initTreeModules();
         authmanage.initOptsGrid();
         //绑定事件
         authmanage.bindEvents();
@@ -88,15 +88,14 @@
             authmanage.setOptsChecked();
         });
     },
-    initModulesTree: function () {
-        treeviewExt.initTree({
-            treeId: 'treeModule',
+    initTreeModules: function () {
+        authmanage.treeModules = treeHelper.create('#treeModule_AuthManage', {
             dataId: 'id',
             dataField: 'rows',
             dataUrl: authmanage.urlSearchModules
         });
         //选择模块时，加载其对应的操作列表
-        treeviewExt.tree.on('nodeSelected', function (event, data) {
+        authmanage.treeModules.tree.on('nodeSelected', function (event, data) {
             //console.log(data);// Object { id="11",  text="用户管理",  sort=10,  更多...}
             if (gFunc.isNull(data)) {
                 return;
@@ -121,7 +120,7 @@
             //queryParams: function (params) {
             //    //添加额外参数
             //    //1、moduleId
-            //    var optIds = treeviewExt.getSelectedData(['id']);
+            //    var optIds = authmanage.treeModules.getSelectedData(['id']);
             //    //console.log(moduleId);
             //    if (!gFunc.isNull(optIds) && optIds.length > 0) {
             //        params.moduleId = optIds[0].id;
@@ -224,7 +223,7 @@
             });
         }
         //console.log(permModuleIds);
-        treeviewExt.setCheckedNodes(permModuleIds);
+        authmanage.treeModules.setCheckedNodes(permModuleIds);
     },
 
     setOptsChecked: function () {
@@ -259,7 +258,7 @@
             return;
         }
         var idField = 'id';
-        var moduleIds = treeviewExt.getCheckedData([idField]);
+        var moduleIds = authmanage.treeModules.getCheckedData([idField]);
 
         var data = { roleId: roleRows[0].Id, perIds: [], perType: 0, moduleId: null };//moduleId: null是为了与后台控制器方法参数匹配
         var idx = 0;
@@ -300,7 +299,7 @@
             gMessager.warning("请选择角色");
             return;
         }
-        var moduleIds = treeviewExt.getSelectedData(['id']);
+        var moduleIds = authmanage.treeModules.getSelectedData(['id']);
         if (moduleIds.length < 1) {
             gMessager.warning("请选择模块");
             return;

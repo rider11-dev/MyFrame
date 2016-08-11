@@ -1,10 +1,11 @@
 ﻿var optmanage = {
-    gridOpt: $('#gridOpt'),
-    btnSearchOpt: $('#btnSearchOpt'),
-    txtSearchOptName: $('#txtSearchOptName'),
-    btnExpandModules: $('#btnExpandModules'),
-    btnSearchModules: $('#btnSearchModules'),
-    txtSearchModuleName: $('#txtSearchModuleName'),
+    gridOpt: $('#gridOpt_OptManage'),
+    treeModule: undefined,
+    btnSearchOpt: $('#btnSearchOpt_OptManage'),
+    txtSearchOptName: $('#txtSearchOpt_OptManage'),
+    btnExpandModules: $('#btnExpandModule_OptManage'),
+    btnSearchModules: $('#btnSearchModule_OptManage'),
+    txtSearchModuleName: $('#txtSearchModule_OptManage'),
 
     strFormAddOpt: '#form-add-opt',
     strCardModuleId: '#ModuleId',
@@ -18,14 +19,13 @@
         optmanage.urlSearchOpt = options.urlSearchOpt;
         optmanage.urlSearchModule = options.urlSearchModule;
 
-        optmanage.initModuleTree();
+        optmanage.initTreeModule();
         optmanage.initGridOpt();
         optmanage.bindEvent();
     },
-    initModuleTree: function () {
-        //console.log('initModuleTree');
-        treeviewExt.initTree({
-            treeId: 'treeModule',
+    initTreeModule: function () {
+        //console.log('initTreeModule');
+        optmanage.treeModule = treeHelper.create('#treeModule_OptManage', {
             dataId: 'id',
             dataField: 'rows',
             dataUrl: optmanage.urlSearchModule,
@@ -45,7 +45,7 @@
             queryParams: function (params) {
                 //添加额外参数
                 //1、moduleId
-                var optIds = treeviewExt.getSelectedData(['id']);
+                var optIds = optmanage.treeModule.getSelectedData(['id']);
                 //console.log(moduleId);
                 if (!gFunc.isNull(optIds) && optIds.length > 0) {
                     params.moduleId = optIds[0].id;
@@ -107,7 +107,7 @@
         optmanage.btnSearchModules.click(optmanage.funcSearchModules);
         optmanage.btnExpandModules.click(optmanage.funcExpandModules);
 
-        treeviewExt.tree.on('nodeSelected', function (event, data) {
+        optmanage.treeModule.tree.on('nodeSelected', function (event, data) {
             //console.log(data);
             if (gFunc.isNull(data)) {
                 return;
@@ -116,7 +116,7 @@
         });
     },
     funcBtnAdd: function (options) {
-        var node = treeviewExt.getSelectedData(['id', 'text']);
+        var node = optmanage.treeModule.getSelectedData(['id', 'text']);
         if (gFunc.isNull(node) || node.length < 1) {
             gMessager.warning('请选择模块');
             return;
@@ -228,16 +228,16 @@
     funcSearchModules: function () {
         //查询文本
         var name = optmanage.txtSearchModuleName.val();
-        treeviewExt.search(name);
+        optmanage.treeModule.search(name);
     },
     funcExpandModules: function () {
         var treeStatus = optmanage.btnExpandModules.attr('data-status');
         //console.log(treeStatus);
         if (treeStatus == 'expanded') {
-            treeviewExt.collapseAll();
+            optmanage.treeModule.collapseAll();
             optmanage.btnExpandModules.attr('data-status', 'collapsed');
         } else {
-            treeviewExt.expandAll();
+            optmanage.treeModule.expandAll();
             optmanage.btnExpandModules.attr('data-status', 'expanded');
         }
     }

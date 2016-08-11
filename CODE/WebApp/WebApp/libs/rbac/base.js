@@ -21,7 +21,7 @@ Date.prototype.Format = function (fmt) {
 /*——————————————————全局函数——————————————————*/
 var gFunc = {
     isNull: function (value) {
-        return typeof (value) == 'undefined' || value == null;
+        return typeof (value) == 'undefined' || value == null || value === '';
     },
     getRootPath: function () {
         //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp

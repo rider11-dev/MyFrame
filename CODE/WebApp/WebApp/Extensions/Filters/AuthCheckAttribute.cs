@@ -29,7 +29,7 @@ namespace WebApp.Extensions.Filters
             //权限校验
             var moduleId = httpContext.Request["module"].ConvertTo<int>();
             var optId = httpContext.Request["opt"].ConvertTo<int>();
-            var rst = RolePermissionSrv.CheckPermission(moduleId, optId);
+            var rst = RolePermissionSrv.CheckPermission(moduleId, optId, AppContext.EnableRBAC);
 
             if (rst.ResultType != OperationResultType.Success)
             {

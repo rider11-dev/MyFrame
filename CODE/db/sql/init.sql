@@ -80,9 +80,10 @@ CREATE TABLE Operations(
 	Icon nvarchar(50),
 	ModuleId int not null,
 	Controller nvarchar(100) not null,
+	Tag nvarchar(100),
+	ClickFunc nvarchar(255) not null,
 	SortOrder int,
 	[Enabled] bit not null default 0,
-	Tag nvarchar(100),
 	Remark nvarchar(255)
 );
 ALTER TABLE [Operations] ADD  CONSTRAINT [UK_Operations_ModuleOptCode] UNIQUE NONCLUSTERED ( [ModuleId] ASC ,[OptCode] ASC);

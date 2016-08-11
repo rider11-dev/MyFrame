@@ -43,10 +43,11 @@
                     }
                     bool hasChild = m.SubModules != null && m.SubModules.Count() > 0;
                     sb.AppendFormat("<li {0}>", (m.ParentId == null) ? "class='treeview'" : "");
-                    sb.AppendFormat("<a href='{0}'><i class='fa {1}'></i><span>{2}</span>{3}</a>",
-                        string.IsNullOrEmpty(m.LinkUrl) ? "#" : (Request.ApplicationPath + m.LinkUrl),
+                    sb.AppendFormat("<a href='{0}' data-module='{4}'><i class='fa {1}'></i><span>{2}</span>{3}</a>",
+                        string.IsNullOrEmpty(m.LinkUrl) ? "" : (Request.ApplicationPath + m.LinkUrl),
                         m.Icon, m.Name,
-                        hasChild ? "<i class='fa fa-angle-left pull-right'></i>" : "");
+                        hasChild ? "<i class='fa fa-angle-left pull-right'></i>" : "",
+                        m.Code);
                     if (hasChild)
                     {
                         sb.AppendFormat("<ul class='treeview-menu'>");

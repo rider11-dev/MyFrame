@@ -1,9 +1,9 @@
 ﻿var modulemanage = {
     form: $('#form-add-module'),
-    grid: $('#grid'),
-    btnSearch: $('#btnSearch'),
-    txtSearchCode: $('#txtSearchCode'),
-    txtSearchName: $('#txtSearchName'),
+    grid: $('#grid_ModuleManage'),
+    btnSearch: $('#btnSearch_ModuleManage'),
+    txtSearchCode: $('#txtSearchCode_ModuleManage'),
+    txtSearchName: $('#txtSearchName_ModuleManage'),
     btnHelpParentModule: $('#btnHelpParentModule'),
     urlAdd: "",
     urlEdit: "",

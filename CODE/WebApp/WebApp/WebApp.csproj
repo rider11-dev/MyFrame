@@ -143,9 +143,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Areas\RBAC\Models\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -180,11 +178,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\RBAC\ModuleTreeNode.cs" />
+    <Content Include="libs\plugins\bootstrap-contextmenu\bootstrap-contextmenu.js" />
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.css" />
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.js" />
     <Content Include="libs\rbac\module\tree_help.js" />
     <Content Include="libs\rbac\operation\index.js" />
-    <Content Include="libs\rbac\treeviewExt.js" />
+    <Content Include="libs\rbac\tabHelper.js" />
+    <Content Include="libs\rbac\treeHelper.js" />
     <Content Include="libs\plugins\form\jquery.form.js" />
     <Content Include="libs\rbac\account\changepwd.js" />
     <Content Include="libs\rbac\authmanage\index.js" />
