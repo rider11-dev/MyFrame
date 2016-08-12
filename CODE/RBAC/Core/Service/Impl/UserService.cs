@@ -109,10 +109,7 @@ namespace MyFrame.RBAC.Service.Impl
                   u => new User
                   {
                       Email = usr.Email,
-                      Phone = usr.Phone,
-                      Address = usr.Address,
                       Enabled = usr.Enabled,
-                      Remark = usr.Remark,
                       LastModifier = usr.LastModifier,
                       LastModifyTime = usr.LastModifyTime
                   });
@@ -136,10 +133,7 @@ namespace MyFrame.RBAC.Service.Impl
                                    Id = usr.Id,
                                    UserName = usr.UserName,
                                    Email = usr.Email,
-                                   Phone = usr.Phone,
-                                   Address = usr.Address,
                                    Enabled = usr.Enabled,
-                                   Remark = usr.Remark,
                                    Creator = usr.Creator,
                                    CreatorName = c.UserName,
                                    CreateTime = usr.CreateTime,

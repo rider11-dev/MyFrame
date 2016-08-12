@@ -17,7 +17,7 @@
             queryParams: function (params) {
                 //添加额外参数
                 if (!gFunc.isNull(usersGridHelp.txtHelpUserName.val())) {
-                    params.RoleName = usersGridHelp.txtHelpUserName.val();
+                    params.UserName = usersGridHelp.txtHelpUserName.val();
                 }
                 return params;//必须返回params
             },
@@ -30,15 +30,7 @@
                        width: 40
                    },
                    { field: 'check', checkbox: true, width: 40 },
-                   { field: 'UserName', title: '用户名', align: 'center', valign: 'center', width: 80 },
-                   {
-                       field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140,
-                       cellStyle: function (value, row, index, field) {
-                           return {
-                               css: { "min-width": "200px" }
-                           };
-                       }
-                   }
+                   { field: 'UserName', title: '用户名', align: 'center', valign: 'center', width: 80 }
             ]
         };
         //调用公共函数，初始化表格

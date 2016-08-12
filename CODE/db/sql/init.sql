@@ -86,7 +86,11 @@ CREATE TABLE Operations(
 	SortOrder int,
 	[Enabled] bit not null default 0,
 	IsSystem bit not null default 0,
-	Remark nvarchar(255)
+	Remark nvarchar(255),
+	Creator int,
+	CreateTime datetime,
+	LastModifier int,
+	LastModifyTime datetime
 );
 ALTER TABLE [Operations] ADD  CONSTRAINT [UK_Operations_ModuleOptCode] UNIQUE NONCLUSTERED ( [ModuleId] ASC ,[OptCode] ASC);
 

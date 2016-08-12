@@ -14,8 +14,9 @@ using MyFrame.Infrastructure.OptResult;
 using WebApp.Extensions.ActionResult;
 using MyFrame.RBAC.ViewModel;
 using WebApp.Extensions.Session;
-using AutoMapper;
+
 using MyFrame.RBAC.Service.Interface;
+using MyFrame.Infrastructure.Common;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -143,7 +144,7 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
 
-            var role = Mapper.Map<Role>(roleVM);
+            var role = OOMapper.Map<RoleViewModel,Role>(roleVM);
             role.Creator = HttpContext.Session.GetUserId();
             role.CreateTime = DateTime.Now;
 
@@ -166,7 +167,7 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, messgae = base.ParseModelStateErrorMessage(ModelState) });
             }
 
-            var role = Mapper.Map<Role>(roleVM);
+            var role = OOMapper.Map<RoleViewModel,Role>(roleVM);
             role.LastModifier = HttpContext.Session.GetUserId();
             role.LastModifyTime = DateTime.Now;
 

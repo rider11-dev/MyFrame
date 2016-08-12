@@ -39,6 +39,7 @@
             //console.log(data);
             $(".lblUserName").text(data.info.user);
             $(".lblRoleName").text(data.info.role);
+            gMessager.success("欢迎回来," + data.info.user);
         }, 'json');
     },
     //初始化tab页右键菜单

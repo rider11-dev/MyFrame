@@ -33,23 +33,14 @@
             },
             columns: [
                     { field: 'Id', visible: false },
-                    {
-                        field: 'rownumber', formatter: function (value, row, index) {
-                            return index + 1;
-                        }
-                    },
+                    //{
+                    //    field: 'rownumber', formatter: function (value, row, index) {
+                    //        return index + 1;
+                    //    }
+                    //},
                     { field: 'check', checkbox: true },
                     { field: 'UserName', title: '用户名', align: 'center', valign: 'center', width: 80 },
                     { field: 'Email', title: '邮箱', align: 'center', valign: 'center', width: 100 },
-                    { field: 'Phone', title: '电话', align: 'center', valign: 'center', width: 100 },
-                    {
-                        field: 'Address', title: '地址', align: 'center', valign: 'center', width: 120,
-                        cellStyle: function (value, row, index, field) {
-                            return {
-                                css: { "min-width": "200px" }
-                            };
-                        }
-                    },
                     {
                         field: 'Enabled', title: '是否激活', align: 'center', valign: 'center', width: 80,
                         formatter: gFormatter.trueOrFalse.formatter
@@ -77,14 +68,6 @@
                         cellStyle: function (value, row, index, field) {
                             return {
                                 css: { "min-width": "140px" }
-                            };
-                        }
-                    },
-                    {
-                        field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140,
-                        cellStyle: function (value, row, index, field) {
-                            return {
-                                css: { "min-width": "200px" }
                             };
                         }
                     }
@@ -129,13 +112,9 @@
                 $('#UserName').val(data.UserName);
                 $('#UserName').attr({ 'readonly': 'readonly' });//用户名不能修改
                 $('#Email').val(data.Email);
-                $('#Phone').val(data.Phone);
-                $('#Address').val(data.Address);
                 if (data.Enabled) {
                     $('#Enabled').iCheck('check');
                 }
-
-                $('#Remark').val(data.Remark);
             },
             submitSucceedCallback: function () {
                 usermanage.grid.bootstrapTable('refresh');

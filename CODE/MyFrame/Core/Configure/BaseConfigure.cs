@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using AutoMapper;
 using MyFrame.Core.Model;
 using MyFrame.Core.Repository;
 using MyFrame.Core.UnitOfWork;
@@ -15,7 +14,7 @@ namespace MyFrame.Core.Configure
     /// <summary>
     /// 框架基础配置
     /// </summary>
-    public class BaseConfigure : IRegister, MyFrame.Core.Configure.IMapper
+    public class BaseConfigure : IRegister
     {
 
         public void Register(ContainerBuilder builder)
@@ -25,10 +24,6 @@ namespace MyFrame.Core.Configure
 
             //注册工作单元,PropertiesAutowired是为了属性DbContext实现自动注入
             builder.RegisterType<EFUnitOfWork>().As<IUnitOfWork>().PropertiesAutowired().InstancePerRequest();
-        }
-
-        public void Map(IMapperConfiguration cfg)
-        {
         }
     }
 }

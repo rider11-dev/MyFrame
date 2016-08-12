@@ -38,6 +38,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EmitMapper">
+      <HintPath>..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\dlls\log4net\log4net.dll</HintPath>
     </Reference>
@@ -62,6 +65,7 @@
     <Compile Include="Common\EncryptionHelper.cs" />
     <Compile Include="Common\EnumExtensions.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
+    <Compile Include="Common\OOMapper.cs" />
     <Compile Include="Common\TypeExtensions.cs" />
     <Compile Include="Common\VerificationCode.cs" />
     <Compile Include="Dynamic\MyDynamicObject.cs" />

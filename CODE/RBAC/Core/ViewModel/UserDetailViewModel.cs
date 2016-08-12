@@ -13,13 +13,7 @@ namespace MyFrame.RBAC.ViewModel
 
         public string Email { get; set; }
 
-        public string Phone { get; set; }
-
-        public string Address { get; set; }
-
         public bool Enabled { get; set; }
-
-        public string Remark { get; set; }
 
         public int? Creator { get; set; }
 

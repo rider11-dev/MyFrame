@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using AutoMapper;
 using MyFrame.Core.Configure;
 using MyFrame.RBAC.Model;
 using MyFrame.RBAC.Repository;
@@ -22,7 +21,7 @@ namespace MyFrame.RBAC.Configure
     /// <summary>
     /// rbac模块配置
     /// </summary>
-    public class RbacConfigure : IRegister, MyFrame.Core.Configure.IMapper
+    public class RbacConfigure : IRegister
     {
         public void Register(ContainerBuilder builder)
         {
@@ -55,16 +54,6 @@ namespace MyFrame.RBAC.Configure
             builder.RegisterType<OperationRepository>().As<IOperationRepository>().InstancePerRequest();
             builder.RegisterType<OperationService>().As<IOperationService>().InstancePerRequest();
 
-        }
-
-        public void Map(IMapperConfiguration cfg)
-        {
-            cfg.CreateMap<RoleViewModel, Role>();
-            cfg.CreateMap<UserViewModel, User>()
-                .ForMember(m => m.Password, opt => opt.Ignore());
-            cfg.CreateMap<ModuleViewModel, MyFrame.RBAC.Model.Module>();
-
-            cfg.CreateMap<OperationViewModel, Operation>();
         }
     }
 }

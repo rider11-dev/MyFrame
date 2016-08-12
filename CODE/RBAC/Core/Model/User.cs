@@ -31,17 +31,8 @@ namespace MyFrame.RBAC.Model
         [Display(Name = "邮箱")]
         public string Email { get; set; }
 
-        [Display(Name = "电话")]
-        public string Phone { get; set; }
-
-        [Display(Name = "地址")]
-        public string Address { get; set; }
-
         [Display(Name = "是否激活")]
         public bool Enabled { get; set; }
-
-        [Display(Name = "备注")]
-        public string Remark { get; set; }
 
         [Display(Name = "创建人")]
         public int? Creator { get; set; }

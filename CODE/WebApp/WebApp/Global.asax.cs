@@ -10,7 +10,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using WebApp.Extensions.Ioc;
-using WebApp.Extensions.Mapping;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Core.Mapping;
 using System.Data.Entity.Core.Metadata.Edm;
@@ -48,8 +47,6 @@ namespace WebApp
 
             //ioc配置
             AutofacRegister.RegisterAutofac();
-            //automapper配置
-            AutoMapperRegister.Configure();
 
             EFWormUp();
         }

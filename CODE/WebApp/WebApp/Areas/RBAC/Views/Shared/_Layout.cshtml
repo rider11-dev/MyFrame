@@ -118,7 +118,14 @@
 
     <script>
         $(function () {
-            toastr.options = { positionClass: "toast-top-center", showDuration: "150", hideDuration: "1000", showMethod: "fadeIn", closeButton: 'true' };
+            toastr.options = {
+                positionClass: "toast-bottom-right",
+                showDuration: 300,
+                timeOut: 1500,//没有交互时，提示框显示的时间
+                showMethod: "fadeIn",
+                closeButton: true,
+                preventDuplicates: true
+            };
             index.init({
                 urlGetAccount: "@Url.Action("GetCurrentAccountInfo", "Account")"
             });

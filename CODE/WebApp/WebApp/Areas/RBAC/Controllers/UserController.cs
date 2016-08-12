@@ -16,8 +16,9 @@ using WebApp.Controllers;
 using WebApp.Extensions.Filters;
 using MyFrame.RBAC.ViewModel;
 
-using AutoMapper;
+
 using MyFrame.RBAC.Service.Interface;
+using MyFrame.Infrastructure.Common;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -88,8 +89,7 @@ namespace WebApp.Areas.RBAC.Controllers
                 u => new
                 {
                     Id = u.Id,
-                    UserName = u.UserName,
-                    Remark = u.Remark
+                    UserName = u.UserName
                 },
                 query => query.OrderBy(u => u.UserName),
                 pageArgs);
@@ -134,7 +134,7 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
 
-            var usr = Mapper.Map<User>(usrVM);
+            var usr = OOMapper.Map<UserViewModel, User>(usrVM);
             usr.Creator = HttpContext.Session.GetUserId();
             usr.CreateTime = DateTime.Now;
 
@@ -157,7 +157,7 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
 
-            var usr = Mapper.Map<User>(usrVM);
+            var usr = OOMapper.Map<UserViewModel, User>(usrVM);
             usr.LastModifier = HttpContext.Session.GetUserId();
             usr.LastModifyTime = DateTime.Now;
 

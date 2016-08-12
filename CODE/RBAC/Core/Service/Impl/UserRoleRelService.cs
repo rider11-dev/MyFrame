@@ -21,11 +21,13 @@ namespace MyFrame.RBAC.Service.Impl
         const string Msg_Assign = "角色分配";
 
         IUserRoleRelRepository _usrRoleRelRepository;
+        IUserRepository _usrRepository;
 
-        public UserRoleRelService(IUnitOfWork unitOfWork, IUserRoleRelRepository usrRoleRelRep)
+        public UserRoleRelService(IUnitOfWork unitOfWork, IUserRoleRelRepository usrRoleRelRep, IUserRepository usrRepository)
             : base(unitOfWork)
         {
             _usrRoleRelRepository = usrRoleRelRep;
+            _usrRepository = usrRepository;
         }
 
         public OperationResult SetRoles(int[] usrIds, int[] roleIds)
@@ -60,6 +62,14 @@ namespace MyFrame.RBAC.Service.Impl
                 result.Message = Msg_Assign + "失败，usrIds不能为空";
                 return result;
             }
+
+            if (_usrRepository.Find(usr => usrIds.Contains(usr.Id) && usr.UserName == "admin").Count() > 0)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = Msg_Assign + "失败，不能修改管理员的角色";
+                return result;
+            }
+
             /*
              * 1、删除指定用户指定角色
              * 2、给指定用户添加新角色
