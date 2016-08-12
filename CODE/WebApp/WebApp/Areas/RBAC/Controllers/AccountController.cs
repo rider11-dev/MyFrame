@@ -13,14 +13,17 @@ using WebApp.Extensions.Session;
 using WebApp.ViewModels.RBAC;
 using WebApp.Extensions.ActionResult;
 using MyFrame.RBAC.Service.Interface;
+using MyFrame.Infrastructure.Common;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
     public class AccountController : BaseController
     {
-        readonly IUserService _usrSrv;
+        IUserService _usrSrv;
         IUserRoleRelService _usrRoleSrv;
         IRoleService _roleSrv;
+        const string KEY_Session_VerifyCode = "VerifyCode";
+        const string KEY_Config_VerifyCodeLength = "verifyCodeLength";
         public AccountController(IUserService usrSrv, IUserRoleRelService usrRoleSrv, IRoleService roleSrv, IOperationService optSrv)
             : base(optSrv)
         {
@@ -45,6 +48,12 @@ namespace WebApp.Areas.RBAC.Controllers
             }
             try
             {
+                if (string.IsNullOrEmpty(loginVM.VerifyCode) || !string.Equals(loginVM.VerifyCode, Session.Get<string>(KEY_Session_VerifyCode)))
+                {
+                    ModelState.AddModelError("", "验证码不正确");
+                    return View(loginVM);
+                }
+
                 var result = _usrSrv.FindByUserName(loginVM.UserName);
                 if (result.ResultType != OperationResultType.Success)
                 {
@@ -108,6 +117,18 @@ namespace WebApp.Areas.RBAC.Controllers
                 ModelState.AddModelError("", "登录失败，请参考：" + ex.GetDeepestException().Message);
                 return View(loginVM);
             }
+        }
+
+        public ActionResult GetVerifycationCode()
+        {
+            int length = AppSettingHelper.Get(KEY_Config_VerifyCodeLength).ConvertTo<int>(VerificationCodeHelper.DefaultLength);
+            var verifyCode = VerificationCodeHelper.Create(length);
+            if (!verifyCode.Check())
+            {
+                return null;
+            }
+            Session.Set(KEY_Session_VerifyCode, verifyCode.Code);
+            return File(verifyCode.ImageBytes, @"image/jpeg");
         }
 
         public ActionResult Logout()

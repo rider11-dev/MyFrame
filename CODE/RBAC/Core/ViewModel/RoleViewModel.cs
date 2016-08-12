@@ -23,6 +23,8 @@ namespace MyFrame.RBAC.ViewModel
         public string Remark { get; set; }
         [Display(Name = "是否激活")]
         public bool Enabled { get; set; }
+        [Display(Name = "是否系统")]
+        public bool IsSystem { get; set; }
 
         [Display(Name = "创建人")]
         public int? Creator { get; set; }

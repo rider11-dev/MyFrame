@@ -22,5 +22,12 @@ namespace WebApp.ViewModels.RBAC
         public bool RememberMe { get; set; }
 
         public string ReturnUrl { get; set; }
+
+        /// <summary>
+        /// 验证码
+        /// </summary>
+        [Required(ErrorMessage = "验证码不能为空")]
+        [Display(Name = "验证码")]
+        public string VerifyCode { get; set; }
     }
 }

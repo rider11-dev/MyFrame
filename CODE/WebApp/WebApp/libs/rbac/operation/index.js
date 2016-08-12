@@ -88,13 +88,35 @@
                     formatter: gFormatter.trueOrFalse.formatter
                 },
                 {
+                    field: 'IsSystem', title: '是否系统', align: 'center', valign: 'center', width: 80,
+                    formatter: gFormatter.trueOrFalse.formatter
+                },
+                {
                     field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140,
                     cellStyle: function (value, row, index, field) {
                         return {
                             css: { "min-width": "200px" }
                         };
                     }
-                }
+                },
+                { field: 'CreatorName', title: '创建人', align: 'center', valign: 'center', width: 80 },
+                    {
+                        field: 'CreateTime', title: '创建时间', align: 'center', valign: 'center', width: 100,
+                        cellStyle: function (value, row, index, field) {
+                            return {
+                                css: { "min-width": "140px" }
+                            };
+                        }
+                    },
+                    { field: 'LastModifierName', title: '最后修改人', align: 'center', valign: 'center', width: 80 },
+                    {
+                        field: 'LastModifyTime', title: '最后修改时间', align: 'center', valign: 'center', width: 100,
+                        cellStyle: function (value, row, index, field) {
+                            return {
+                                css: { "min-width": "140px" }
+                            };
+                        }
+                    }
             ],
         };
         //调用公共函数，初始化表格
@@ -169,6 +191,9 @@
                 $('#SortOrder', optmanage.strFormAddOpt).val(data.SortOrder);
                 if (data.Enabled) {
                     $('#Enabled', optmanage.strFormAddOpt).iCheck('check');
+                }
+                if (data.IsSystem) {
+                    $('#IsSystem', optmanage.strFormAddOpt).iCheck('check');
                 }
                 $('#Remark', optmanage.strFormAddOpt).val(data.Remark);
             },

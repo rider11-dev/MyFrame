@@ -120,6 +120,7 @@ namespace MyFrame.RBAC.Service.Impl
                     Remark = role.Remark,
                     Enabled = role.Enabled,
                     SortOrder = role.SortOrder,
+                    IsSystem = role.IsSystem,
                     LastModifier = role.LastModifier,
                     LastModifyTime = role.LastModifyTime
                 });
@@ -144,6 +145,7 @@ namespace MyFrame.RBAC.Service.Impl
                                 RoleName = role.RoleName,
                                 Remark = role.Remark,
                                 Enabled = role.Enabled,
+                                IsSystem = role.IsSystem,
                                 SortOrder = role.SortOrder,
                                 Creator = role.Creator,
                                 CreatorName = c.UserName,
@@ -202,8 +204,17 @@ namespace MyFrame.RBAC.Service.Impl
         protected override OperationResult OnBeforeDelete(Expression<Func<Role, bool>> where)
         {
             OperationResult result = new OperationResult { ResultType = OperationResultType.Success };
+            var queryToDel = _roleRepository.Find(where);
+            //1、是否系统角色
+            if (queryToDel.Where(r => r.IsSystem == true).Count() > 0)
+            {
+                result.ResultType = OperationResultType.ParamError;
+                result.Message = string.Format("{0}失败，{1}", Msg_BeforeDelete, "系统角色不能删除");
+                return result;
+            }
+            //2、是否已分配
             var count = _usrRoleRelRep.Entities
-                .Join(_roleRepository.Find(where),
+                .Join(queryToDel,
                         rel => rel.RoleId,
                         r => r.Id,
                         (rel, r) => new { r.Id })

@@ -22,6 +22,7 @@ create table Roles(
 	RoleName nvarchar(20) not null,
 	Remark nvarchar(255),
 	[Enabled] bit not null default 0,
+	IsSystem bit not null default 0,
 	SortOrder int null,
 	Creator int NULL,
 	CreateTime datetime NULL,
@@ -43,9 +44,9 @@ CREATE TABLE Modules(
 	SortOrder int,
 	Remark nvarchar(255),
 	Creator int,
-	CreateTime date,
+	CreateTime datetime,
 	LastModifier int,
-	LastModifyTime date
+	LastModifyTime datetime
 );
 ALTER TABLE [Modules] ADD  CONSTRAINT [UK_Module_Code] UNIQUE NONCLUSTERED ( [Code] ASC );
 
@@ -84,6 +85,7 @@ CREATE TABLE Operations(
 	ClickFunc nvarchar(255) not null,
 	SortOrder int,
 	[Enabled] bit not null default 0,
+	IsSystem bit not null default 0,
 	Remark nvarchar(255)
 );
 ALTER TABLE [Operations] ADD  CONSTRAINT [UK_Operations_ModuleOptCode] UNIQUE NONCLUSTERED ( [ModuleId] ASC ,[OptCode] ASC);

@@ -15,7 +15,10 @@
             return;
         }
 
-        var html = '<li id="' + options.tabHeaderId + '" data-closeable="true"><a href="#' + options.tabContentId + '" data-toggle="tab">' + options.title + '</a><i class="close-tab glyphicon glyphicon-remove" style="display: none;"></i></li>';
+        var html = '<li id="' + options.tabHeaderId + '" data-closeable="true">';
+        html += '<a href="#' + options.tabContentId + '" data-toggle="tab">' + options.title + '</a>';
+        html += '<i class="close-tab glyphicon glyphicon-remove" style="display: none;"></i>';
+        html += '</li>';
         $('#' + options.tabHeaderContainerId).append(html);
         html = '<div class="tab-pane tab_page_content" id="' + options.tabContentId + '"></div>';
         $('#' + options.tabContentContainerId).append(html);

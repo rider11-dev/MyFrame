@@ -181,6 +181,7 @@
     <Content Include="libs\plugins\bootstrap-contextmenu\bootstrap-contextmenu.js" />
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.css" />
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.js" />
+    <Content Include="libs\rbac\index.css" />
     <Content Include="libs\rbac\module\tree_help.js" />
     <Content Include="libs\rbac\operation\index.js" />
     <Content Include="libs\rbac\tabHelper.js" />

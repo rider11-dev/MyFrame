@@ -55,6 +55,21 @@ namespace MyFrame.RBAC.Model
         [Description("是否激活")]
         public bool Enabled { get; set; }
 
+        [Description("是否系统")]
+        public bool IsSystem { get; set; }
+
+        [Description("创建人")]
+        public int? Creator { get; set; }
+
+        [Description("创建时间")]
+        public DateTime? CreateTime { get; set; }
+
+        [Description("最后修改人")]
+        public int? LastModifier { get; set; }
+
+        [Description("最后修改时间")]
+        public DateTime? LastModifyTime { get; set; }
+
         [Description("备注")]
         public string Remark { get; set; }
     }

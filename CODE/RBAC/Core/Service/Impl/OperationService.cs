@@ -32,10 +32,12 @@ namespace MyFrame.RBAC.Service.Impl
         IModuleRepository _moduleRepository;
         IRolePermissionRepository _rolePerRepository;
         IUserRoleRelRepository _usrRoleRelRepository;
+        IUserRepository _usrRepository;
         public OperationService(IUnitOfWork unitOfWork,
             IOperationRepository optRepository, IRoleRepository roleRepository,
             IModuleRepository moduleRepository, IRolePermissionRepository rolePerRepository,
-            IUserRoleRelRepository usrRoleRelRepository)
+            IUserRoleRelRepository usrRoleRelRepository,
+            IUserRepository usrRepository)
             : base(unitOfWork)
         {
             _optRepository = optRepository;
@@ -43,6 +45,7 @@ namespace MyFrame.RBAC.Service.Impl
             _moduleRepository = moduleRepository;
             _rolePerRepository = rolePerRepository;
             _usrRoleRelRepository = usrRoleRelRepository;
+            _usrRepository = usrRepository;
         }
 
         public OperationResult FindByOptCode(int moduleId, string optCode)
@@ -77,6 +80,10 @@ namespace MyFrame.RBAC.Service.Impl
                 var query = from opt in optPaged
                             join module in _moduleRepository.Entities on opt.ModuleId equals module.Id into moduleQuery
                             from m in moduleQuery.DefaultIfEmpty()
+                            join creator in _usrRepository.Entities on opt.Creator equals creator.Id into creatorQuery
+                            from c in creatorQuery.DefaultIfEmpty()
+                            join lastmodifier in _usrRepository.Entities on opt.LastModifier equals lastmodifier.Id into lastmodifierQuery
+                            from l in lastmodifierQuery.DefaultIfEmpty()
                             select new
                             {
                                 Id = opt.Id,
@@ -93,6 +100,13 @@ namespace MyFrame.RBAC.Service.Impl
                                 Controller = opt.Controller,
                                 SortOrder = opt.SortOrder,
                                 Enabled = opt.Enabled,
+                                IsSystem = opt.IsSystem,
+                                Creator = opt.Creator,
+                                CreatorName = c.UserName,
+                                CreateTime = opt.CreateTime,
+                                LastModifier = opt.LastModifier,
+                                LastModifierName = l.UserName,
+                                LastModifyTime = opt.LastModifyTime,
                                 Remark = opt.Remark
                             };
                 result.ResultType = OperationResultType.Success;
@@ -143,8 +157,9 @@ namespace MyFrame.RBAC.Service.Impl
             }
             try
             {
+                var perType = PermissionType.Operation.ToInt();
                 var query = from opt in _optRepository.Entities
-                            join per in _rolePerRepository.Entities on opt.Id equals per.PermissionId
+                            join per in _rolePerRepository.Find(per => per.PerType == perType) on opt.Id equals per.PermissionId
                             join role in _roleRepository.Entities on per.RoleId equals role.Id
                             where roleIds.Contains(per.RoleId) && opt.Enabled && role.Enabled
                             select new
@@ -186,6 +201,9 @@ namespace MyFrame.RBAC.Service.Impl
                 SortOrder = opt.SortOrder,
                 Controller = opt.Controller,
                 Enabled = opt.Enabled,
+                IsSystem = opt.IsSystem,
+                LastModifier = opt.LastModifier,
+                LastModifyTime = opt.LastModifyTime,
                 Remark = opt.Remark
             });
         }
@@ -221,12 +239,21 @@ namespace MyFrame.RBAC.Service.Impl
         {
             OperationResult result = new OperationResult { ResultType = OperationResultType.Success };
             var optsToDel = _optRepository.Find(where);
-            //1、检查操作是否被引用
-            var perType = PermissionType.Operation.ToInt();
-            var query = from per in _rolePerRepository.Entities
-                        join opt in optsToDel on per.PermissionId equals opt.Id
-                        where per.PerType == perType
+            //1、是否系统
+            var query = from opt in optsToDel
+                        where opt.IsSystem == true
                         select 1;
+            if (query.Count() > 0)
+            {
+                result.ResultType = OperationResultType.CheckFailedBeforeProcess;
+                result.Message = Msg_CheckBeforeDelete + "失败，系统操作不允许删除";
+            }
+            //2、检查操作是否被引用
+            var perType = PermissionType.Operation.ToInt();
+            query = from per in _rolePerRepository.Entities
+                    join opt in optsToDel on per.PermissionId equals opt.Id
+                    where per.PerType == perType
+                    select 1;
             if (query.Count() > 0)
             {
                 result.ResultType = OperationResultType.CheckFailedBeforeProcess;

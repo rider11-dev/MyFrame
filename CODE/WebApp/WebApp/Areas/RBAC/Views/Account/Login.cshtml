@@ -34,6 +34,10 @@
                 @Html.PasswordFor(u => u.Password, new { @class = "form-control", placeholder = "密码" })
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
+            <div class="form-inline form-group has-feedback">
+                @Html.TextBoxFor(u => u.VerifyCode, new { @class = "form-control", placeholder = "验证码" })
+                <img id="verifyCode" style="cursor: pointer; height: 35px; width: 82px; " src="@Url.Action("GetVerifycationCode")" alt="验证码" />
+            </div>
             <div>
                 <label style="cursor:pointer">
                     <input type="checkbox" value="RememberMe" />&nbsp;记住我
@@ -52,6 +56,15 @@
         <script src="~/Scripts/html5shiv.min.js"></script>
         <script src="~/Scripts/respond.min.js"></script>
     <![endif]-->
+    <script>
+        $('#verifyCode').click(function () {
+            var src = this.src;
+            if (src.indexOf('?') > -1) {
+                src = this.src.substr(0, this.src.lastIndexOf('?'));
+            }
+            this.src = src + '?time=' + (new Date()).getTime();
+        });
+    </script>
     @MiniProfiler.RenderIncludes();
 </body>
 </html>

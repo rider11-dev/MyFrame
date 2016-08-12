@@ -1,0 +1,16 @@
+﻿.tab_page_content {
+    min-height: 500px;
+}
+
+.close-tab {
+    color: #94a6b0;
+    cursor: pointer;
+    display: none;
+    font-size: 10px;
+    /*padding-left: 25px;*/
+    padding: 0px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    z-index: 100;
+}

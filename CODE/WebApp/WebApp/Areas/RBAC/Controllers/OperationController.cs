@@ -14,6 +14,7 @@ using MyFrame.Infrastructure.OptResult;
 using WebApp.Extensions.ActionResult;
 using MyFrame.RBAC.ViewModel;
 using AutoMapper;
+using WebApp.Extensions.Session;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -50,6 +51,9 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
             Operation opt = Mapper.Map<OperationViewModel, Operation>(optVM);
+            opt.Creator = HttpContext.Session.GetUserId();
+            opt.CreateTime = DateTime.Now;
+
             OperationResult result = OptSrv.Add(opt);
             if (result.ResultType != OperationResultType.Success)
             {
@@ -68,6 +72,9 @@ namespace WebApp.Areas.RBAC.Controllers
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
             Operation opt = Mapper.Map<OperationViewModel, Operation>(optVM);
+            opt.LastModifier = HttpContext.Session.GetUserId();
+            opt.LastModifyTime = DateTime.Now;
+
             OperationResult result = OptSrv.UpdateDetail(opt);
             if (result.ResultType != OperationResultType.Success)
             {

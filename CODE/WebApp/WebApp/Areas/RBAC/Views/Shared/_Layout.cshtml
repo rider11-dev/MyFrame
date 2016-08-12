@@ -24,29 +24,8 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link href="~/libs/AdminLTE/css/skins/_all-skins.min.css" rel="stylesheet" />
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="~/libs/misc/respond.min.js"></script>
-    <script src="~/libs/misc/html5shiv.min.js"></script>
-    <![endif]-->
-    <style>
-        .tab_page_content {
-            min-height: 500px;
-        }
 
-        .close-tab {
-            color: #94a6b0;
-            cursor: pointer;
-            display: none;
-            font-size: 10px;
-            padding-left: 25px;
-            position: absolute;
-            right: 5px;
-            top: 5px;
-            z-index: 100;
-        }
-    </style>
+    <link href="~/libs/rbac/index.css" rel="stylesheet" />
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
@@ -130,6 +109,13 @@
     <script src="~/libs/rbac/WinMsg.js"></script>
     <script src="~/libs/rbac/treeHelper.js"></script>
     <script src="~/libs/rbac/tabHelper.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="~/libs/misc/respond.min.js"></script>
+    <script src="~/libs/misc/html5shiv.min.js"></script>
+    <![endif]-->
+
     <script>
         $(function () {
             toastr.options = { positionClass: "toast-top-center", showDuration: "150", hideDuration: "1000", showMethod: "fadeIn", closeButton: 'true' };

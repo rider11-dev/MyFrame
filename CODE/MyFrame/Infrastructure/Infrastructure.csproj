@@ -48,6 +48,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -62,6 +63,7 @@
     <Compile Include="Common\EnumExtensions.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
     <Compile Include="Common\TypeExtensions.cs" />
+    <Compile Include="Common\VerificationCode.cs" />
     <Compile Include="Dynamic\MyDynamicObject.cs" />
     <Compile Include="Exception\ExceptionExtensions.cs" />
     <Compile Include="Expression\ExpressionExtensions.cs" />

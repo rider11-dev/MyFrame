@@ -74,6 +74,11 @@ namespace MyFrame.Core.Service
 
         public OperationResult Count(Expression<Func<TEntity, bool>> where = null)
         {
+            return PublicProcess(() =>
+            {
+                return CurrentRepository.Count(where);
+            });
+
             OperationResult result = new OperationResult();
             try
             {
@@ -87,6 +92,23 @@ namespace MyFrame.Core.Service
             }
             return result;
         }
+
+        private OperationResult PublicProcess(Func<dynamic> innerAction)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var data = innerAction();
+                result.ResultType = OperationResultType.Success;
+                result.AppendData = data;
+            }
+            catch (Exception ex)
+            {
+                ProcessException(ref result, string.Format("获取{0}数据实体总数失败", EntityType), ex);
+            }
+            return result;
+        }
+
         public OperationResult Delete(Expression<Func<TEntity, bool>> where)
         {
             OperationResult result = new OperationResult();

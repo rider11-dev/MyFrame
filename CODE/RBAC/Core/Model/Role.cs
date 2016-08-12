@@ -20,6 +20,10 @@ namespace MyFrame.RBAC.Model
         public string Remark { get; set; }
         [Display(Name = "是否激活")]
         public bool Enabled { get; set; }
+
+        [Display(Name = "是否系统")]
+        public bool IsSystem { get; set; }
+
         [Display(Name = "排序")]
         public int SortOrder { get; set; }
 

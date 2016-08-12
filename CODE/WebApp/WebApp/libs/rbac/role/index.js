@@ -48,6 +48,10 @@
                         formatter: gFormatter.trueOrFalse.formatter
                     },
                     {
+                        field: 'IsSystem', title: '是否系统', align: 'center', valign: 'center', width: 80,
+                        formatter: gFormatter.trueOrFalse.formatter
+                    },
+                    {
                         field: 'Remark', title: '备注', align: 'center', valign: 'center', width: 140,
                         cellStyle: function (value, row, index, field) {
                             return {
@@ -117,6 +121,9 @@
                 $('#SortOrder').val(data.SortOrder);
                 if (data.Enabled) {
                     $('#Enabled').iCheck('check');
+                }
+                if (data.IsSystem) {
+                    $('#IsSystem').iCheck('check');
                 }
                 $('#Remark').val(data.Remark);
             },

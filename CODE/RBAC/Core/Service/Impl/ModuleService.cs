@@ -103,6 +103,7 @@ namespace MyFrame.RBAC.Service.Impl
                 Icon = module.Icon,
                 ParentId = module.ParentId,
                 Enabled = module.Enabled,
+                IsSystem = module.IsSystem,
                 SortOrder = module.SortOrder,
                 Remark = module.Remark,
                 LastModifier = module.LastModifier,
@@ -124,7 +125,7 @@ namespace MyFrame.RBAC.Service.Impl
                             join creator in _usrRepository.Entities on module.Creator equals creator.Id into creatorQuery
                             from c in creatorQuery.DefaultIfEmpty()
                             join lastmodifier in _usrRepository.Entities on module.LastModifier equals lastmodifier.Id into lastmodifierQuery
-                            from m in lastmodifierQuery.DefaultIfEmpty()
+                            from l in lastmodifierQuery.DefaultIfEmpty()
                             select new
                             {
                                 Id = module.Id,
@@ -142,7 +143,7 @@ namespace MyFrame.RBAC.Service.Impl
                                 CreatorName = c.UserName,
                                 CreateTime = module.CreateTime,
                                 LastModifier = module.LastModifier,
-                                LastModifierName = m.UserName,
+                                LastModifierName = l.UserName,
                                 LastModifyTime = module.LastModifyTime
                             };
                 result.ResultType = OperationResultType.Success;
@@ -191,11 +192,12 @@ namespace MyFrame.RBAC.Service.Impl
             if (roleIds == null || roleIds.Length < 1)
             {
                 result.ResultType = OperationResultType.ParamError;
-                result.Message = "参数错误，角色不能为空";
+                result.Message = Msg_SearchSimpleInfoByRoles + "参数错误，角色不能为空";
                 return result;
             }
+            var perType = PermissionType.Module.ToInt();
             var query = from module in _moduleRepository.Entities
-                        join per in _rolePermissionRep.Entities on module.Id equals per.PermissionId
+                        join per in _rolePermissionRep.Find(per => per.PerType == perType) on module.Id equals per.PermissionId
                         join role in _roleRep.Entities on per.RoleId equals role.Id
                         where roleIds.Contains(per.RoleId)
                             && module.Enabled == true
@@ -246,10 +248,20 @@ namespace MyFrame.RBAC.Service.Impl
         {
             OperationResult result = new OperationResult { ResultType = OperationResultType.Success };
             var modulesToDel = _moduleRepository.Find(where);
-            //1、模块是否包含子模块
-            var query = from module in _moduleRepository.Entities
-                        join mToDel in modulesToDel on module.ParentId equals mToDel.Id
+            //0、是否系统模块
+            var query = from module in modulesToDel
+                        where module.IsSystem == true
                         select 1;
+            if (query.Count() > 0)
+            {
+                result.ResultType = OperationResultType.CheckFailedBeforeProcess;
+                result.Message = Msg_BeforeDelete + "失败，系统模块不允许删除";
+                return result;
+            }
+            //1、模块是否包含子模块
+            query = from module in _moduleRepository.Entities
+                    join mToDel in modulesToDel on module.ParentId equals mToDel.Id
+                    select 1;
             if (query.Count() > 0)
             {
                 result.ResultType = OperationResultType.CheckFailedBeforeProcess;
@@ -266,8 +278,7 @@ namespace MyFrame.RBAC.Service.Impl
                 result.Message = Msg_BeforeDelete + "失败，要删除的模块包含操作";
                 return result;
             }
-
-            //3、检查模块是否被引用
+            //4、检查模块是否被引用
             var perType = PermissionType.Module.ToInt();
             query = from per in _rolePermissionRep.Entities
                     join module in modulesToDel on per.PermissionId equals module.Id

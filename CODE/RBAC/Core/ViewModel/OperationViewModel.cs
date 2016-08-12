@@ -64,6 +64,21 @@ namespace MyFrame.RBAC.ViewModel
         [Display(Name = "是否激活")]
         public bool Enabled { get; set; }
 
+        [Display(Name = "是否系统")]
+        public bool IsSystem { get; set; }
+
+        [Display(Name = "创建人")]
+        public int? Creator { get; set; }
+
+        [Display(Name = "创建时间")]
+        public DateTime? CreateTime { get; set; }
+
+        [Display(Name = "最后修改人")]
+        public int? LastModifier { get; set; }
+
+        [Display(Name = "最后修改时间")]
+        public DateTime? LastModifyTime { get; set; }
+
         [Display(Name = "备注")]
         [MaxLength(255, ErrorMessage = "备注不能超过{1}个字符")]
         public string Remark { get; set; }
