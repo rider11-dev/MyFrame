@@ -21,8 +21,9 @@ namespace MyFrame.Infrastructure.Common
         /// 生成二维码
         /// </summary>
         /// <param name="length">二维码长度，默认4个字符</param>
+        /// <param name="buildImg">是否生成图片，默认true</param>
         /// <returns></returns>
-        public static VerificationCode Create(int length = 4)
+        public static VerificationCode Create(int length = 4, bool buildImg = true)
         {
             if (length < 1)
             {
@@ -64,18 +65,24 @@ namespace MyFrame.Infrastructure.Common
                 code += validateNums[i].ToString();
             }
 
-            return BuildImage(code);
+            VerificationCode entity = new VerificationCode { Code = code, NeedImage = buildImg };
+            //生成验证码图片
+            if (buildImg)
+            {
+                BuildImage(ref entity);
+            }
+
+            return entity;
         }
 
-        private static VerificationCode BuildImage(string code)
+        private static void BuildImage(ref VerificationCode entity)
         {
-            if (string.IsNullOrEmpty(code))
+            if (string.IsNullOrEmpty(entity.Code))
             {
-                throw new ArgumentException("二维码字符不正确", "code");
+                throw new ArgumentNullException("entity", "二维码字符不正确");
             }
-            VerificationCode entity = new VerificationCode { Code = code };
 
-            int width = (int)Math.Ceiling(code.Length * 12.0);
+            int width = (int)Math.Ceiling(entity.Code.Length * 12.0);
             int height = 22;
             Bitmap image = new Bitmap(width, height);
             Graphics g = Graphics.FromImage(image);
@@ -97,7 +104,7 @@ namespace MyFrame.Infrastructure.Common
                 Font font = new Font("Arial", 12, (FontStyle.Bold | FontStyle.Italic));
                 LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, width, height),
                  Color.Blue, Color.DarkRed, 1.2f, true);
-                g.DrawString(code, font, brush, 3, 2);
+                g.DrawString(entity.Code, font, brush, 3, 2);
                 //画图片的前景干扰点
                 for (int i = 0; i < 100; i++)
                 {
@@ -120,8 +127,6 @@ namespace MyFrame.Infrastructure.Common
                 g.Dispose();
                 image.Dispose();
             }
-
-            return entity;
         }
     }
 
@@ -134,6 +139,12 @@ namespace MyFrame.Infrastructure.Common
         /// 二维码字符串
         /// </summary>
         public string Code { get; set; }
+
+        /// <summary>
+        /// 是否需要二维码图片数据
+        /// </summary>
+        public bool NeedImage { get; set; }
+
         /// <summary>
         /// 二维码图片字节数组
         /// </summary>
@@ -141,7 +152,8 @@ namespace MyFrame.Infrastructure.Common
 
         public bool Check()
         {
-            return !string.IsNullOrEmpty(Code) && ImageBytes != null && ImageBytes.Length > 0;
+            return !string.IsNullOrEmpty(Code) &&
+                (NeedImage ? (ImageBytes != null && ImageBytes.Length > 0) : true);
         }
     }
 }

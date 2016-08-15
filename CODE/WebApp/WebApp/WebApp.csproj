@@ -170,6 +170,8 @@
     <Compile Include="Extensions\Ioc\IAutofacHelper.cs" />
     <Compile Include="Extensions\Session\SessionExtension.cs" />
     <Compile Include="Extensions\Validation\NotEqualToAttribute.cs" />
+    <Compile Include="Extensions\VerifyCodeNotify\IVerifyCodeNotifyer.cs" />
+    <Compile Include="Extensions\VerifyCodeNotify\VerifyCodeEmailNotifyer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

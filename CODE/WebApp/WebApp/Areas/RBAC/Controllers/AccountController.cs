@@ -14,6 +14,8 @@ using WebApp.ViewModels.RBAC;
 using WebApp.Extensions.ActionResult;
 using MyFrame.RBAC.Service.Interface;
 using MyFrame.Infrastructure.Common;
+using MyFrame.Infrastructure.Logger;
+using WebApp.Extensions.VerifyCodeNotify;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -22,8 +24,30 @@ namespace WebApp.Areas.RBAC.Controllers
         IUserService _usrSrv;
         IUserRoleRelService _usrRoleSrv;
         IRoleService _roleSrv;
-        const string KEY_Session_VerifyCode = "VerifyCode";
+        const string KEY_Session_VerifyCode_Login = "VerifyCode_Login";
+        const string KEY_Session_VerifyCode_ChangePwd = "VerifyCode_ChangePwd";
+        const string KEY_Session_VerifyCode_ChangePwd_BeginTime = "VerifyCode_ChangePwd_BeginTime";
         const string KEY_Config_VerifyCodeLength = "verifyCodeLength";
+        const string KEY_Config_VerifyCodeExpireTime = "verifyCodeExpireTime";
+        const string Msg_ChangPwd = "修改密码";
+        const string Msg_ChangPwd_Notify = "修改密码时验证码通知";
+        int VerifyCodeLength
+        {
+            get
+            {
+                return AppSettingHelper.Get(KEY_Config_VerifyCodeLength).ConvertTo<int>(VerificationCodeHelper.DefaultLength);
+            }
+        }
+
+        int VerifyCodeExpireTime
+        {
+            get
+            {
+                return AppSettingHelper.Get(KEY_Config_VerifyCodeExpireTime).ConvertTo<int>(10);//默认有效期10分钟
+            }
+        }
+
+        ILogHelper<AccountController> _logHelper = LogHelperFactory.GetLogHelper<AccountController>();
         public AccountController(IUserService usrSrv, IUserRoleRelService usrRoleSrv, IRoleService roleSrv, IOperationService optSrv)
             : base(optSrv)
         {
@@ -46,9 +70,10 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return View(loginVM);
             }
+            //_logHelper.LogInfo(string.Format("session-mode:{0},session-timeout:{1}", Session.Mode.ToString(), Session.Timeout));
             try
             {
-                if (string.IsNullOrEmpty(loginVM.VerifyCode) || !string.Equals(loginVM.VerifyCode, Session.Get<string>(KEY_Session_VerifyCode)))
+                if (string.IsNullOrEmpty(loginVM.VerifyCode) || !string.Equals(loginVM.VerifyCode, Session.Get<string>(KEY_Session_VerifyCode_Login)))
                 {
                     ModelState.AddModelError("", "验证码不正确");
                     return View(loginVM);
@@ -121,13 +146,12 @@ namespace WebApp.Areas.RBAC.Controllers
 
         public ActionResult GetVerifycationCode()
         {
-            int length = AppSettingHelper.Get(KEY_Config_VerifyCodeLength).ConvertTo<int>(VerificationCodeHelper.DefaultLength);
-            var verifyCode = VerificationCodeHelper.Create(length);
+            var verifyCode = VerificationCodeHelper.Create(VerifyCodeLength);
             if (!verifyCode.Check())
             {
                 return null;
             }
-            Session.Set(KEY_Session_VerifyCode, verifyCode.Code);
+            Session.Set(KEY_Session_VerifyCode_Login, verifyCode.Code);
             return File(verifyCode.ImageBytes, @"image/jpeg");
         }
 
@@ -144,6 +168,32 @@ namespace WebApp.Areas.RBAC.Controllers
             return PartialView(new ChangePwdViewModel());
         }
 
+        public JsonResult EmailNotifyForChangePwd(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return Json(new { code = OperationResultType.Error, message = Msg_ChangPwd_Notify + "失败，邮箱不能为空" });
+            }
+            var verifyCode = VerificationCodeHelper.Create(VerifyCodeLength, false);
+            if (!verifyCode.Check())
+            {
+                return Json(new { code = OperationResultType.Error, message = Msg_ChangPwd_Notify + "失败，生成验证码时错误" });
+            }
+            //验证码以及生成时间写入session
+            Session.Set(KEY_Session_VerifyCode_ChangePwd, verifyCode.Code);
+            Session.Set(KEY_Session_VerifyCode_ChangePwd_BeginTime, DateTime.Now);
+
+            //调用验证码通知器
+            VerifyCodeEmailNotifyer notifier = new VerifyCodeEmailNotifyer();
+            notifier.Notify(verifyCode.Code, email);
+
+            return Json(new
+            {
+                code = OperationResultType.Success,
+                message = string.Format("验证码已发送到您的邮箱，有效期{0}分钟，请及时查收。", VerifyCodeExpireTime)
+            });
+        }
+
         [HttpPost]
         [LoginCheck]
         [ValidateAntiForgeryToken]
@@ -153,6 +203,20 @@ namespace WebApp.Areas.RBAC.Controllers
             {
                 return Json(new { code = OperationResultType.ParamError, message = base.ParseModelStateErrorMessage(ModelState) });
             }
+
+            //验证码校验
+            if (Session.Get<string>(KEY_Session_VerifyCode_ChangePwd) != changePwdVM.VerifyCode)
+            {
+                return Json(new { code = OperationResultType.ParamError, message = Msg_ChangPwd + "失败，验证码不正确" });
+            }
+            var beginTime = Session.Get<DateTime>(KEY_Session_VerifyCode_ChangePwd_BeginTime);
+            if (beginTime.AddMinutes(VerifyCodeExpireTime) < DateTime.Now)
+            {
+                return Json(new { code = OperationResultType.ParamError, message = Msg_ChangPwd + "失败，验证码已失效，请重新获取" });
+            }
+            //重置验证码session设置
+            Session.Set(KEY_Session_VerifyCode_ChangePwd, null);
+            Session.Set(KEY_Session_VerifyCode_ChangePwd_BeginTime, null);
 
             var usrId = HttpContext.Session.GetUserId();
             if (usrId == null)

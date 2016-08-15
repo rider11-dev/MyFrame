@@ -69,6 +69,9 @@
     <Compile Include="Common\TypeExtensions.cs" />
     <Compile Include="Common\VerificationCode.cs" />
     <Compile Include="Dynamic\MyDynamicObject.cs" />
+    <Compile Include="Email\EmailHelper.cs" />
+    <Compile Include="Email\EmailInfo.cs" />
+    <Compile Include="Email\EmailSender.cs" />
     <Compile Include="Exception\ExceptionExtensions.cs" />
     <Compile Include="Expression\ExpressionExtensions.cs" />
     <Compile Include="Logger\ILogHelper.cs" />

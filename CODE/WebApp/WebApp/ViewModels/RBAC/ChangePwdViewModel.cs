@@ -25,5 +25,13 @@ namespace WebApp.ViewModels.RBAC
         [Display(Name = "密码确认")]
         [Compare("NewPassword", ErrorMessage = "新密码和确认密码不匹配")]
         public string NewPassword2 { get; set; }
+
+        [Required(ErrorMessage = "请输入验证码接收邮箱")]
+        [Display(Name = "验证码接收邮箱")]
+        public string VerifyCodeEmail { get; set; }
+
+        [Required(ErrorMessage = "请输入验证码")]
+        [Display(Name = "验证码")]
+        public string VerifyCode { get; set; }
     }
 }

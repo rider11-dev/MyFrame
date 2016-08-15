@@ -7,7 +7,7 @@
                 <h3 class="box-title">修改密码</h3>
             </div>
             <div class="box-body">
-                @using (Html.BeginForm("ChangePwd", "Account", new { Area = "RBAC" }, FormMethod.Post, new { @class = "form-signin container", style = "max-width:300px;", id = "editForm" }))
+                @using (Html.BeginForm("ChangePwd", "Account", new { Area = "RBAC" }, FormMethod.Post, new { @class = "form-signin container", style = "max-width:300px;", id = "editForm_ChangePwd" }))
                 {
                     @Html.AntiForgeryToken()
                     <div style="color:red;">
@@ -25,7 +25,19 @@
                         @Html.PasswordFor(p => p.NewPassword2, new { @class = "form-control", placeholder = "密码确认" })
                         <span class="glyphicon  form-control-feedback"></span>
                     </div>
-                    <button id="btnSubmit" class="btn btn-lg btn-primary btn-block" type="submit">确认修改</button>
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(p => p.VerifyCodeEmail, new { @class = "form-control", placeholder = "验证码接收邮箱" })
+                        <span class="glyphicon  form-control-feedback"></span>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xs-7" style="padding-right:0px;">
+                            @Html.TextBoxFor(p => p.VerifyCode, new { @class = "form-control", placeholder = "验证码" })
+                        </div>
+                        <div class="col-xs-5">
+                            <span class="form-control btn btn-default" id="btnChangePwd_GetVerifyCode">点击获取</span>
+                        </div>
+                    </div>
+                    <button id="btnChangePwd_Submit" class="btn btn-lg btn-primary btn-block" type="submit">确认修改</button>
                 }
                 <script src="~/Scripts/jquery.validate.min.js"></script>
                 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
@@ -44,6 +56,8 @@
 <script src="~/libs/plugins/form/jquery.form.js"></script>
 <script type="text/javascript">
     $(function () {
-        changepwd.init();
+        changepwd.init({
+            urlGetVerifyCode: "@Url.Action("EmailNotifyForChangePwd")"
+        });
     });
 </script>

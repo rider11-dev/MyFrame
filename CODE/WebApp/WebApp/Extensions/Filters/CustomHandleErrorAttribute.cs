@@ -17,15 +17,6 @@ namespace WebApp.Extensions.Filters
         {
             //记录日志
             _logHelper.LogError(filterContext.Exception);
-
-            var result = new ViewResult
-            {
-                ViewName = View,
-                MasterName = Master,
-                TempData = filterContext.Controller.TempData
-            };
-            result.ViewData.Add("ErrorInfo", new HandleErrorInfo(filterContext.Exception, filterContext.Controller.GetType().Name, "hahah"));
-            filterContext.Result = result;
         }
     }
 }
