@@ -20,13 +20,13 @@ namespace WebApp.Extensions.Filters
         {
             base.OnActionExecuting(filterContext);
 
-            var httpContext = filterContext.HttpContext;
             //登录校验
-            if (!new LoginCheckAttribute().LoginCheck(httpContext))
+            if (!new LoginCheckAttribute().LoginCheck(filterContext.RequestContext))
             {
                 return;
             }
             //权限校验
+            var httpContext = filterContext.HttpContext;
             var moduleId = httpContext.Request["module"].ConvertTo<int>();
             var optId = httpContext.Request["opt"].ConvertTo<int>();
             var rst = RolePermissionSrv.CheckPermission(moduleId, optId, AppContext.EnableRBAC);

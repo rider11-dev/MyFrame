@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebApp.ViewModels.RBAC;
+using WebApp.Areas.RBAC.ViewModel;
 using WebApp.Extensions.Session;
 using MyFrame.Infrastructure.Common;
 using MyFrame.Infrastructure.Pagination;

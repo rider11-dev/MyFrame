@@ -10,6 +10,14 @@
         index.initMenuTree();
         index.getAccount();
         index.initContextMenu();
+
+        $('#link-header-myinfo').click(function () {
+            var menuNode = $('.sidebar-menu a').filter('[data-module=UserExtManage]');
+            //console.log(menuNode.length);
+            menuNode.click();
+            index.toggleMenu(menuNode.parent());
+            return false;
+        });
     },
     initMenuTree: function () {
         for (var idx = 0; idx < index.menuLinks.length; idx++) {
@@ -18,6 +26,7 @@
                 //event.data即传递的menuLink参数
                 //console.log($(event.data));
                 var link = $(event.data);
+                index.toggleMenu(link.parent());
                 tabHelper.toggleTab({
                     tabHeaderId: 'tab_page_header_' + link.attr('data-module'),
                     tabContentId: 'tab_page_content_' + link.attr('data-module'),
@@ -74,5 +83,15 @@
                         break;
                 }
             });
+    },
+    toggleMenu: function (target) {
+        var menuSidebar = $('.sidebar-menu');
+        menuSidebar.find('.treeview-menu li').removeClass('active');//移除所有叶子节点焦点
+        menuSidebar.find('.treeview ul').removeClass('menu-open').css({ 'display': 'none' });//隐藏所有ul标签
+        menuSidebar.find('.treeview').removeClass('active');
+
+        $(target).parent().parent().addClass('active');//
+        $(target).parent().addClass('menu-open').css({ 'display': 'block' });
+        $(target).addClass('active');
     }
 };

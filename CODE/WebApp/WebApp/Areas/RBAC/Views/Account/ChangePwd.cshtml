@@ -1,11 +1,8 @@
-﻿@using WebApp.ViewModels.RBAC
+﻿@using WebApp.Areas.RBAC.ViewModel
 @model ChangePwdViewModel
 <div class="row" style="margin:10px 0px;">
     <div class="col-xs-12">
         <div class="box" style="min-height: 500px;">
-            <div class="box-header">
-                <h3 class="box-title">修改密码</h3>
-            </div>
             <div class="box-body">
                 @using (Html.BeginForm("ChangePwd", "Account", new { Area = "RBAC" }, FormMethod.Post, new { @class = "form-signin container", style = "max-width:300px;", id = "editForm_ChangePwd" }))
                 {
@@ -37,7 +34,7 @@
                             <span class="form-control btn btn-default" id="btnChangePwd_GetVerifyCode">点击获取</span>
                         </div>
                     </div>
-                    <button id="btnChangePwd_Submit" class="btn btn-lg btn-primary btn-block" type="submit">确认修改</button>
+                    <button id="btnChangePwd_Submit" class="btn btn-primary btn-block" type="submit">确认修改</button>
                 }
                 <script src="~/Scripts/jquery.validate.min.js"></script>
                 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

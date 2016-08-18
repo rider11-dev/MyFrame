@@ -2,7 +2,7 @@
 @{
     Layout = null;
 }
-@model WebApp.ViewModels.RBAC.LoginViewModel
+@model WebApp.Areas.RBAC.ViewModel.LoginViewModel
 <!DOCTYPE html>
 
 <html>
@@ -35,8 +35,8 @@
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="form-inline form-group has-feedback">
-                @Html.TextBoxFor(u => u.VerifyCode, new { @class = "form-control", placeholder = "验证码" })
-                <img id="verifyCode" style="cursor: pointer; height: 35px; width: 82px; " src="@Url.Action("GetVerifycationCode")" alt="验证码" />
+                @Html.TextBoxFor(u => u.VerifyCode, new { @class = "form-control", placeholder = "验证码", style = "padding-right: 20px" })
+                <img id="verifyCode" style="cursor: pointer; height: 35px; width: 80px; " src="@Url.Action("GetVerifycationCode")" alt="验证码" />
             </div>
             <div>
                 <label style="cursor:pointer">
@@ -46,15 +46,15 @@
             <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
         }
     </div>
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/libs/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script src="~/libs/plugins/bootstrap/3.3.6/js/bootstrap.js"></script>
+    <script src="~/libs/plugins/validate/jquery.validate.min.js"></script>
+    <script src="~/libs/plugins/validate/jquery.validate.unobtrusive.min.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-        <script src="~/Scripts/html5shiv.min.js"></script>
-        <script src="~/Scripts/respond.min.js"></script>
+        <script src="~/libs/misc/html5shiv.min.js"></script>
+        <script src="~/libs/misc/respond.min.js"></script>
     <![endif]-->
     <script>
         $('#verifyCode').click(function () {

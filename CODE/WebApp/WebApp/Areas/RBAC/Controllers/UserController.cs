@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
-using WebApp.ViewModels.RBAC;
+using WebApp.Areas.RBAC.ViewModel;
 using MyFrame.Infrastructure.Extension;
 using MyFrame.Infrastructure.Pagination;
 using MyFrame.Infrastructure.OptResult;

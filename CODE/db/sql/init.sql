@@ -1,11 +1,10 @@
+-------------------------------------RBAC-------------------------------------
 -- 用户表
 CREATE TABLE Users(
 	Id int IDENTITY(1,1) primary key,
 	UserName nvarchar(20) NOT NULL,
 	Password nvarchar(32) NOT NULL,
 	Email nvarchar(50) NULL,
-	Phone nvarchar(50) NULL,
-	Address nvarchar(300) NULL,
 	Creator int NULL,
 	CreateTime datetime NULL,
 	LastModifier int NULL,
@@ -15,7 +14,7 @@ CREATE TABLE Users(
 );
 ALTER TABLE [Users] ADD  CONSTRAINT [UK_Users_UserName] UNIQUE NONCLUSTERED ( [UserName] ASC );
 
-INSERT into Users(UserName,Password,Email,Phone,Address,Enabled) values('admin','0b4e7a0e5fe84ad35fb5f95b9ceeac79','751682472@163.com','88888888','中国山东',1); --aaaaaa
+INSERT into Users(UserName,Password,Email,Enabled) values('admin','0b4e7a0e5fe84ad35fb5f95b9ceeac79','751682472@163.com',1); --aaaaaa
 -- 角色表
 create table Roles(
 	Id int identity(1,1) primary key,
@@ -107,6 +106,21 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY];
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'权限类型：0 功能权限，1 操作权限' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'RolePermission', @level2type=N'COLUMN',@level2name=N'PerType';
+
+
+-------------------------------------App-------------------------------------
+--用户详细信息表
+create table UserDetails(
+	Id INT PRIMARY KEY,
+	NickName nvarchar(10),
+	BirthDate DATE,
+	Age INT,
+	Telephone nvarchar(20),
+	Address nvarchar(100),
+	Interests nvarchar(100),
+	HeadImage nvarchar(200),
+	PersonalNote nvarchar(100)
+)
 
 
 

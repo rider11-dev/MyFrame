@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace WebApp.ViewModels.RBAC
+namespace WebApp.Areas.RBAC.ViewModel
 {
     public class LoginViewModel
     {

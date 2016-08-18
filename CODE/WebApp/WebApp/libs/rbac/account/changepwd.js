@@ -2,7 +2,7 @@
     btnSubmit: $('#btnChangePwd_Submit'),
     editForm: $('#editForm_ChangePwd'),
     init: function (options) {
-        changepwd.btnSubmit.click(changepwd.submit);
+        //changepwd.btnSubmit.click(changepwd.submit);
         $('#btnChangePwd_GetVerifyCode').click(function () {
             var email = $('#VerifyCodeEmail', changepwd.editForm).val();
             $.ajax({

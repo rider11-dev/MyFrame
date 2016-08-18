@@ -10,7 +10,7 @@ using System.Web.Mvc;
 using WebApp.Controllers;
 using WebApp.Extensions.Filters;
 using WebApp.Extensions.Session;
-using WebApp.ViewModels.RBAC;
+using WebApp.Areas.RBAC.ViewModel;
 using WebApp.Extensions.ActionResult;
 using MyFrame.RBAC.Service.Interface;
 using MyFrame.Infrastructure.Common;

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace WebApp.Extensions.Validation
+namespace WebApp.Core.Extensions.Validation
 {
     /// <summary>
     /// 对比两属性值是否不相等

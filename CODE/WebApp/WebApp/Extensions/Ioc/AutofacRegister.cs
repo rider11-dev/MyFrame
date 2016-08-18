@@ -14,6 +14,7 @@ using System.IO;
 using MyFrame.Core.Model;
 using MyFrame.Core.Configure;
 using MyFrame.RBAC.Configure;
+using WebApp.Core.Configure;
 
 namespace WebApp.Extensions.Ioc
 {
@@ -36,6 +37,7 @@ namespace WebApp.Extensions.Ioc
             //3、框架基础注册、rbac模块注册
             new BaseConfigure().Register(builder);
             new RbacConfigure().Register(builder);
+            new WebAppConfig().Register(builder);
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

@@ -140,12 +140,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\RBAC\Models\" />
+    <Folder Include="Areas\Public\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Public\Controllers\UserDetailsController.cs" />
+    <Compile Include="Areas\Public\PublicAreaRegistration.cs" />
     <Compile Include="Areas\RBAC\Controllers\HomeController.cs" />
     <Compile Include="Areas\RBAC\Controllers\AccountController.cs" />
     <Compile Include="Areas\RBAC\Controllers\ModuleController.cs" />
@@ -155,6 +157,9 @@
     <Compile Include="Areas\RBAC\Controllers\UserController.cs" />
     <Compile Include="Areas\RBAC\Controllers\UserRoleRelationController.cs" />
     <Compile Include="Areas\RBAC\RBACAreaRegistration.cs" />
+    <Compile Include="Areas\RBAC\ViewModel\ChangePwdViewModel.cs" />
+    <Compile Include="Areas\RBAC\ViewModel\LoginViewModel.cs" />
+    <Compile Include="Areas\RBAC\ViewModel\ModuleTreeNode.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Extensions\ActionResult\JsonNetResult.cs" />
@@ -169,16 +174,20 @@
     <Compile Include="Extensions\Ioc\AutofacRegister.cs" />
     <Compile Include="Extensions\Ioc\IAutofacHelper.cs" />
     <Compile Include="Extensions\Session\SessionExtension.cs" />
-    <Compile Include="Extensions\Validation\NotEqualToAttribute.cs" />
     <Compile Include="Extensions\VerifyCodeNotify\IVerifyCodeNotifyer.cs" />
     <Compile Include="Extensions\VerifyCodeNotify\VerifyCodeEmailNotifyer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\RBAC\ModuleTreeNode.cs" />
+    <Content Include="libs\app\userdetails\index.js" />
     <Content Include="libs\plugins\bootstrap-contextmenu\bootstrap-contextmenu.js" />
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.css" />
     <Content Include="libs\plugins\bootstrap-treeview\bootstrap-treeview.js" />
+    <Content Include="libs\plugins\datetimepicker\bootstrap-datetimepicker.min.css" />
+    <Content Include="libs\plugins\datetimepicker\bootstrap-datetimepicker.min.js" />
+    <Content Include="libs\plugins\font-awesome\css\font-awesome.css" />
+    <Content Include="libs\plugins\font-awesome\css\font-awesome.min.css" />
+    <Content Include="libs\plugins\moment\moment-zh-cn.js" />
     <Content Include="libs\rbac\index.css" />
     <Content Include="libs\rbac\module\tree_help.js" />
     <Content Include="libs\rbac\operation\index.js" />
@@ -190,8 +199,6 @@
     <Content Include="libs\rbac\role\grid_help.js" />
     <Content Include="libs\rbac\modalFormHelp.js" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\RBAC\ChangePwdViewModel.cs" />
-    <Compile Include="ViewModels\RBAC\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="libs\plugins\bootstrap-table\bootstrap-table-locale-all.js" />
@@ -573,65 +580,10 @@
     <Content Include="libs\plugins\datatables\jquery.dataTables.min.css" />
     <Content Include="libs\plugins\datatables\jquery.dataTables.min.js" />
     <Content Include="libs\plugins\datatables\jquery.dataTables_themeroller.css" />
-    <Content Include="libs\plugins\datepicker\bootstrap-datepicker.js" />
-    <Content Include="libs\plugins\datepicker\datepicker3.css" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.ar.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.az.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.bg.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.ca.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.cs.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.cy.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.da.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.de.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.el.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.es.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.et.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.fa.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.fi.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.fr.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.gl.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.he.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.hr.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.hu.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.id.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.is.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.it.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.ja.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.ka.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.kk.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.kr.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.lt.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.lv.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.mk.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.ms.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.nb.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.nl-BE.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.nl.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.no.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.pl.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.pt-BR.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.pt.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.ro.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.rs-latin.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.rs.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.ru.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.sk.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.sl.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.sq.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.sv.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.sw.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.th.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.tr.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.ua.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.vi.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.zh-CN.js" />
-    <Content Include="libs\plugins\datepicker\locales\bootstrap-datepicker.zh-TW.js" />
     <Content Include="libs\plugins\daterangepicker\daterangepicker-bs3.css" />
     <Content Include="libs\plugins\daterangepicker\daterangepicker.js" />
     <Content Include="libs\plugins\fastclick\fastclick.js" />
     <Content Include="libs\plugins\fastclick\fastclick.min.js" />
-    <Content Include="libs\plugins\font-awesome\font-awesome.css" />
-    <Content Include="libs\plugins\font-awesome\font-awesome.min.css" />
     <Content Include="libs\plugins\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="libs\plugins\iCheck\all.css" />
     <Content Include="libs\plugins\iCheck\flat\aero%402x.png" />
@@ -2167,6 +2119,8 @@
     <Content Include="Areas\RBAC\Views\Module\TreeHelp.cshtml" />
     <Content Include="Areas\RBAC\Views\Shared\_HelpModal.cshtml" />
     <Content Include="Areas\RBAC\Views\Operation\Add.cshtml" />
+    <Content Include="Areas\Public\Views\web.config" />
+    <Content Include="Areas\Public\Views\UserDetails\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -2191,7 +2145,12 @@
     <Content Include="Areas\RBAC\Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{47f81372-2c68-4bff-b5e6-1fbe9e34e74e}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="packages.config" />

@@ -16,7 +16,7 @@ using WebApp.Controllers;
 using WebApp.Extensions.Session;
 
 using MyFrame.RBAC.Service.Interface;
-using WebApp.ViewModels.RBAC;
+using WebApp.Areas.RBAC.ViewModel;
 using MyFrame.Infrastructure.Common;
 
 

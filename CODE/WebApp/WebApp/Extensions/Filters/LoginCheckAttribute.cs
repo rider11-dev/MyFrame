@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApp.Extensions.Session;
 using MyFrame.Infrastructure.Extension;
+using System.Web.Routing;
 
 namespace WebApp.Extensions.Filters
 {
@@ -31,18 +32,21 @@ namespace WebApp.Extensions.Filters
         {
             base.OnActionExecuting(filterContext);
 
-            LoginCheck(filterContext.HttpContext);
+            LoginCheck(filterContext.RequestContext);
         }
 
-        public bool LoginCheck(HttpContextBase httpContext)
+        public bool LoginCheck(RequestContext requestContext)
         {
             bool pass = true;
             if (EnableCheck)
             {
-                if (httpContext.Session.GetUserId() == null)
+                if (requestContext.HttpContext.Session.GetUserId() == null)
                 {
                     pass = false;
-                    httpContext.Response.Redirect("~/RBAC/Account/Login?returnUrl=" + httpContext.Request.RawUrl, true);
+                    var loginUrl = new UrlHelper(requestContext).Action("Login", "Account", new { Area = "RBAC" });
+                    requestContext.HttpContext.Response.Write(string.Format("<script language='javascript'>parent.window.open('{0}', '_top')</script>", loginUrl));
+                    //loginUrl + "?returnUrl=" + requestContext.HttpContext.Request.RawUrl));
+                    requestContext.HttpContext.Response.End();
                 }
             }
             return pass;

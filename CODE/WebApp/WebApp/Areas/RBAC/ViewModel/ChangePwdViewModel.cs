@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using WebApp.Extensions.Validation;
 
-namespace WebApp.ViewModels.RBAC
+namespace WebApp.Areas.RBAC.ViewModel
 {
     /// <summary>
     /// 密码修改模型
