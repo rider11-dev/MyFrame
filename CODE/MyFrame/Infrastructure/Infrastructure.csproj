@@ -74,6 +74,8 @@
     <Compile Include="Email\EmailSender.cs" />
     <Compile Include="Exception\ExceptionExtensions.cs" />
     <Compile Include="Expression\ExpressionExtensions.cs" />
+    <Compile Include="Images\CutAvatarParams.cs" />
+    <Compile Include="Images\ImageHelper.cs" />
     <Compile Include="Logger\ILogHelper.cs" />
     <Compile Include="Logger\ILogHelperProvider.cs" />
     <Compile Include="Logger\Log4NetHelper.cs" />

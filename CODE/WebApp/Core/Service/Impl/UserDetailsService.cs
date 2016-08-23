@@ -1,5 +1,6 @@
 ﻿using MyFrame.Core.Service;
 using MyFrame.Core.UnitOfWork;
+using MyFrame.Infrastructure.Images;
 using MyFrame.Infrastructure.OptResult;
 using MyFrame.RBAC.Model;
 using MyFrame.RBAC.Repository.Interface;
@@ -19,6 +20,7 @@ namespace WebApp.Core.Service.Impl
     {
         const string Msg_FindById = "根据id获取用户详细信息";
         const string Msg_UpdateDetail = "更新用户详细信息";
+        const string Msg_UpdateAvatar = "更新用户头像信息";
 
         IUserDetailsRepository _usrDetailRep;
         IUserRepository _usrRep;
@@ -57,7 +59,6 @@ namespace WebApp.Core.Service.Impl
                 usrDetailVM.Telephone = usrDetail.Telephone;
                 usrDetailVM.Address = usrDetail.Address;
                 usrDetailVM.Interests = usrDetail.Interests;
-                usrDetailVM.HeadImage = usrDetail.HeadImage;
                 usrDetailVM.PersonalNote = usrDetail.PersonalNote;
 
             }
@@ -89,7 +90,6 @@ namespace WebApp.Core.Service.Impl
                     base.Update(u => u.Id == usrDetails.Id, u => new UserDetails
                 {
                     NickName = usrDetails.NickName,
-                    HeadImage = usrDetails.HeadImage,
                     BirthDate = usrDetails.BirthDate,
                     Age = usrDetails.Age,
                     Telephone = usrDetails.Telephone,
@@ -103,6 +103,47 @@ namespace WebApp.Core.Service.Impl
                 base.ProcessException(ref result, Msg_UpdateDetail, ex);
             }
             return result;
+        }
+
+        /// <summary>
+        /// 更新头像
+        /// </summary>
+        /// <param name="cutParams"></param>
+        /// <param name="usrId"></param>
+        /// <returns></returns>
+        public OperationResult UpdateAvatar(CutAvatarParams cutParams, int usrId)
+        {
+            OperationResult optRst = new OperationResult();
+            try
+            {
+                bool rst = ImageHelper.CutAvatar(cutParams, 100, 100);
+                if (!rst)
+                {
+                    optRst.ResultType = OperationResultType.Error;
+                    optRst.Message = Msg_UpdateAvatar + "失败，未知错误";
+                    return optRst;
+                }
+
+                rst = _usrDetailRep.Exists(u => u.Id == usrId);
+                optRst = rst ?
+                    base.Update(u => u.Id == usrId,
+                    u => new UserDetails
+                    {
+                        SrcImage = cutParams.imgSrcFilePath,
+                        AvatarImage = cutParams.imgAvatarFilePath
+                    }) :
+                    base.Add(new UserDetails
+                    {
+                        Id = usrId,
+                        SrcImage = cutParams.imgSrcFilePath,
+                        AvatarImage = cutParams.imgAvatarFilePath
+                    });
+            }
+            catch (Exception ex)
+            {
+                base.ProcessException(ref optRst, Msg_UpdateAvatar, ex);
+            }
+            return optRst;
         }
     }
 }

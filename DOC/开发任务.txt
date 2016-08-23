@@ -86,13 +86,16 @@
 34、聊天室实现，学习signalr，
 	异常处理,http://www.asp.net/signalr/overview/guide-to-the-api/hubs-api-guide-server,How to handle errors in the Hub class
 	
-35、用户详细信息 
+35、用户详细信息 √
 		用户id，出生年月、年龄、地址、兴趣爱好、联系电话、头像、昵称、个人说明
 
 36、logincheck，主页跳转到登录界面 √
 
 37、我的信息，点击后打开功能，但是功能菜单没有同步选中 √
 
+38、头像 √
+
+39、微信开发
 
 
 

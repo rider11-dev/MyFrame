@@ -1,4 +1,5 @@
 ﻿using MyFrame.Core.Service;
+using MyFrame.Infrastructure.Images;
 using MyFrame.Infrastructure.OptResult;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace WebApp.Core.Service.Interface
     {
         OperationResult GetDetailsById(int? id);
         OperationResult Save(UserDetails usrDetails);
+        OperationResult UpdateAvatar(CutAvatarParams cutParams, int usrId);
     }
 }

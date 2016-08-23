@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
+using WebApp.Core.Models;
 
 namespace WebApp.Extensions.Session
 {
@@ -11,6 +12,7 @@ namespace WebApp.Extensions.Session
     {
         const string KEY_USER_ID = "UserId";
         const string KEY_USER_NAME = "UserName";
+        const string KEY_USER_DETAIL = "UserDetail";
         const string KEY_ROLEID_LIST = "RoleIds";
         const string KEY_ROLE_TEXT = "RoleText";
         public static int? GetUserId(this HttpSessionStateBase state)
@@ -27,6 +29,16 @@ namespace WebApp.Extensions.Session
         {
             state.Set(KEY_USER_ID, usr.Id);
             state.Set(KEY_USER_NAME, usr.UserName);
+        }
+
+        public static void SetUserDetail(this HttpSessionStateBase state, UserDetails usrDetails)
+        {
+            state.Set(KEY_USER_DETAIL, usrDetails);
+        }
+
+        public static UserDetails GetUserDetail(this HttpSessionStateBase state)
+        {
+            return state.Get<UserDetails>(KEY_USER_DETAIL);
         }
 
         public static void SetRoleIds(this HttpSessionStateBase state, int[] roleIds)

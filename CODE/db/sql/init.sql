@@ -118,7 +118,8 @@ create table UserDetails(
 	Telephone nvarchar(20),
 	Address nvarchar(100),
 	Interests nvarchar(100),
-	HeadImage nvarchar(200),
+	SrcImage nvarchar(200),
+	AvatarImage nvarchar(200),
 	PersonalNote nvarchar(100)
 )
 

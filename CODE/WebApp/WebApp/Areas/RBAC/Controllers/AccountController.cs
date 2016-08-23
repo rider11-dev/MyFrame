@@ -16,6 +16,8 @@ using MyFrame.RBAC.Service.Interface;
 using MyFrame.Infrastructure.Common;
 using MyFrame.Infrastructure.Logger;
 using WebApp.Extensions.VerifyCodeNotify;
+using WebApp.Core.Service.Interface;
+using WebApp.Core.Models;
 
 namespace WebApp.Areas.RBAC.Controllers
 {
@@ -24,6 +26,7 @@ namespace WebApp.Areas.RBAC.Controllers
         IUserService _usrSrv;
         IUserRoleRelService _usrRoleSrv;
         IRoleService _roleSrv;
+        IUserDetailsService _usrDetailSrv;
         const string KEY_Session_VerifyCode_Login = "VerifyCode_Login";
         const string KEY_Session_VerifyCode_ChangePwd = "VerifyCode_ChangePwd";
         const string KEY_Session_VerifyCode_ChangePwd_BeginTime = "VerifyCode_ChangePwd_BeginTime";
@@ -48,12 +51,13 @@ namespace WebApp.Areas.RBAC.Controllers
         }
 
         ILogHelper<AccountController> _logHelper = LogHelperFactory.GetLogHelper<AccountController>();
-        public AccountController(IUserService usrSrv, IUserRoleRelService usrRoleSrv, IRoleService roleSrv, IOperationService optSrv)
+        public AccountController(IUserService usrSrv, IUserRoleRelService usrRoleSrv, IRoleService roleSrv, IOperationService optSrv, IUserDetailsService usrDetailSrv)
             : base(optSrv)
         {
             _usrSrv = usrSrv;
             _usrRoleSrv = usrRoleSrv;
             _roleSrv = roleSrv;
+            _usrDetailSrv = usrDetailSrv;
         }
         //
         // GET: /RBAC/User/
@@ -108,6 +112,18 @@ namespace WebApp.Areas.RBAC.Controllers
                 RBACContext.CurrentUser = usr;
                 //登录成功 登记session
                 HttpContext.Session.SetUser(usr);
+                //获取用户详细信息
+                result = _usrDetailSrv.Find(u => u.Id == usr.Id);
+                if (result.ResultType == OperationResultType.Success)
+                {
+                    var usrDetails = (List<UserDetails>)result.AppendData;
+                    if (usrDetails != null && usrDetails.Count > 0)
+                    {
+                        Session.SetUserDetail(usrDetails[0]);
+
+                    }
+                }
+
                 //角色id
                 result = _usrRoleSrv.Find(r => r.UserId == usr.Id);
                 if (result.ResultType != OperationResultType.Success)
@@ -251,9 +267,10 @@ namespace WebApp.Areas.RBAC.Controllers
 
         public JsonResult GetCurrentAccountInfo()
         {
-            string userName = HttpContext.Session.GetUserName();
-            string roleText = HttpContext.Session.GetRoleText();
-
+            string userName = Session.GetUserName();
+            string roleText = Session.GetRoleText();
+            var usrDetail = Session.GetUserDetail();
+            string usrAvatarUrl = usrDetail == null ? "#" : usrDetail.AvatarImage;
             return new JsonNetResult
             {
                 Data = new
@@ -263,7 +280,8 @@ namespace WebApp.Areas.RBAC.Controllers
                     info = new
                     {
                         user = userName,
-                        role = roleText
+                        role = roleText,
+                        avatar = usrAvatarUrl
                     }
                 },
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet

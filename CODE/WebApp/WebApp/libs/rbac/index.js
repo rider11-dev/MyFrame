@@ -10,7 +10,6 @@
         index.initMenuTree();
         index.getAccount();
         index.initContextMenu();
-
         $('#link-header-myinfo').click(function () {
             var menuNode = $('.sidebar-menu a').filter('[data-module=UserExtManage]');
             //console.log(menuNode.length);
@@ -41,15 +40,22 @@
         }
     },
     getAccount: function () {
-        $.get(index.urlGetAccount, null, function (data, status, xhr) {
-            if (gFunc.isNull(data.info)) {
-                return;
+        $.ajax({
+            url: index.urlGetAccount,
+            type: 'get',
+            async: true,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+                if (gFunc.isNull(data.info)) {
+                    return;
+                }
+                //console.log(data);
+                $(".lblUserName").text(data.info.user);
+                $(".lblRoleName").text(data.info.role);
+                $('.img-avatar').attr('src', data.info.avatar + "?" + Math.random());
+                gMessager.success("欢迎回来," + data.info.user);
             }
-            //console.log(data);
-            $(".lblUserName").text(data.info.user);
-            $(".lblRoleName").text(data.info.role);
-            gMessager.success("欢迎回来," + data.info.user);
-        }, 'json');
+        });
     },
     //初始化tab页右键菜单
     initContextMenu: function () {

@@ -37,8 +37,11 @@ namespace WebApp.Core.Models
         [Description("兴趣爱好")]
         public string Interests { get; set; }
 
-        [Description("头像")]
-        public string HeadImage { get; set; }
+        [Description("头像源文件相对路径")]
+        public string SrcImage { get; set; }
+
+        [Description("头像文件相对路径")]
+        public string AvatarImage { get; set; }
 
         [Description("个人说明")]
         public string PersonalNote { get; set; }
